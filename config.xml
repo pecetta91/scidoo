@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.pgb.brewapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+	<name>Scidoo</name>
+	<description>
+		Scidoo App for controlling temperature of your apartaments
+	</description>
+
+	<author email="info@webcoom.com" href="http://www.scidoo.com">
+	   PhoneGap Team
+	</author>
+
+	<preference name="phonegap-version" value="cli-6.0.0" />
+</widget>
