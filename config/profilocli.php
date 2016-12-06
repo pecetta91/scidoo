@@ -1,6 +1,7 @@
 <?php 
-include('../../config/connect.php');
+include('../../config/connecti.php');
 include('../../config/funzioni.php');
+
 
 $IDpren=$_SESSION['IDstrpren'];
 $query="SELECT app,gg,time,tempg,tempn FROM prenotazioni WHERE IDv='$IDpren' LIMIT 1";
@@ -51,13 +52,10 @@ $testo=  '<div data-page="dynamic-content" class="page">
 	<a href="#tab-1" class="link"><img src="img/direction.png"></a></div>
   </div>
 			
-			
             <!-- Scrollable page content--> 
             <div class="page-content"> 
               <div class="content-block" ><div id="contenutodiv">';
-			  
-			  
-			  
+	
 			  $inc=1;
 			  
 			  include('profilo/temp.php');

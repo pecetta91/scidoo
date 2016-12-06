@@ -1,5 +1,11 @@
 <?php 
-include('../../config/connect.php');
+include('../../config/connecti.php');
+include('../../config/funzioni.php');
+
+
+
+
+
 $testo=  '<div data-page="dynamic-content" class="page"> 
             <!-- Top Navbar--> 
             <div class="navbar"> 
@@ -19,7 +25,6 @@ $testo=  '<div data-page="dynamic-content" class="page">
 		  
 		  $testo=base64_encode($testo);
 		  
-		  //$testo='pincopallino';
 		  
 	header('Content-type: application/json');
 	//echo "[{'html' : '".$testo."'} ]";	  

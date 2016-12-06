@@ -1,5 +1,5 @@
 <?php 
-include('../../config/connect.php');
+include('../../config/connecti.php');
 include('../../config/funzioni.php');
 
 
