@@ -13,7 +13,7 @@ var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
 
-var baseurl='http://127.0.0.1/milliont/'
+var baseurl='http://192.168.1.107/milliont/'
 var IDutente=0;
 
 
