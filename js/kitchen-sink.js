@@ -43,11 +43,11 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
                 success: function (data) {
                     // Find matched items
                  	 //alert(data);
-					alert('aa');
+				
 					myApp.hideIndicator();
 					var ret=atob(data[0].html);
 					var num=ret.indexOf("error");
-						alert(num);
+						
 					if(num==-1){
 						var res = ret.split("_");
 						window.localStorage.setItem("IDcliente", res['0']);
