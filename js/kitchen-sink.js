@@ -43,7 +43,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
                 success: function (data) {
                     // Find matched items
                  	 //alert(data);
-				
+				alert('aaa');
 					myApp.hideIndicator();
 					var ret=atob(data[0].html);
 					var num=ret.indexOf("error");
