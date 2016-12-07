@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 
-<platform name="ios" />
-<platform name="android" />
-<platform name="winphone" />
+
 
 <widget id="com.pgb.brewapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
 	<name>Scidoo</name>
@@ -13,6 +11,10 @@
 	<author email="info@webcoom.com" href="http://www.scidoo.com">
 	   PhoneGap Team
 	</author>
+	
+	<platform name="ios" />
+	<platform name="android" />
+	<platform name="winphone" />
 	
 	<param name="android-package" value="org.apache.cordova.core.NetworkManager" />
 	<access origin="*"  subdomains="true" />
