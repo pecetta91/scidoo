@@ -17,8 +17,6 @@ var baseurl='https://www.scidoo.com/'
 var IDutente=0;
 
 
-
-
 /* ===== Login screen page events ===== */
 myApp.onPageInit('login-screen-embedded2', function (page) {
 	
@@ -88,10 +86,8 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 						mainView.router.back();
 					}*/
 					 
-                }
-            }).fail(function (a, b, c) {
-				console.log(b + '|' + c);
-			});
+				}
+            })
     });
 
 });

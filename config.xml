@@ -1,4 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
+
+<platform name="ios" />
+<platform name="android" />
+<platform name="winphone" />
+
 <widget id="com.pgb.brewapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
 	<name>Scidoo</name>
 	<description>
@@ -10,13 +15,7 @@
 	</author>
 	
 	<param name="android-package" value="org.apache.cordova.core.NetworkManager" />
-	<platform name="android">
-		<allow-intent href="market:*" />
-		<access origin="*" />
-		<allow-intent href="*" />
-		<allow-navigation href="*" />
-	</platform>
-	<access origin="https://www.scidoo.com" />
+	<access origin="*"  subdomains="true" />
 
 	<preference name="phonegap-version" value="cli-6.0.0" />
 </widget>
