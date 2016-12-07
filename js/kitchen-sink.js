@@ -50,7 +50,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 					alert('bb');
 				},
 				 error: function (data) {
-					alert('error');
+					alert(data);
 				},
 				statusCode: {
 					404: function() {
