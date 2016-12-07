@@ -88,7 +88,9 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 					}*/
 					 
                 }
-            });
+            }).fail(function (a, b, c) {
+				console.log(b + '|' + c);
+			});
     });
 
 });
