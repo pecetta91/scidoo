@@ -13,7 +13,7 @@ var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
 
-var baseurl='http://192.168.1.107/milliont/'
+var baseurl='https://www.scidoo.com/'
 var IDutente=0;
 
 
@@ -25,13 +25,13 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 	 $$(page.container).find('.sendform').on('click', function () {
         var email = $$(page.container).find('input[name="email"]').val();
         var password = $$(page.container).find('input[name="pass"]').val();
-		var url = baseurl+'config/login.php';
+		
+		password="a";
+		email="b";		var url = baseurl+'login.php';
 		myApp.showIndicator();
-		alert(url);
 		$$.ajax({
                 url: url,
                 method: 'POST',
-				dataType: 'json',
                 //send "query" to server. Useful in case you generate response dynamically
                 data: {
                     email:email,
@@ -41,9 +41,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 					callback:''
                 },
                 success: function (data) {
-                    // Find matched items
-                 	 //alert(data);
-				alert('aaa');
+                    
 					myApp.hideIndicator();
 					var ret=atob(data[0].html);
 					var num=ret.indexOf("error");
