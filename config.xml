@@ -1,23 +1,32 @@
-<?xml version='1.0' encoding='utf-8'?>
-<widget id="com.pgb.brewapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-	<name>Scidoo</name>
-	<description>
-		Scidoo App for controlling temperature of your apartaments
-	</description>
+<preference name="SplashScreen" value="screen" />
+<preference name="SplashScreenDelay" value="6000" />
+<preference name="SplashMaintainAspectRatio" value="true" />
 
-	<author email="info@webcoom.com" href="http://www.scidoo.com">
-	   PhoneGap Team
-	</author>
-	
-	<param name="android-package" value="org.apache.cordova.core.NetworkManager" />
-	<platform name="android">
-		<allow-intent href="market:*" />
-		<access origin="*" />
-		<allow-intent href="*" />
-		<allow-navigation href="*" />
-	</platform>
-	<access origin="https://www.scidoo.com" />
+<platform name="android">
+    <splash src="screen/android/ldpi.9.png" density="ldpi"/>
+    <splash src="screen/android/mdpi.9.png" density="mdpi"/>
+    <splash src="screen/android/hdpi.9.png" density="hdpi"/>
+    <splash src="screen/android/xhdpi.9.png" density="xhdpi"/>
+</platform>
 
-	<preference name="phonegap-version" value="cli-6.0.0" />
-</widget>
+<preference name="loglevel" value="DEBUG"/>
+<preference name="AndroidLaunchMode" value="singleTop"/>
+<preference name="ErrorUrl" value=""/>
+<preference name="monaca:DisableCookie" value="false"/>
+<feature name="App">
+    <param name="android-package" value="org.apache.cordova.App"/>
+</feature>
+<preference name="monaca:androidVersionCode" value="1"/>
+<preference name="KeyboardShrinksView" value="true"/>
+<preference name="monaca:MonacaBackendUrl" value="https://cloud.monaca.mobi/json-rpc/"/>
+<preference name="monaca:MonacaBackendId" value="5462a7b9fd1734575d0f0317"/>
+<preference name="monaca:MonacaBackendApiKey" value="e839514dc867719689001fa1c32a17136adeb1ba631c5885b2f996b1375f9cb4"/>
+<preference name="KeepRunning" value="true"/>
+<preference name="monaca:AndroidIsPackageNameSeparate" value="false"/>
+<preference name="DisallowOverscroll" value="true"/>
+<preference name="monaca:WebViewEngine" value="default"/>
+<preference name="Orientation" value="portrait"/>
+<preference name="Fullscreen" value="false"/>
+<preference name="BackgroundColor" value="0xff1b3c81"/>
 
+<access origin="*"/>
