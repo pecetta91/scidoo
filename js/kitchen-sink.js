@@ -29,6 +29,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 		password="a";
 		email="b";		var url = baseurl+'login.php';
 		myApp.showIndicator();
+		alert(url);
 		$$.ajax({
                 url: url,
                 method: 'POST',
@@ -41,7 +42,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 					callback:''
                 },
                 success: function (data) {
-                    
+                    alert('aaa');
 					myApp.hideIndicator();
 					var ret=atob(data[0].html);
 					var num=ret.indexOf("error");
