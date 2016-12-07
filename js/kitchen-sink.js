@@ -43,7 +43,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 		$$.ajax({
                 url: url,
                 method: 'POST',
-				dataType: 'jsonp',
+				dataType: 'html',
 				cache:false,
                 
                 beforeSend: function (data) {
