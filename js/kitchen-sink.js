@@ -61,6 +61,9 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
                 success: function (data) {
                     // Find matched items
                  	 //alert(data);
+					 
+					 window.localStorage.setItem("prova", "ciao"); 
+					 
 					alert('aaa');myApp.hideIndicator();
 					/*
 					

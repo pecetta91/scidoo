@@ -60,11 +60,12 @@
  
     <script type="text/javascript" src="js/framework7.min.js"></script>
     <script type="text/javascript" src="js/kitchen-sink.js"></script>
-    <script type="text/javascript" src="cordova/cordova.js"></script>
+    
+ <script type="text/javascript" src="cordova/cordova.js"></script>
      <script>
 	
 	
-			var app = {
+			var appc = {
 			 storage: window.localStorage,
 			initialize: function() {
 				this.bind();
@@ -85,16 +86,19 @@
 		};
 	
 	
-     	app.initialize();
+     	appc.initialize();
 		
-		
-		window.localStorage.setItem("prova", "ciao");
-		
+		alert(window.localStorage.getItem("prova"));
+		 
+        
+        
+        </script>
+	
 		
 	
 			
 		
     
-    </script>
+  
   </body>
 </html>
