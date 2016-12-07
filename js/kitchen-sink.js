@@ -30,6 +30,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 		*/
 			
 		var url = baseurl+'config/login.php';
+		alert(url);
 		myApp.showIndicator();
 		$$.ajax({
                 url: url,
@@ -43,7 +44,6 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 					callback:'?'
                 },
                 beforeSend: function (data) {
-					alert('bb');
 				},
 				 error: function (data) {
 					//alert(data);
@@ -59,14 +59,11 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
                 success: function (data) {
                     // Find matched items
                  	 //alert(data);
-					 
-					
-					
-					var ret=atob(data[0].html);
-					var num=ret.indexOf("error");
-						
+					 myApp.hideIndicator();
+					var num=data.indexOf("error");
+					alert(data);
 					if(num==-1){
-						var res = ret.split("_");
+						var res = data.split("_");
 						window.localStorage.setItem("IDcliente", res['0']);
 						if(res['1']!=0){
 							window.localStorage.setItem("IDstruttura", res['1']);
@@ -81,6 +78,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 						myApp.addNotification({
 							message: 'I Dati immessi non sono corretti. Prego riprovare!'
 						});
+						
 						mainView.router.back();
 					}
 					 
