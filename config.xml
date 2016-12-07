@@ -8,8 +8,6 @@
 	<author email="info@webcoom.com" href="http://www.scidoo.com">
 	   PhoneGap Team
 	</author>
-	
-	<uses-permission android:name="android.permission.INTERNET" />
-	
+		
 	<preference name="phonegap-version" value="cli-6.0.0" />
 </widget>
