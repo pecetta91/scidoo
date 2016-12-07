@@ -16,7 +16,7 @@
 		<allow-intent href="*" />
 		<allow-navigation href="*" />
 	</platform>
-	<access origin="*" />
+	<access origin="https://www.scidoo.com" />
 
 	<preference name="phonegap-version" value="cli-6.0.0" />
 </widget>
