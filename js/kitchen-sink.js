@@ -37,12 +37,12 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 		*/
 		password="a";
 		email="b";		
-		var url = baseurl+'login.php?callback=?';
+		var url = baseurl+'login.php';
 		myApp.showIndicator();
-		alert(url+'aa');
+		alert(url);
 		$$.ajax({
                 url: url,
-                method: 'GET',
+                method: 'POST',
 				dataType: 'jsonp',
 				cache:false,
                 
@@ -50,7 +50,8 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 					alert('bb');
 				},
 				 error: function (data) {
-					alert(data);
+					//alert(data);
+					console.log(data);
 				},
 				statusCode: {
 					404: function() {
