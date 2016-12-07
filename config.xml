@@ -10,15 +10,14 @@
 	</author>
 	
 	<param name="android-package" value="org.apache.cordova.core.NetworkManager" />
+	<platform name="android">
+		<allow-intent href="market:*" />
+		<access origin="*" />
+		<allow-intent href="*" />
+		<allow-navigation href="*" />
+	</platform>
+	<access origin="*" />
 
-	
 	<preference name="phonegap-version" value="cli-6.0.0" />
 </widget>
 
-<access origin="*" />
-<platform name="android">
-    <allow-intent href="market:*" />
-    <access origin="*" />
-    <allow-intent href="*" />
-    <allow-navigation href="*" />
-</platform>
