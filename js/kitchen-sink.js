@@ -29,10 +29,11 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 		password="a";
 		email="b";		var url = baseurl+'login.php';
 		myApp.showIndicator();
-		alert(url);
+		alert(url+'aa');
 		$$.ajax({
                 url: url,
                 method: 'POST',
+				dataType: 'jsonp',
                 //send "query" to server. Useful in case you generate response dynamically
                 data: {
                     email:email,
@@ -42,7 +43,9 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 					callback:''
                 },
                 success: function (data) {
-                    alert('aaa');
+                    // Find matched items
+                 	 //alert(data);
+					alert('aaa');
 					myApp.hideIndicator();
 					var ret=atob(data[0].html);
 					var num=ret.indexOf("error");
