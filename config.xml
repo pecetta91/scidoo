@@ -8,6 +8,7 @@
 	<author email="info@webcoom.com" href="http://www.scidoo.com">
 	   PhoneGap Team
 	</author>
-		
+	<param name="android-package" value="org.apache.cordova.core.NetworkManager" />
+	
 	<preference name="phonegap-version" value="cli-6.0.0" />
 </widget>
