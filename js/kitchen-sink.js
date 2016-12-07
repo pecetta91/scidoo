@@ -27,26 +27,41 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
         var password = $$(page.container).find('input[name="pass"]').val();
 		
 		password="a";
-		email="b";		var url = baseurl+'login.php';
+		email="b";		
+		var url = baseurl+'login.php?callback=?';
 		myApp.showIndicator();
 		alert(url+'aa');
 		$$.ajax({
                 url: url,
                 method: 'POST',
 				dataType: 'jsonp',
+				cache:false,
                 //send "query" to server. Useful in case you generate response dynamically
                 data: {
                     email:email,
 					password:password,
 					json:1,
-					resta:'on',
-					callback:''
+					callback:'?'
                 },
+                beforeSend: function (data) {
+					alert('bb');
+				},
+				 error: function (data) {
+					alert('error');
+				},
+				statusCode: {
+					404: function() {
+					  alert( "page not found" );
+					}
+				  },
+				  timeout:10000,
+				  
                 success: function (data) {
                     // Find matched items
                  	 //alert(data);
-					alert('aaa');
-					myApp.hideIndicator();
+					alert('aaa');myApp.hideIndicator();
+					/*
+					
 					var ret=atob(data[0].html);
 					var num=ret.indexOf("error");
 						
@@ -67,7 +82,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 							message: 'I Dati immessi non sono corretti. Prego riprovare!'
 						});
 						mainView.router.back();
-					}
+					}*/
 					 
                 }
             });
