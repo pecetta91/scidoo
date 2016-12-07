@@ -17,7 +17,10 @@
 	<platform name="winphone" />
 	
 	<param name="android-package" value="org.apache.cordova.core.NetworkManager" />
-	<access origin="*"  subdomains="true" />
+	<access origin="*" />
+	<plugin name="cordova-plugin-whitelist"  source="npm" version="1.1.0" />
+	<allow-intent href="*" />
+	<allow-navigation href="*" />
 
 	<preference name="phonegap-version" value="cli-6.0.0" />
 </widget>
