@@ -26,24 +26,22 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 		
 		//send "query" to server. Useful in case you generate response dynamically
 		/*
-                data: {
-                    email:email,
-					password:password,
-					json:1,
-					callback:'?'
-                },
+                
 		*/
-		password="a";
-		email="b";		
-		var url = baseurl+'login.php';
+			
+		var url = baseurl+'config/login.php';
 		myApp.showIndicator();
-		alert(url);
 		$$.ajax({
                 url: url,
                 method: 'POST',
 				dataType: 'html',
 				cache:false,
-                
+				data: {
+                    email:email,
+					password:password,
+					json:1,
+					callback:'?'
+                },
                 beforeSend: function (data) {
 					alert('bb');
 				},
@@ -62,10 +60,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
                     // Find matched items
                  	 //alert(data);
 					 
-					 window.localStorage.setItem("prova", "ciao"); 
-					 
-					alert('aaa');myApp.hideIndicator();
-					/*
+					
 					
 					var ret=atob(data[0].html);
 					var num=ret.indexOf("error");
@@ -87,7 +82,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 							message: 'I Dati immessi non sono corretti. Prego riprovare!'
 						});
 						mainView.router.back();
-					}*/
+					}
 					 
 				}
             })
