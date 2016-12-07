@@ -26,6 +26,15 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
         var email = $$(page.container).find('input[name="email"]').val();
         var password = $$(page.container).find('input[name="pass"]').val();
 		
+		//send "query" to server. Useful in case you generate response dynamically
+		/*
+                data: {
+                    email:email,
+					password:password,
+					json:1,
+					callback:'?'
+                },
+		*/
 		password="a";
 		email="b";		
 		var url = baseurl+'login.php?callback=?';
@@ -33,16 +42,10 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 		alert(url+'aa');
 		$$.ajax({
                 url: url,
-                method: 'POST',
+                method: 'GET',
 				dataType: 'jsonp',
 				cache:false,
-                //send "query" to server. Useful in case you generate response dynamically
-                data: {
-                    email:email,
-					password:password,
-					json:1,
-					callback:'?'
-                },
+                
                 beforeSend: function (data) {
 					alert('bb');
 				},
@@ -52,9 +55,9 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 				statusCode: {
 					404: function() {
 					  alert( "page not found" );
+					  myApp.hideIndicator();
 					}
 				  },
-				  timeout:10000,
 				  
                 success: function (data) {
                     // Find matched items
