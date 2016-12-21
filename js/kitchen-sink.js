@@ -104,7 +104,7 @@ myApp.onPageInit('login-screen-embedded', function (page) {
         var data = $$(page.container).find('input[id="kscal"]').val();
 		var url = baseurl+'config/logincli.php';
 		myApp.showIndicator();
-	
+		alert(url);
 		$$.ajax({
                 url: url,
                 method: 'POST',
@@ -116,9 +116,10 @@ myApp.onPageInit('login-screen-embedded', function (page) {
 					json:1
                 },
                 beforeSend: function (data) {
+					alert(email);
 				},
 				 error: function (data) {
-					//alert(data);
+					alert(data);
 					//console.log(data);
 				},
 				statusCode: {
@@ -132,7 +133,7 @@ myApp.onPageInit('login-screen-embedded', function (page) {
                     // Find matched items
                  	 //alert(data);
 					 myApp.hideIndicator();
-                    
+                    alert(data);
 					var num=data.indexOf("error");
 					if(num==-1){
 						var query = {};
@@ -157,7 +158,7 @@ function navigation(id,met,query){
 	var url=baseurl+"mobile/";
 	var apriurl=new Array('config/profilo.php','config/profilocli.php');
 	var url=url+apriurl[id];
-	//alert(url);
+	alert(url);
 	myApp.showIndicator();
 	$$.ajax({
             url: url,
