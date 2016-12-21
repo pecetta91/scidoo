@@ -13,9 +13,11 @@ var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
 
-var baseurl='https://www.scidoo.com/'
-var IDutente=0;
 
+var baseurl='http://127.0.0.1/milliont/';
+var baseurl='https://www.scidoo.com/';
+
+var IDutente=0;
 
 /* ===== Login screen page events ===== */
 myApp.onPageInit('login-screen-embedded2', function (page) {
@@ -47,7 +49,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 				},
 				 error: function (data) {
 					//alert(data);
-					console.log(data);
+					//console.log(data);
 				},
 				statusCode: {
 					404: function() {
@@ -59,10 +61,11 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
                 success: function (data) {
                     // Find matched items
                  	 //alert(data);
-					 myApp.hideIndicator();
-					var num=data.indexOf("error");
-					alert(data);
+					 myApp.hideIndicator();  	 //alert(data);
+					var num=data.indexOf("error");  	 //alert(data);
+					
 					if(num==-1){
+						
 						var res = data.split("_");
 						window.localStorage.setItem("IDcliente", res['0']);
 						if(res['1']!=0){
@@ -89,7 +92,6 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 });
 
 
-
 myApp.onPageInit('login-screen-embedded', function (page) {	
 
 	var calendarDefault = myApp.calendar({
@@ -98,29 +100,40 @@ myApp.onPageInit('login-screen-embedded', function (page) {
     });
 	
 	$$(page.container).find('.sendform2').on('click', function () {
-		
         var email = $$(page.container).find('input[name="email"]').val();
         var data = $$(page.container).find('input[id="kscal"]').val();
 		var url = baseurl+'config/logincli.php';
 		myApp.showIndicator();
 	
-		
 		$$.ajax({
                 url: url,
                 method: 'POST',
-				dataType: 'json',
-                //send "query" to server. Useful in case you generate response dynamically
-                data: {
+				dataType: 'html',
+				cache:false,
+				data: {
                     email:email,
 					data:data,
 					json:1
                 },
+                beforeSend: function (data) {
+				},
+				 error: function (data) {
+					//alert(data);
+					//console.log(data);
+				},
+				statusCode: {
+					404: function() {
+					  alert( "Problema applicativo. Contattare la struttura" );
+					  myApp.hideIndicator();
+					}
+				  },
+				  
                 success: function (data) {
-					myApp.hideIndicator();
                     // Find matched items
-					var ret=data[0].html; 
-					var ret2 = atob(ret);
-					var num=ret2.indexOf("error");
+                 	 //alert(data);
+					 myApp.hideIndicator();
+                    
+					var num=data.indexOf("error");
 					if(num==-1){
 						var query = {};
 						navigation(1,'POST',query);
@@ -132,29 +145,29 @@ myApp.onPageInit('login-screen-embedded', function (page) {
 						//mainView.router.back();
 					}
 					 
-                }
-            });
+				}
+            })
+		
     });
 	  
 });
-
 
 function navigation(id,met,query){
 
 	var url=baseurl+"mobile/";
 	var apriurl=new Array('config/profilo.php','config/profilocli.php');
 	var url=url+apriurl[id];
+	//alert(url);
 	myApp.showIndicator();
 	$$.ajax({
             url: url,
-                method: met,
-				dataType: 'json',
+                  method: 'POST',
+				dataType: 'html',
+				cache:false,
                 data: query,
                 success: function (data) {
     				myApp.hideIndicator();
-					var ret=data[0].html;
-					var ret2 = atob(ret);
-				mainView.router.loadContent(ret2);
+				mainView.router.loadContent(data);
          }
      });
 }
