@@ -1,14 +1,15 @@
 // Init App
 var myApp = new Framework7({
     modalTitle: 'Scidoo.com',
-    // Enable Material theme
-    material: true,
+    material: true
 });
+
 
 // Expose Internal DOM library
 var $$ = Dom7;
 
 // Add main view
+
 var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
@@ -66,11 +67,11 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 					
 					if(num==-1){
 						
-						var res = data.split("_");
-						window.localStorage.setItem("IDcliente", res['0']);
+						window.localStorage.setItem("ID", data);
+						
 						if(res['1']!=0){
-							window.localStorage.setItem("IDstruttura", res['1']);
-							var query = {IDstr:res['1'], IDcli:res['0']};
+							//window.localStorage.setItem("IDstruttura", res['1']);
+							var query = {ID:data};
 							navigation(0,'POST',query);
 						}else{
 							myApp.addNotification({
@@ -98,7 +99,7 @@ myApp.onPageInit('login-screen-embedded', function (page) {
         input: '#kscal',
 		dateFormat: 'dd/mm/yyyy'
     });
-	
+
 	$$(page.container).find('.sendform2').on('click', function () {
         var email = $$(page.container).find('input[name="email"]').val();
         var data = $$(page.container).find('input[id="kscal"]').val();
@@ -136,6 +137,7 @@ myApp.onPageInit('login-screen-embedded', function (page) {
                     alert(data);
 					var num=data.indexOf("error");
 					if(num==-1){
+						window.localStorage.setItem("ID", data);
 						var query = {};
 						navigation(1,'POST',query);
 
@@ -145,10 +147,8 @@ myApp.onPageInit('login-screen-embedded', function (page) {
 						});
 						//mainView.router.back();
 					}
-					 
 				}
-            })
-		
+            })	
     });
 	  
 });
@@ -165,8 +165,9 @@ function navigation(id,met,query){
                   method: 'POST',
 				dataType: 'html',
 				cache:false,
-                data: query,
+                data: {},
                 success: function (data) {
+					alert(data);
     				myApp.hideIndicator();
 				mainView.router.loadContent(data);
          }
@@ -187,10 +188,7 @@ function navigationtxt(id,met,query,campo){
                 success: function (data) {
 					myApp.hideIndicator();
                     // Find matched items
-					var ret=data[0].html;
-					var ret2 = atob(ret);
-					
-					$$('#'+campo).html(ret2);
+					$$('#'+campo).html(data);
 
                 }
      });
@@ -200,29 +198,32 @@ onloadf();
 
 function onloadf(){
 	
-	IDutente=window.localStorage.getItem("IDcliente");
-	if(isNaN(IDutente)){
-		
-		var url=baseurl+"mobile/";
+	ID=window.localStorage.getItem("ID");
+	
+	if(ID!='undefined'){
+		//alert(IDutente);
+		//var url=baseurl+"mobile/";
 		var url=url+'config/controlloini.php';
+		alert(url);
 		
 		$$.ajax({
-					url: url,
-					method: 'POST',
-					dataType: 'json',
-					success: function (data) {
-						// Find matched items
-						var ret=data[0].html; 
-						var ret2 = atob(ret);
-						var num=ret2.indexOf("error");
-						if(num==-1){
-							var arr=new Array();
-							navigation(ret2,'POST',arr)
-						}
-						 
+            url: url,
+                  method: 'POST',
+				dataType: 'html',
+				cache:false,
+                data: {ID:ID},
+                success: function (data) {
+					var num=data.indexOf("error");
+					if(num==-1){
+						var arr=new Array();
+						navigation(data,'POST',arr)
 					}
-				});
-	}
+    				//myApp.hideIndicator();
+					//mainView.router.loadContent(data);
+       			}
+    	 });
+		
+	
 }
 
 function modprofilo(id,campo,tipo,val2,agg){
@@ -247,14 +248,17 @@ function modprofilo(id,campo,tipo,val2,agg){
 	
 	var query = {val:val, tipo:tipo,IDv:id,val2:val2,json:'1'};
 	
+	
 	$$.ajax({
             url: url,
-                method: 'POST',
+                  method: 'POST',
+				dataType: 'html',
+				cache:false,
                 data: query,
-				dataType: 'json',
                 success: function (data) {
 					myApp.hideIndicator();
-                    switch(agg){
+					
+					switch(agg){
 						case 1:
 							myApp.addNotification({
 								message: 'Temperatura Modificata con Successo'
@@ -265,7 +269,10 @@ function modprofilo(id,campo,tipo,val2,agg){
 						break;
 						
 					}
-                }
-     });
+					//mainView.router.loadContent(data);
+       			}
+    	 });
+	
+	
 	 
 }
