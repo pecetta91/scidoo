@@ -61,23 +61,14 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 				  
                 success: function (data) {
                     // Find matched items
-                 	 //alert(data);
+					alert(data);
 					 myApp.hideIndicator();  	 //alert(data);
 					var num=data.indexOf("error");  	 //alert(data);
-					
-					if(num==-1){
-						
-						window.localStorage.setItem("ID", data);
-						
-						if(res['1']!=0){
-							//window.localStorage.setItem("IDstruttura", res['1']);
-							var query = {ID:data};
+					if(num==-1){					
+						window.localStorage.setItem("IDcode", data);
+							var query = {IDcode:data};
 							navigation(0,'POST',query);
-						}else{
-							myApp.addNotification({
-								message: 'Non puoi accedere. Non sei un titolare di una struttura'
-							});
-						}
+						
 					}else{
 						myApp.addNotification({
 							message: 'I Dati immessi non sono corretti. Prego riprovare!'
@@ -137,7 +128,7 @@ myApp.onPageInit('login-screen-embedded', function (page) {
                     alert(data);
 					var num=data.indexOf("error");
 					if(num==-1){
-						window.localStorage.setItem("ID", data);
+						window.localStorage.setItem("IDcode", data);
 						var query = {};
 						navigation(1,'POST',query);
 
@@ -154,67 +145,73 @@ myApp.onPageInit('login-screen-embedded', function (page) {
 });
 
 function navigation(id,met,query){
-
+	IDcode=window.localStorage.getItem("IDcode");
 	var url=baseurl+"mobile/";
-	var apriurl=new Array('config/profilo.php','config/profilocli.php');
+	id=parseInt(id);
+	var apriurl=new Array('config/profilo.php','config/profilocli.php','config/calendario.inc.php');
 	var url=url+apriurl[id];
-	alert(url);
+	alert(IDcode);
 	myApp.showIndicator();
 	$$.ajax({
             url: url,
-                  method: 'POST',
+                method: 'POST',
 				dataType: 'html',
 				cache:false,
-                data: {},
+                data: {IDcode:IDcode},
                 success: function (data) {
 					alert(data);
-    				myApp.hideIndicator();
+    			myApp.hideIndicator();
 				mainView.router.loadContent(data);
          }
      });
 }
 
 function navigationtxt(id,met,query,campo){
-	var url=baseurl+"mobile/";
-	
-	var apriurl=new Array('config/profilo/temp.php');
+	IDcode=window.localStorage.getItem("IDcode");
+	var url=baseurl+"mobile/config/";
+	var apriurl=new Array('profilo/temp.php','calendario.inc.php');
 	var url=url+apriurl[id];
 	myApp.showIndicator();
+	
+	query['IDcode']=IDcode;
+	
 	$$.ajax({
             url: url,
-                method: met,
-				dataType: 'json',
+                method: 'POST',
+				dataType: 'html',
+				cache:false,
                 data: query,
                 success: function (data) {
-					myApp.hideIndicator();
-                    // Find matched items
-					$$('#'+campo).html(data);
-
-                }
+					alert(data);
+    			myApp.hideIndicator();
+				$$('#'+campo).html(data);
+         }
      });
+	
+	
 }
 
 onloadf();
 
 function onloadf(){
-	
-	ID=window.localStorage.getItem("ID");
-	
-	if(ID!='undefined'){
-		//alert(IDutente);
+	IDcode=window.localStorage.getItem("IDcode");
+	if(IDcode.length>10){
+		//alert(ID);
 		//var url=baseurl+"mobile/";
-		var url=url+'config/controlloini.php';
-		alert(url);
+		
+		var url=baseurl+'mobile/config/controlloini.php';
+		//alert(url);
 		
 		$$.ajax({
             url: url,
                   method: 'POST',
 				dataType: 'html',
 				cache:false,
-                data: {ID:ID},
+                data: {IDcode:IDcode},
                 success: function (data) {
 					var num=data.indexOf("error");
-					if(num==-1){
+					if((num==-1)&&(!isNaN(data))){
+						data=parseInt(data);
 						var arr=new Array();
 						navigation(data,'POST',arr)
 					}
@@ -222,7 +219,7 @@ function onloadf(){
 					//mainView.router.loadContent(data);
        			}
     	 });
-		
+	}
 	
 }
 
@@ -272,7 +269,4 @@ function modprofilo(id,campo,tipo,val2,agg){
 					//mainView.router.loadContent(data);
        			}
     	 });
-	
-	
-	 
 }
