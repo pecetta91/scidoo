@@ -14,8 +14,9 @@ var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
 
+
 var baseurl='http://127.0.0.1/milliont/';
-var baseurl='http://192.168.1.107/milliont/';
+//var baseurl='http://192.168.1.107/milliont/';
 //var baseurl='https://www.scidoo.com/';
 
 
@@ -37,7 +38,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 		*/
 			
 		var url = baseurl+'config/login.php';
-		//alert(url);
+		alert(url);
 		myApp.showIndicator();
 		$$.ajax({
                 url: url,
@@ -65,7 +66,7 @@ myApp.onPageInit('login-screen-embedded2', function (page) {
 				  
                 success: function (data) {
                     // Find matched items
-					//alert(data);
+					alert(data);
 					 myApp.hideIndicator();  	 //alert(data);
 					var num=data.indexOf("error");  	 //alert(data);
 					if(num==-1){					
@@ -129,7 +130,7 @@ myApp.onPageInit('login-screen-embedded', function (page) {
                     // Find matched items
                  	 //alert(data);
 					 myApp.hideIndicator();
-                    //alert(data);
+                    alert(data);
 					var num=data.indexOf("error");
 					if(num==-1){
 						window.localStorage.setItem("IDcode", data);
@@ -159,7 +160,7 @@ myApp.onPageInit('calendario', function (page) {
 		var off=parseInt(offset.top)+parseInt(55);
 		
 		
-		if(off<55){
+		if(off<111){
 			//if(p==0){
 				
 				//
@@ -173,9 +174,9 @@ myApp.onPageInit('calendario', function (page) {
 				 //document.getElementById('valore').innerHTML=off2;
 				 if(off2<0){
 					 var off2=(off2*-1);
-					 off2=parseInt(off2)+parseInt(2);
+					 off2=parseInt(off2)+parseInt(58);
 				 }else{
-					 off2=0+parseInt(parseInt(2)-off2);
+					 off2=0+parseInt(parseInt(58)-off2);
 					 
 					 
 					//off2=parseInt(off2)+(parseInt(100);	
@@ -215,6 +216,47 @@ myApp.onPageInit('calendario', function (page) {
 	
 	
 	
+	
+	
+/*
+	$$(page).on("scroll", function () {
+		
+		alert('bb');
+		
+		
+		var offset = $$("#tabdate").offset();
+		alert('aa');
+		if(offset.top<=40){
+				//var val=document.getElementById('scro').value;
+				//alert(val);
+				//document.getElementById('scro').value=1;
+					var off=parseInt(offset.top)+parseInt(70);
+					//alert(off);
+				//$$('#valore').val(off);
+				
+					var data = $$(page.container).find('input[id="valore"]').val();
+					alert(data);
+					$$('#tabdate').css('position','absolute');
+					$$('#tabdate').css('margin-top',off+'px');
+					//$$('#scro').val('1');
+					//document.getElementById('scro').value=1;
+				
+			//$('#tabhead2').css('margin-top','0px');
+			//var tt=parseInt(tt)-parseInt(105);
+			//$('#tabhead').css('margin-top',tt+'px');
+		}else{
+			//$('#tabhead2').css('margin-top','35px');
+				$$('#tabdate').css('position','absolute');
+				$$('#tabdate').css('top','auto');
+				$$('#tabdate').css('margin-top','0px');
+				document.getElementById('scro').value=0;
+		}
+			
+		
+		
+		
+	});*/
+	
 
 
 });
@@ -239,33 +281,22 @@ function scrollrig(){
 		
 	}
 
-function navigation(id,str){
+function navigation(id,met,query){
 	IDcode=window.localStorage.getItem("IDcode");
 	var url=baseurl+"mobile/";
 	id=parseInt(id);
-	var apriurl=new Array('config/profilo.php','config/profilocli.php','config/calendario.inc.php','config/detpren.php');
+	var apriurl=new Array('config/profilo.php','config/profilocli.php','config/calendario.inc.php');
 	var url=url+apriurl[id];
-	//alert(IDcode);
-	
-	query=new Array();
-	query['IDcode']=IDcode;
-	if(str.length>0){
-		var vettore=str.split(',');
-		for (prop in vettore) {
-			query['dato'+prop]=vettore[prop];
-		}
-	}
-	
-	
-	
+	alert(IDcode);
 	myApp.showIndicator();
 	$$.ajax({
             url: url,
                 method: 'POST',
 				dataType: 'html',
 				cache:false,
-                data: query,
+                data: {IDcode:IDcode},
                 success: function (data) {
+				
 					myApp.hideIndicator();
 					mainView.router.loadContent(data);
 					
@@ -286,23 +317,14 @@ function scrodate(){
 }
 
 
-function navigationtxt(id,str,campo,agg){
+function navigationtxt(id,met,query,campo){
 	IDcode=window.localStorage.getItem("IDcode");
 	var url=baseurl+"mobile/config/";
-	var apriurl=new Array('profilo/temp.php','calendario.inc.php','detpren2.php');
+	var apriurl=new Array('profilo/temp.php','calendario.inc.php');
 	var url=url+apriurl[id];
 	myApp.showIndicator();
 	
-
-	query=new Array();
 	query['IDcode']=IDcode;
-	if(str.length>0){
-		var vettore=str.split(',');
-		for (prop in vettore) {
-			query['dato'+prop]=vettore[prop];
-		}
-	}
-	
 	
 	$$.ajax({
             url: url,
@@ -311,16 +333,9 @@ function navigationtxt(id,str,campo,agg){
 				cache:false,
                 data: query,
                 success: function (data) {
-					//alert(data);
-					myApp.hideIndicator();
-					$$('#'+campo).html(data);
-					
-					switch(agg){
-						case 1:
-							$$('.tabmainmenu').removeClass('selectedsx');
-							$$('#tabm'+query['dato1']).addClass('selectedsx');
-						break;
-					}
+					alert(data);
+    			myApp.hideIndicator();
+				$$('#'+campo).html(data);
          }
      });
 	
