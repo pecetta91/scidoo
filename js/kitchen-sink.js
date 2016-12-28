@@ -16,7 +16,7 @@ var mainView = myApp.addView('.view-main', {});
 
 var baseurl='http://127.0.0.1/milliont/';
 var baseurl='http://192.168.1.107/milliont/';
-//var baseurl='https://www.scidoo.com/';
+var baseurl='https://www.scidoo.com/';
 
 
 
