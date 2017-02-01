@@ -66,6 +66,7 @@ var IDutente=0;
 					var num=data.indexOf("error");  	 //alert(data);
 					if(num==-1){					
 						window.localStorage.setItem("IDcode", data);
+						IDcode=data;
 							var query = {IDcode:data};
 							navigation(0,'POST',query);
 						
@@ -118,6 +119,7 @@ var IDutente=0;
 					var num=data.indexOf("error");
 					if(num==-1){
 						window.localStorage.setItem("IDcode", data);
+						IDcode=data;
 						var query = {};
 						navigation(1,'POST',query);
 
