@@ -2,8 +2,8 @@
 var myApp = new Framework7({
     modalTitle: 'Scidoo.com',
 	 material: true,
-	 dynamicNavbar: true,
-	 pushState:true
+	 pushState:true,
+	 animatePages:false
 });
 
 IDcode=window.localStorage.getItem("IDcode");
@@ -16,7 +16,7 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
-var baseurl='http://127.0.0.1/milliont/';
+//var baseurl='http://127.0.0.1/milliont/';
 //var baseurl='http://192.168.1.107/milliont/';
 //var baseurl='http://192.168.1.2/milliont/';
 
@@ -31,13 +31,15 @@ var IDutente=0;
         var email = $$('input[name="email"]').val();
         var password = $$('input[name="pass"]').val();
 			
+		setTimeout(function(){ hidelo(); }, 5500);		
+			
 		var url = baseurl+'config/login.php';
 		//alert(url);
-		myApp.showIndicator();
+		myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 		$$.ajax({
                 url: url,
                 method: 'POST',
-				dataType: 'html',
+				dataType: 'text',
 				cache:false,
 				data: {
                     email:email,
@@ -86,11 +88,12 @@ var IDutente=0;
         var data = $$('input[id="kscal"]').val();
 		var url = baseurl+'config/logincli.php';
 		myApp.showIndicator();
+		setTimeout(function(){ hidelo(); }, 5500);	
 		//alert(url);
 		$$.ajax({
                 url: url,
                 method: 'POST',
-				dataType: 'html',
+				dataType: 'text',
 				cache:false,
 				data: {
                     email:email,
@@ -163,11 +166,11 @@ myApp.onPageInit('calendario', function (page) {
 		
 		query=new Array();			
 		
-		myApp.showIndicator();
+		myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 		$$.ajax({
 				url: url,
-					method: 'POST',
-					dataType: 'html',
+					method: 'GET',
+					dataType: 'text',
 					cache:false,
 					data: query,
 					success: function (data) {
@@ -193,19 +196,19 @@ myApp.onPageInit('calendario', function (page) {
 		
 		if(off<105){
 			if(ps==0){
-				$$('#navcal').hide();
-				mainView.hideToolbar();
+				//$$('#navcal').hide();
+				//mainView.hideToolbar();
 				ps=1;
 			}
 		}else{
 			if(ps==1){
-				mainView.showToolbar();
-				$$('#navcal').show();
+				//mainView.showToolbar();
+				//$$('#navcal').show();
 				ps=0;
 			}
 		}
 		
-		if(off<55){
+		if(off<104){
 				 var offset2=$$('.table-fixed-right').offset();
 				var lef=parseInt(offset2.left)*-1+parseInt(174);
 				 var off2=offset.top;
@@ -217,11 +220,12 @@ myApp.onPageInit('calendario', function (page) {
 				 }else{
 					 off2=0+parseInt(parseInt(2)-off2);
 				}
+				off2=parseInt(off2)+parseInt(50);
 				
 				$$('#tabdate').css('top',off2+'px');
 				
 				if(p!=1){ 
-					$$('#tabdate').css('position','absolute');
+					$$('#tabdate').css('position','fixed');
 					$$('#tabdate').css('z-index','99999');
 					//$$('#tabdate').css('left','0px');
 					$$('#tabbody').css('margin-top','38px');
@@ -244,29 +248,14 @@ myApp.onPageInit('calendario', function (page) {
 	
 });
 
-function scrollrig(){
-		/*
-		if($$('#tabdate').css('position')=='fixed'){
-			var offset = $$("#tabappart").offset();
-			var off=parseInt(offset.top)+parseInt(55);
-			
-			var offset2=$$('.table-fixed-right').offset();
-			var lef=parseInt(offset2.left)*-1+parseInt(174);
-			
-			$$('#tabdate').css('position','fixed');
-				$$('#tabdate').css('top','55px');
-				$$('#tabdate').css('z-index','99999');
-				$$('#tabdate').css('left',lef+'px');
-			
-			}
-	*/	
-	}
+
+var myCalendar='';
 
 function navigation(id,str,agg){
 	//alert(id);
 	var url=baseurl+"mobile/";
 	id=parseInt(id);
-	var apriurl=new Array('config/profilo.php','config/profilocli.php','config/calendario.inc.php','config/detpren.php','config/centrobenessere.php','config/ristorante.php','config/pulizie.php','config/arrivi.php','config/prenotazioni.php','config/clienti.php','config/domotica.php');
+	var apriurl=new Array('config/profilo.php','config/profilocli.php','config/calendario.inc.php','config/detpren.php','config/centrobenessere.php','config/ristorante.php','config/pulizie.php','config/arrivi.php','config/prenotazioni.php','config/clienti.php','config/domotica.php','config/notifiche.php','config/appunti.php','config/ristorantegiorno.php','config/centrobenesseregiorno.php');
 	var url=url+apriurl[id];
 	//alert(IDcode);
 	
@@ -283,13 +272,11 @@ function navigation(id,str,agg){
 			query['dato0']=str;
 		}
 	}
-	
-	
-	myApp.showIndicator();
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	$$.ajax({
             url: url,
-                method: 'POST',
-				dataType: 'html',
+                method: 'GET',
+				dataType: 'text',
 				cache:false,
                 data: query,
                 success: function (data) {
@@ -309,30 +296,50 @@ function navigation(id,str,agg){
 						
 						break;
 						case 2:
-							var myCalendar = myApp.calendar({
+	
+							 myCalendar = myApp.calendar({
 								input: '#datacentro',
 								weekHeader: true,
 								dateFormat: 'dd/mm/yyyy',
 								header: false,
 								footer: false,
+								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									var send= (values/1000)+','+$$('#IDsottocentro').val();
-									navigationtxt(13,send,'centrobenesserediv',5)
-									myCalendar.close()
+									//alert(p+'//'+values+'//'+displayValues);
+									var string=new String(values);
+									var vett=string.split(',');
+									var t1=vett['0']/1000;
+									if(string.length>20){
+										var t2=vett['1']/1000;
+										var diff=((t2-t1)/86400);
+										var send=t1+','+diff;
+										navigationtxt(13,send,'centrobenesserediv',5)
+										myCalendar.close()
+									}
 								}
 							});
+						
 						break;
 						case 3:
-							var myCalendar = myApp.calendar({
+							 myCalendar = myApp.calendar({
 								input: '#datacentro',
 								weekHeader: true,
 								dateFormat: 'dd/mm/yyyy',
 								header: false,
 								footer: false,
+								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									var send= (values/1000)+','+$$('#IDsottoristo').val()+','+$$('#IDtipovis').val();
-									navigationtxt(14,send,'ristorantediv',6)
-									myCalendar.close()
+									//alert(p+'//'+values+'//'+displayValues);
+									var string=new String(values);
+									var vett=string.split(',');
+									var t1=vett['0']/1000;
+									if(string.length>20){
+										var t2=vett['1']/1000;
+										var diff=((t2-t1)/86400);
+										var send=t1+','+diff;
+										navigationtxt(14,send,'ristorantediv',6)
+										myCalendar.close()
+									}
 								}
 							});
 						
@@ -340,35 +347,64 @@ function navigation(id,str,agg){
 							
 						break;
 						case 4:
-							var myCalendar = myApp.calendar({
+						
+							 myCalendar = myApp.calendar({
 								input: '#datacentro',
 								weekHeader: true,
 								dateFormat: 'dd/mm/yyyy',
 								header: false,
 								footer: false,
+								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									var send= (values/1000)+','+$$('#IDtipovis').val();
-									navigationtxt(15,send,'pulizidiv',7)
-									myCalendar.close()
+									
+									var string=new String(values);
+									var vett=string.split(',');
+									var t1=vett['0']/1000;
+									if(string.length>20){
+										var t2=vett['1']/1000;
+										var diff=((t2-t1)/86400);
+										var send=t1+','+$$('#IDtipovis').val()+','+diff;
+										navigationtxt(15,send,'puliziediv',7)
+										myCalendar.close()
+									}
+									
 								}
+								
 							});
+							
+							
+							
 						
 						
 							
 						break;
 						case 5:
-							var myCalendar = myApp.calendar({
+							 myCalendar = myApp.calendar({
 								input: '#dataarrivi',
 								weekHeader: true,
 								dateFormat: 'dd/mm/yyyy',
 								header: false,
 								footer: false,
+								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									var send= (values/1000);
-									navigationtxt(17,send,'arrividiv',8)
-									myCalendar.close()
+									
+									var string=new String(values);
+									var vett=string.split(',');
+									var t1=vett['0']/1000;
+									if(string.length>20){
+										var t2=vett['1']/1000;
+										var diff=((t2-t1)/86400);
+										var send=t1+','+diff;
+										navigationtxt(17,send,'arrividiv',8)
+										myCalendar.close()
+									}
+									
 								}
 							});
+						break;
+						case 6:
+							var sosp=$$('#sospesi').val();
+							$$('#badgecentro').html(sosp);
 						break;
 						
 					}
@@ -471,16 +507,13 @@ function stepnew(step,str){
 var okstep1=0;
 
 
-
 function navigationtxt(id,str,campo,agg){
 	
-	
-	
 	var url=baseurl+"mobile/config/";
-	var apriurl=new Array('profilo/temp.php','calendario.inc.php','detpren2.php','calendario2.inc.php','preventivo/step1.php','preventivo/step0.php','preventivo/step2.php','preventivo/step3.php','preventivo/step4.php','preventivo/step5.php','notifiche.php','promemoria.php','appunti.php','centrobenessere.inc.php','ristorante.inc.php','pulizie.inc.php','domotica.inc.php','arrivi.inc.php','clienti.inc.php','prenotazioni.inc.php');
+	var apriurl=new Array('profilo/temp.php','calendario.inc.php','detpren2.php','calendario2.inc.php','preventivo/step1.php','preventivo/step0.php','preventivo/step2.php','preventivo/step3.php','preventivo/step4.php','preventivo/step5.php','notifiche.inc.php','promemoria.php','appunti.inc.php','centrobenessere.inc.php','ristorante.inc.php','pulizie.inc.php','domotica.inc.php','arrivi.inc.php','clienti.inc.php','prenotazioni.inc.php','ristorantegiorno.inc.php','centrobenesseregiorno.inc.php');
 	var url=url+apriurl[id];
 	myApp.showIndicator();
-	
+	setTimeout(function(){ hidelo(); }, 5500);	
 
 	query=new Array();
 	query['IDcode']=IDcode;
@@ -497,8 +530,8 @@ function navigationtxt(id,str,campo,agg){
 	}	
 	$$.ajax({
             url: url,
-                method: 'POST',
-				dataType: 'html',
+                method: 'GET',
+				dataType: 'text',
 				cache:false,
                 data: query,
                 success: function (data) {
@@ -601,30 +634,46 @@ function navigationtxt(id,str,campo,agg){
 							//$$('#tabdate').animate({'left': left});
 						break;
 						case 5:
-							var myCalendar = myApp.calendar({
+							myCalendar = myApp.calendar({
 								input: '#datacentro',
 								weekHeader: true,
 								dateFormat: 'dd/mm/yyyy',
 								header: false,
 								footer: false,
+								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									var send= (values/1000)+','+$$('#IDsottocentro').val();
-									navigationtxt(13,send,'centrobenesserediv',5)
-									myCalendar.close()
+									var string=new String(values);
+									var vett=string.split(',');
+									var t1=vett['0']/1000;
+									if(string.length>20){
+										var t2=vett['1']/1000;
+										var diff=((t2-t1)/86400);
+										var send=t1+','+diff;
+										navigationtxt(13,send,'centrobenesserediv',5)
+										myCalendar.close()
+									}
 								}
 							});
 						break;
 						case 6:
-							var myCalendar = myApp.calendar({
+							myCalendar = myApp.calendar({
 								input: '#datacentro',
 								weekHeader: true,
 								dateFormat: 'dd/mm/yyyy',
 								header: false,
 								footer: false,
+								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									var send= (values/1000)+','+$$('#IDsottoristo').val()+','+$$('#IDtipovis').val();
-									navigationtxt(14,send,'ristorantediv',6)
-									myCalendar.close()
+									var string=new String(values);
+									var vett=string.split(',');
+									var t1=vett['0']/1000;
+									if(string.length>20){
+										var t2=vett['1']/1000;
+										var diff=((t2-t1)/86400);
+										var send=t1+','+diff;
+										navigationtxt(14,send,'ristorantediv',6)
+										myCalendar.close()
+									}
 								}
 							});
 						break;
@@ -635,10 +684,18 @@ function navigationtxt(id,str,campo,agg){
 								dateFormat: 'dd/mm/yyyy',
 								header: false,
 								footer: false,
+								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									var send= (values/1000)+','+$$('#IDtipovis').val();
-									navigationtxt(15,send,'pulizidiv',7)
-									myCalendar.close()
+									var string=new String(values);
+									var vett=string.split(',');
+									var t1=vett['0']/1000;
+									if(string.length>20){
+										var t2=vett['1']/1000;
+										var diff=((t2-t1)/86400);
+										var send=t1+','+$$('#IDtipovis').val()+','+diff;
+										navigationtxt(15,send,'puliziediv',7)
+										myCalendar.close()
+									}
 								}
 							});
 						break;
@@ -649,12 +706,24 @@ function navigationtxt(id,str,campo,agg){
 								dateFormat: 'dd/mm/yyyy',
 								header: false,
 								footer: false,
+								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									var send= (values/1000);
-									navigationtxt(17,send,'arrividiv',8)
-									myCalendar.close()
+									var string=new String(values);
+									var vett=string.split(',');
+									var t1=vett['0']/1000;
+									if(string.length>20){
+										var t2=vett['1']/1000;
+										var diff=((t2-t1)/86400);
+										var send=t1+','+diff;
+										navigationtxt(17,send,'arrividiv',8)
+										myCalendar.close()
+									}
 								}
 							});
+						break;
+						case 9:
+							var sosp=$$('#sospesi').val();
+							$$('#badgecentro').html(sosp);
 						break;
 						
 					}
@@ -664,6 +733,8 @@ function navigationtxt(id,str,campo,agg){
          }
      });	
 }
+
+
 
 onloadf();
 
@@ -679,7 +750,7 @@ function onloadf(){
 		$$.ajax({
             url: url,
                   method: 'POST',
-				dataType: 'html',
+				dataType: 'text',
 				cache:false,
                 data: {IDcode:IDcode},
                 success: function (data) {
@@ -718,14 +789,14 @@ function modprofilo(id,campo,tipo,val2,agg){
 		}
 		var url=url+'config/gestioneprofilo.php';
 	myApp.showIndicator();
-	
+	setTimeout(function(){ hidelo(); }, 5500);	
 	var query = {val:val, tipo:tipo,IDv:id,val2:val2,json:'1'};
 	
 	
 	$$.ajax({
             url: url,
                   method: 'POST',
-				dataType: 'html',
+				dataType: 'text',
 				cache:false,
                 data: query,
                 success: function (data) {
@@ -767,8 +838,8 @@ function vis2(id,tipo,multi,num){
 		//alert(url);
 		$$.ajax({
 				url: url,
-					  method: 'POST',
-					dataType: 'html',
+					  method: 'GET',
+					dataType: 'text',
 					cache:false,
 					data: query,
 					success: function (data) {
@@ -789,6 +860,27 @@ function vis2(id,tipo,multi,num){
 	}
 }
 
+function backcentro(tipo){
+	
+	
+	
+	switch(tipo){
+		case 1:
+			var time=$$('#timecentro').val();
+			var gg=$$('#ggcentro').val();
+			var txt=time+','+gg;
+			navigationtxt(13,txt,'centrobenesserediv',5)
+		break;
+		case 2:
+			var time=$$('#timeristo').val();
+			var gg=$$('#ggristo').val();
+			var txt=time+','+gg;
+			navigationtxt(14,txt,'ristorantediv',6)
+		break;
+	}
+}
+
+
 function riaggvis(txtsend){
 	//alert(mainView.activePage.name);
 	//controllo dove siamo
@@ -806,8 +898,8 @@ function riaggvis(txtsend){
 				//alert(url);
 				$$.ajax({
 						url: url,
-							  method: 'POST',
-							dataType: 'html',
+							  method: 'GET',
+							dataType: 'text',
 							cache:false,
 							data: query,
 							success: function (data) {
@@ -819,25 +911,16 @@ function riaggvis(txtsend){
 							}
 					 });
 		break;
-		case "centrobenessere":
-			if($$('#timemod').val()!='undefined'){
-				var time=$$('#timemod').val();
-			}else{
-				var time=$$('#timecentro').val();
-			}
-			var sottotip=$$('#IDsottocentro').val();
+		case "centrobenesseregiorno":
+			var time=$$('#timecentrogiorno').val();
+			var sottotip=$$('#IDsottocentrogiorno').val();
 			var txt=time+','+sottotip;
-			navigationtxt(13,txt,'centrobenesserediv',5);
+			navigationtxt(21,txt,'centrobenesseregiornodiv',9);
 		break;
-		case "ristorante":
-			if($$('#timemod').val()!='undefined'){
-				var time=$$('#timemod').val();
-			}else{
-				var time=$$('#timeristo').val();
-			}
-			var send= time+','+$$('#IDsottoristo').val()+','+$$('#IDtipovis').val();
-			navigationtxt(14,send,'ristorantediv',6)
-			
+		case "ristorantegiorno":
+			var time=$$('#timeristogiorno').val();
+			var send= time+','+$$('#IDsottoristogiorno').val();
+			navigationtxt(20,send,'ristorantegiornodiv',0)
 		break;
 	}
 }
@@ -845,6 +928,7 @@ function riaggvis(txtsend){
 
 function modprenextra(id,campo,tipo,val2,agg){
 		myApp.showIndicator();
+		setTimeout(function(){ hidelo(); }, 5500);	
 		var plus="";
 		switch(val2) {
 			case 1:
@@ -910,7 +994,7 @@ function modprenextra(id,campo,tipo,val2,agg){
 		$$.ajax({
 				url: url,
 					  method: 'POST',
-					dataType: 'html',
+					dataType: 'text',
 					cache:false,
 					data: query,
 					success: function (data) {
@@ -958,7 +1042,7 @@ function modprenextra(id,campo,tipo,val2,agg){
 
 
 function modprenot(id,campo,tipo,val2,agg){
-		myApp.showIndicator();
+		myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 		switch(val2) {
 			case 0:
 				var val=$$('#'+campo).val();
@@ -1012,11 +1096,10 @@ function modprenot(id,campo,tipo,val2,agg){
 		$$.ajax({
 			url: url,
 			method: 'POST',
-			dataType: 'html',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
-				//alert(data);
 				if(agg==2){
 					myApp.addNotification({
 							message: 'Funzione eseguita con successo',
@@ -1038,8 +1121,12 @@ function modprenot(id,campo,tipo,val2,agg){
 						myApp.closePanel('right');
 					break;
 					case 2:
-						navigationtxt(12,0,'appunti',0);
+						navigationtxt(12,0,'appuntidiv',0);
 						myApp.closePanel('right');
+					break;
+					case 3:
+						var send= $$('#timeristo').val()+','+$$('#IDtipovis').val()+','+$$('#ggpulizie').val();
+						navigationtxt(15,send,'puliziediv',7)				
 					break;
 					
 					
@@ -1073,12 +1160,23 @@ function accendidom2(ID,acc){
 var inter3=setInterval("notifiche()",300000);
 
 function notifiche(){
-	//controllare su quale slide siamo per non riaggiornarla
-	
-	
-	navigationtxt(10,0,'notifiche',3);
+	var url=baseurl;
+	var url=url+'mobile/config/reloadnot.php';
+	var query = {};
+	$$.ajax({
+			url: url,
+			method: 'GET',
+			dataType: 'text',
+			cache:false,
+			data: query,
+			success: function (data) {
+				var arr=data.split(',');
+				$$('#numnot').html(arr['0']);
+				$$('#numapp').html(arr['1']);
+				//alert(data);
+			}
+	});
 	navigationtxt(11,0,'promemoria',0);
-	navigationtxt(12,0,'appunti',0);
 }
 
 
@@ -1088,8 +1186,8 @@ function opennosogg(time){
 	var query = {time:time};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1101,14 +1199,14 @@ function opennosogg(time){
 function modificaserv(ID,tipo,time,riagg){
 	//alert(ID);
 	
-	myApp.showIndicator();
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var url=baseurl;
 	var url=url+'mobile/config/orarioserv.php';
 	var query = {ID:ID,tipo:tipo,time:time,riagg:riagg};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1158,8 +1256,8 @@ function selectservice(ID,tipolim,IDtipo,durata,agg){
 	var query = {ID:ID,tipolim:tipolim};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1184,7 +1282,7 @@ function creasessione(valore,tipo){
 	$$.ajax({
 			url: url,
 			method: 'POST',
-			dataType: 'html',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1248,7 +1346,7 @@ if((serviziriep.length>0)&&(nump==1)){
 	$$.ajax({
 			url: url,
 			method: 'POST',
-			dataType: 'html',
+			dataType: 'text',
 			cache:false,
 			data: dataString,
 			success: function (data) {
@@ -1282,7 +1380,9 @@ if((serviziriep.length>0)&&(nump==1)){
 }
 }
 
-
+function hidelo(){
+	myApp.hideIndicator();
+}
 
 
 
@@ -1347,8 +1447,8 @@ function cercaservizio(val){
 	var query = {val:val};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1360,14 +1460,14 @@ function cercaservizio(val){
 
 function addservice(IDpren){
 	
-	myApp.showIndicator();
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var url=baseurl;
 	var url=url+'mobile/config/addserv.php';
 	var query = {IDpren:IDpren};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1387,24 +1487,24 @@ function selprenot(){
 	
 	switch(mainView.activePage.name){
 		
-		case "centrobenessere":
-			var time=$$('#timecentro').val();
-			var IDsotto=$$('#IDsottocentro').val();
+		case "centrobenesseregiorno":
+			var time=$$('#timecentrogiorno').val();
+			var IDsotto=$$('#IDsottocentrogiorno').val();
 		break;
-		case "ristorante":
-			var time=$$('#timeristo').val();
-			var IDsotto=$$('#IDsottoristo').val();
+		case "ristorantegiorno":
+			var time=$$('#timeristogiorno').val();
+			var IDsotto=$$('#IDsottoristogiorno').val();
 		break;
 	}
 	
-	myApp.showIndicator();
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var url=baseurl;
 	var url=url+'mobile/config/selprenot.php';
 	var query = {time:time,IDsotto:IDsotto};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1425,8 +1525,8 @@ function cercaprenot(val){
 	var query = {val:val};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1440,14 +1540,14 @@ function cercaprenot(val){
 
 function setdom(IDdom){
 	
-	myApp.showIndicator();
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var url=baseurl;
 	var url=url+'mobile/config/setdomotica.php';
 	var query = {IDdom:IDdom};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1508,7 +1608,7 @@ function msgboxelimina(id,tipo,altro,id2,url){
 
 function elimina(id,tipo,altro,agg,url){
 
-	myApp.showIndicator();
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var url=baseurl;
 	var url=url+'config/elimina.php';
 	var query = {ID:id,tipo:tipo,altro:altro};
@@ -1516,7 +1616,7 @@ function elimina(id,tipo,altro,agg,url){
 	$$.ajax({
 			url: url,
 			method: 'POST',
-			dataType: 'html',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1558,14 +1658,14 @@ function elimina(id,tipo,altro,agg,url){
 
 function detcli(ID){
 	//alert(ID);
-	myApp.showIndicator();
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var url=baseurl;
 	var url=url+'mobile/config/detcli.php';
 	var query = {ID:ID};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {
@@ -1579,14 +1679,14 @@ function detcli(ID){
 
 function detappunto(ID){
 	//alert(ID);
-	myApp.showIndicator();
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var url=baseurl;
 	var url=url+'mobile/config/detappunto.php';
 	var query = {ID:ID};
 	$$.ajax({
 			url: url,
-			method: 'POST',
-			dataType: 'html',
+			method: 'GET',
+			dataType: 'text',
 			cache:false,
 			data: query,
 			success: function (data) {

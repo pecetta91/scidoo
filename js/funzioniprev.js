@@ -114,11 +114,11 @@ var piunotti=0;
 			if(somma>0){	
 				var url = baseurl+'config/preventivo/config/dispo1.php';
 		
-				myApp.showIndicator();
+				myApp.showIndicator(); setTimeout(function(){ hidelo(); }, 5500);	
 				$$.ajax({
 						url: url,
 						method: 'POST',
-						dataType: 'html',
+						dataType: 'text',
 						cache:false,
 						data: query,
 						success: function (data) {
@@ -145,14 +145,13 @@ var piunotti=0;
 
 
  function selpacc(IDapp,IDpacc){
-	
+	myApp.showIndicator();  setTimeout(function(){ hidelo(); }, 5500);	
 		var query = {IDapp:IDapp,IDpacc:IDpacc};
 		var url = baseurl+'mobile/config/preventivo/config/selpacc.php';
-		myApp.showIndicator();
 				$$.ajax({
 						url: url,
 						method: 'POST',
-						dataType: 'html',
+						dataType: 'text',
 						cache:false,
 						data: query,
 						success: function (data) {
@@ -171,7 +170,6 @@ function addservprev(){
 	
 	var data=$$('#elencos').html();
 	$$('#pannellodx').html(data);
-	 myApp.hideIndicator();  	 //alert(data);
 	 myApp.openPanel('right');
 
 }	
@@ -179,7 +177,7 @@ function addservprev(){
 
 
 function addservprev2(IDins,IDserv,time){
-
+myApp.showIndicator();  setTimeout(function(){ hidelo(); }, 5500);	
 	myApp.closeModal('.popover-menu');
 	
 	var query = {IDserv:IDserv,IDins:IDins,time:time};
@@ -187,7 +185,7 @@ function addservprev2(IDins,IDserv,time){
 	$$.ajax({
 						url: url,
 						method: 'POST',
-						dataType: 'html',
+						dataType: 'text',
 						cache:false,
 						data: query,
 						success: function (data) {
@@ -222,12 +220,12 @@ function addservprev2(IDins,IDserv,time){
 
 function addservprevent(IDserv){
 	myApp.closeModal('.popover-menu');
-	myApp.showIndicator();  
+	myApp.showIndicator();  setTimeout(function(){ hidelo(); }, 5500);	
 	var url = baseurl+'mobile/config/preventivo/config/addserv.php';
 	$$.ajax({
 						url: url,
 						method: 'POST',
-						dataType: 'html',
+						dataType: 'text',
 						cache:false,
 						data: query,
 						success: function (data) {
@@ -243,7 +241,7 @@ function addservprevent(IDserv){
 	
 
 function gestioneric(id,campo,tipo,val2,agg){
-	myApp.showIndicator();  
+	myApp.showIndicator(); setTimeout(function(){ hidelo(); }, 5500);	 
 		switch(val2) {
 			case 0:
 				var val=$$('#'+campo).val();
@@ -292,7 +290,7 @@ function gestioneric(id,campo,tipo,val2,agg){
 	$$.ajax({
 						url: url,
 						method: 'POST',
-						dataType: 'html',
+						dataType: 'text',
 						cache:false,
 						data: query,
 						success: function (data) {
@@ -334,7 +332,7 @@ function ricarcolaadd(){
 }
 
 function aggiungis(){
-	myApp.showIndicator(); 
+	myApp.showIndicator(); setTimeout(function(){ hidelo(); }, 5500);	
 	var val1=$$('#orarioadd').val();
 	var val2='';
 	$$('.soggetti').each(function(i, obj) {
@@ -356,7 +354,7 @@ function cambiadestprev(restr,IDins,IDserv){
 }
 
 function eliminaextraprev(ID){
-	myApp.showIndicator();  
+	myApp.showIndicator(); setTimeout(function(){ hidelo(); }, 5500);	 
 	myApp.closeModal('.popover-menu');
 	var url=baseurl;
 	var url=url+'config/preventivo/config/eliminaextra.php';
@@ -365,7 +363,7 @@ function eliminaextraprev(ID){
 	$$.ajax({
 		url: url,
 		method: 'POST',
-		dataType: 'html',
+		dataType: 'text',
 		cache:false,
 		data: query,
 		success: function (data) {
@@ -386,7 +384,7 @@ function eliminaextraprev(ID){
 
 
 function addservprenvent(IDserv){
-	myApp.showIndicator();  
+	myApp.showIndicator(); setTimeout(function(){ hidelo(); }, 5500);	 
 	var url=baseurl;
 	var url=url+'config/preventivo/config/addextra.php';
 	var query = {IDserv:IDserv};
@@ -394,7 +392,7 @@ function addservprenvent(IDserv){
 	$$.ajax({
 		url: url,
 		method: 'POST',
-		dataType: 'html',
+		dataType: 'text',
 		cache:false,
 		data: query,
 		success: function (data) {
@@ -431,7 +429,8 @@ function calcolatot(){
 }
 
 function confermapren(){
-	myApp.showIndicator();  
+	myApp.showIndicator(); 
+	setTimeout(function(){ hidelo(); }, 5500);	 
 	var url=baseurl;
 	var url=url+'config/preventivo/conferma.php';
 	var noteag=$$('#noteag').val();
@@ -439,7 +438,7 @@ function confermapren(){
 	$$.ajax({
 		url: url,
 		method: 'POST',
-		dataType: 'html',
+		dataType: 'text',
 		cache:false,
 		data: query,
 		beforeSend: function (data) {
