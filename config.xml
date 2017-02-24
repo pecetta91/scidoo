@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 
-
-
 <widget id="com.scidoo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
 	<name>Scidoo</name>
 	<description>
@@ -11,6 +9,32 @@
 	<author email="info@webcoom.com" href="http://www.scidoo.com">
 	   PhoneGap Team
 	</author>
+	
+	<icon src="web_hi_res_512.png" platform="ios" width="57" height="57" density="mdpi" />
+	
+	 <platform name="android">
+              <icon src="web_hi_res_512.png" density="ldpi" />
+              <icon src="web_hi_res_512.png" density="mdpi" />
+              <icon src="web_hi_res_512.png" density="hdpi" />
+              <icon src="web_hi_res_512.png" density="xhdpi" />
+     </platform>
+	
+	
+	<platform name="android">
+		<!-- you can use any density that exists in the Android project -->
+		<splash src="splashscreen.png" density="land-hdpi"/>
+		<splash src="splashscreen.png" density="land-ldpi"/>
+		<splash src="splashscreen.png" density="land-mdpi"/>
+		<splash src="splashscreen.png" density="land-xhdpi"/>
+	
+		<splash src="splashscreen.png" density="port-hdpi"/>
+		<splash src="splashscreen.png" density="port-ldpi"/>
+		<splash src="splashscreen.png" density="port-mdpi"/>
+		<splash src="splashscreen.png" density="port-xhdpi"/>
+	</platform>
+	
+	
+	
 	
 	<platform name="ios" />
 	<platform name="android" />
