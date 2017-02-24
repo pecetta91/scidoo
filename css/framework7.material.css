@@ -1060,6 +1060,7 @@ p {
 .toolbar,
 .subnavbar {
   background: #2196f3;
+  background: #394baa;
 }
 .navbar a.link,
 .toolbar a.link,
@@ -7527,7 +7528,7 @@ html.pixel-ratio-3 .picker-center-highlight:after {
   line-height: 48px;
   color: #fff;
   padding: 0 24px;
-  font-size: 20px;
+  font-size: 15px;
   position: relative;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -7539,7 +7540,8 @@ html.pixel-ratio-3 .picker-center-highlight:after {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight:400;
   box-sizing: border-box;
   position: relative;
   color: rgba(0, 0, 0, 0.54);
@@ -7590,6 +7592,7 @@ html.pixel-ratio-3 .picker-center-highlight:after {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  
   -webkit-box-orient: vertical;
   -moz-box-orient: vertical;
   -ms-flex-direction: column;
@@ -7640,7 +7643,7 @@ html.pixel-ratio-3 .picker-center-highlight:after {
   width: -moz-calc(100% / 7);
   width: calc(100% / 7);
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
 }
 .picker-calendar-day.picker-calendar-day-prev,
@@ -7652,10 +7655,12 @@ html.pixel-ratio-3 .picker-center-highlight:after {
   cursor: auto;
 }
 .picker-calendar-day.picker-calendar-day-today span {
-  color: #2196f3;
+  color: #D62F32;
+  border:solid 1px #BD3C3E;  font-weight:600;
 }
 .picker-calendar-day.picker-calendar-day-selected span {
   background: #2196f3;
+  background:#394baa;
   color: #fff;
 }
 .picker-calendar-range .picker-calendar-day.picker-calendar-day-selected span {
@@ -7668,6 +7673,7 @@ html.pixel-ratio-3 .picker-center-highlight:after {
   height: 4px;
   border-radius: 50%;
   background: #2196f3;
+  background:#394baa;
   position: absolute;
   margin-left: -2px;
   left: 50%;
