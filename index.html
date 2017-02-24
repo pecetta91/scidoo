@@ -10,26 +10,39 @@
     <meta name="theme-color" content="#394baa">
     <title>Scidoo.com</title>
     
-    <link rel="stylesheet" href="css/framework7.material.min.css">
+    <link rel="stylesheet" href="css/framework7.material.css">
     <link rel="stylesheet" href="css/framework7.material.colors.min.css">
      <link rel="stylesheet" href="css/material-icons.css">
      <link rel="stylesheet" href="css/framework7-icons.css">
     <link rel="stylesheet" href="css/kitchen-sink.css">
     <script type="text/javascript" src="js/framework7.min.js"></script>
-    
-    <link rel="icon" href="img/icon.png">
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&libraries=places"></script>
+   <link rel="icon" href="img/icon.png">
   </head>
-  <body >
-    <div class="statusbar-overlay"></div>
-   
-  <div class="panel-overlay" ></div>
- 	<div class="panel panel-right panel-cover" id="pannellodx" style="z-index:99999; background:#fff; border-left:solid 1px #ccc; ">
+  
+  <div class="panel panel-left panel-reveal" id="pannellosx" style="background:#f9f9f9;">
+        <div class="content-block" >
+        </div>
+      </div>
+      
+      <div class="panel panel-right panel-cover" id="pannellodx" style="z-index:99999; background:#fff; border-left:solid 1px #ccc; ">
     <div class="content-block" >
     </div>
   </div>
+      
+      
+      
+  <body>
+    <div class="statusbar-overlay"></div>
+   
+  <div class="panel-overlay" ></div>
+ 	
+  	
+  
 
   
-    <div class="popover popover-menu" style="z-index:99999; ">
+    <div class="popover popover-menu" style="z-index:99998; ">
       <div class="popover-inner"  >
         <div class="list-block">
           <ul id="menupop">
@@ -87,9 +100,9 @@
 
 <li class="item-content">
             <div class="item-inner"> 
-              <div class="item-title label"  style="color:#333; font-size:15px;">E-mail</div>
+              <div class="item-title label"  style="color:#333; font-size:15px;">E-mail o Telefono</div>
               <div class="item-input">
-                <input type="text" name="mailcli"  style="font-size:13px;" placeholder="Email di Prenotazione" />
+                <input type="text" name="mailcli"  style="font-size:15px;" placeholder="Email / Telefono in prenotazione" />
               </div>
                </div>
           </li>     
@@ -97,7 +110,7 @@
             <div class="item-inner">      
                 <div class="item-title label" style="color:#333;font-size:15px;" >Check-in</div>
 			<div class="item-input">
-            	<input type="text" id="kscal" style="font-size:13px;" placeholder="Data di Arrivo" />
+            	<input type="text" id="kscal" style="font-size:15px;" placeholder="Data di Arrivo" />
               </div>
  </div>
           </li>  
@@ -129,7 +142,7 @@
             <div class="item-inner"> 
               <div class="item-title label" style="color:#333;font-size:15px;">E-mail</div>
               <div class="item-input">
-                <input type="text" name="email" id="email" style="font-size:13px;" placeholder="info@scidoo.com"/>
+                <input type="text" name="email" id="email" style="font-size:15px;" placeholder="info@scidoo.com"/>
               </div>
             </div>
           </li>
@@ -137,7 +150,7 @@
             <div class="item-inner"> 
               <div class="item-title label" style="color:#333;font-size:15px;">Password</div>
               <div class="item-input">
-                <input type="password" name="pass" id="pass" style="font-size:13px;" placeholder="" />
+                <input type="password" name="pass" id="pass" style="font-size:15px;" placeholder="" />
               </div>
             </div>
           </li>
