@@ -16,7 +16,6 @@ function gd(data1,data2,trasf){
 			var dataok2=new Date(anno2, mese2-1, giorno2);
 		break;
 		case 2:
-		
 			giorno1 = parseInt(data1.substr(8, 2));
 			mese1 = parseInt(data1.substr(5, 2));
 			anno1 = parseInt(data1.substr(0,4));			
@@ -56,35 +55,50 @@ function addrestriz(ID,add){
 var piunotti=0;
 
 	 function dispo1(){
-		var data=document.getElementById('data').value;
-		var nottipern=1;
 		
-		if(piunotti==1){
-			if(data.length>10){
-				var vettore=data.split(' - ');
-				var datai=vettore['0'];
-				var dataf=vettore['1'];
-				var notti=gd(datai,dataf,2);
+		var nottipern=1;
+		if(piunotti==1){		
+			var prenotveloce=$$('#prenotveloce').html();
+			if(prenotveloce==0){
+				var datai=$$('#prenotvelocetime').val();	
+				var notti=$$('#notti').val();	
 			}else{
-				myApp.alert('Date selezionate in modo scorretto. Si prega di modificarle per continuare.');
-				myApp.showTab('#step1');
-				return false;
+				var data=document.getElementById('data').value;
+				if(data.length>10){
+					var vettore=data.split(' - ');
+					var datai=vettore['0'];
+					var dataf=vettore['1'];
+					var notti=gd(datai,dataf,2);
+				}else{
+					myApp.alert('Date selezionate in modo scorretto. Si prega di modificarle per continuare.');
+					myApp.showTab('#step1');
+					return false;
+				}
 			}
 		}else{
-			if(data.length>5){
-				var datai=data;
-				notti=0;
-				nottipern=0;
+			var prenotveloce=$$('#prenotveloce').html();
+			if(prenotveloce==0){
+				var datai=$$('#prenotvelocetime').val();
+				
+				var notti=0;
 			}else{
-				myApp.alert('Date selezionate in modo scorretto. Si prega di modificarle per continuare.');
-				myApp.showTab('#step1');
-				return false;
+				var data=document.getElementById('data').value;
+				if(data.length>5){
+					var datai=data;
+					notti=0;
+					nottipern=0;
+				}else{
+					myApp.alert('Date selezionate in modo scorretto. Si prega di modificarle per continuare.');
+					myApp.showTab('#step1');
+					return false;
+				}
 			}
 			
 		}
 		var orario=document.getElementById('orario').value;
 		var voucher=0;
 		var cofanetto=0;
+				
 		
 		var query = {datai:datai,notti:notti,voucher:voucher,cofanetto:cofanetto,orario:orario};
 		
@@ -137,12 +151,7 @@ var piunotti=0;
 			myApp.alert('Il soggiorno deve avere una durata minima di una notte.');
 		}	
 		
-	 
-			
-			
-   
 	}
-
 
  function selpacc(IDapp,IDpacc){
 	myApp.showIndicator();  setTimeout(function(){ hidelo(); }, 5500);	
@@ -155,7 +164,7 @@ var piunotti=0;
 						cache:false,
 						data: query,
 						success: function (data) {
-							
+							 calcolatot();
 							 //alert(data);
 							 myApp.hideIndicator();  	 //alert(data);
 							
@@ -451,9 +460,6 @@ function confermapren(){
 							hold:2500,
 							 button: {text: '<i class="material-icons">close</i>'}
 						});
-			
-			
-			
 			myApp.hideIndicator();  
 			$$('.close-popup').trigger('click');
 			var time=$$('#datacalpren').val();

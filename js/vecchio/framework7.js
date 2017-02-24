@@ -1,16 +1,16 @@
 /**
- * Framework7 1.5.3
+ * Framework7 1.5.2
  * Full featured mobile HTML framework for building iOS & Android apps
  * 
  * http://framework7.io/
  * 
- * Copyright 2017, Vladimir Kharlampidi
+ * Copyright 2016, Vladimir Kharlampidi
  * The iDangero.us
  * http://www.idangero.us/
  * 
  * Licensed under MIT
  * 
- * Released on: February 10, 2017
+ * Released on: December 17, 2016
  */
 (function () {
 
@@ -114,7 +114,6 @@
             popupCloseByOutside: true,
             modalPreloaderTitle: 'Loading... ',
             modalStack: true,
-            modalsMoveToRoot: true,
             // Lazy Load
             imagesLazyLoadThreshold: 0,
             imagesLazyLoadSequential: true,
@@ -648,19 +647,9 @@
                 view.attachEvents();
             }
         
-            // Check view name to delete unwanted characters
-            if (view.params.name) view.params.name = view.params.name.replace(/[^a-zA-Z]/g, '');
-          
             // Add view to app
             app.views.push(view);
-            if (view.main) {
-                app.mainView = view;
-                app.views.main = view;
-            }
-            else if(view.params.name) {
-                app[view.params.name + 'View'] = view;
-                app.views[view.params.name] = view;
-            }
+            if (view.main) app.mainView = view;
         
             // Router
             view.router = {
@@ -746,17 +735,17 @@
             view.back = view.router.back;
         
             // Bars methods
-            view.hideNavbar = function (animated) {
-                return app.hideNavbar(container.find('.navbar'), animated);
+            view.hideNavbar = function () {
+                return app.hideNavbar(container.find('.navbar'));
             };
-            view.showNavbar = function (animated) {
-                return app.showNavbar(container.find('.navbar'), animated);
+            view.showNavbar = function () {
+                return app.showNavbar(container.find('.navbar'));
             };
-            view.hideToolbar = function (animated) {
-                return app.hideToolbar(container.find('.toolbar'), animated);
+            view.hideToolbar = function () {
+                return app.hideToolbar(container.find('.toolbar'));
             };
-            view.showToolbar = function (animated) {
-                return app.showToolbar(container.find('.toolbar'), animated);
+            view.showToolbar = function () {
+                return app.showToolbar(container.find('.toolbar'));
             };
         
             // Push State on load
@@ -795,32 +784,7 @@
             // Destroy
             view.destroy = function () {
                 view.detachEvents();
-                if (view.main) {
-                    app.mainView = null;
-                    delete app.mainView;
-                    app.views.main = null;
-                    delete app.views.main;
-                }
-                else if(view.params.name) {
-                    app[view.params.name + 'View'] = null;
-                    delete app[view.params.name + 'View'];
-                    app.views[view.params.name] = null;
-                    delete app.views[view.params.name];
-                }
-                container.removeAttr('data-page');
-                container[0].f7View = null;
-                delete container[0].f7View;
-                
-                app.views.splice(app.views.indexOf(view), 1);
-        
-                // Delete props & methods
-                for (var prop in view) {
-                    if (view.hasOwnProperty(prop)) {
-                        view[prop] = null;
-                        delete view[prop];
-                    }
-                }
-                view = null;
+                view = undefined;
             };
         
             // Plugin hook
@@ -1070,43 +1034,26 @@
         };
         
         // Hide/Show Navbars/Toolbars
-        app.hideNavbar = function (navbarContainer, animated) {
-            if (typeof animated === 'undefined') animated = true;
-            $(navbarContainer).addClass('navbar-hidden' + (!animated ? (' not-animated') : ''));
+        app.hideNavbar = function (navbarContainer) {
+            $(navbarContainer).addClass('navbar-hidden');
             return true;
         };
-        app.showNavbar = function (navbarContainer, animated) {
-            if (typeof animated === 'undefined') animated = true;
+        app.showNavbar = function (navbarContainer) {
             var navbar = $(navbarContainer);
-            if (animated) {
-                navbar.removeClass('not-animated');
-                navbar.addClass('navbar-hiding').removeClass('navbar-hidden').transitionEnd(function () {
-                    navbar.removeClass('navbar-hiding');
-                });
-            }
-            else {
-                navbar.removeClass('navbar-hidden navbar-hiding not-animated');
-            }
+            navbar.addClass('navbar-hiding').removeClass('navbar-hidden').transitionEnd(function () {
+                navbar.removeClass('navbar-hiding');
+            });
             return true;
         };
-        app.hideToolbar = function (toolbarContainer, animated) {
-            if (typeof animated === 'undefined') animated = true;
-            $(toolbarContainer).addClass('toolbar-hidden' + (!animated ? (' not-animated') : ''));
+        app.hideToolbar = function (toolbarContainer) {
+            $(toolbarContainer).addClass('toolbar-hidden');
             return true;
         };
-        app.showToolbar = function (toolbarContainer, animated) {
-            if (typeof animated === 'undefined') animated = true;
+        app.showToolbar = function (toolbarContainer) {
             var toolbar = $(toolbarContainer);
-            if (animated) {
-                toolbar.removeClass('not-animated');
-                toolbar.addClass('toolbar-hiding').removeClass('toolbar-hidden').transitionEnd(function () {
-                    toolbar.removeClass('toolbar-hiding' + (!animated ? (' not-animated') : ''));
-                });
-            }
-            else {
-                toolbar.removeClass('toolbar-hidden toolbar-hiding not-animated');
-            }
-                
+            toolbar.addClass('toolbar-hiding').removeClass('toolbar-hidden').transitionEnd(function () {
+                toolbar.removeClass('toolbar-hiding');
+            });
         };
         
 
@@ -1139,7 +1086,7 @@
             };
             params = params || {};
             for (var def in defaults) {
-                if (typeof params[def] === 'undefined' || params[def] === null && defaults.hasOwnProperty(def)) {
+                if (typeof params[def] === 'undefined' || params[def] === null) {
                     params[def] = defaults[def];
                 }
             }
@@ -1265,9 +1212,8 @@
                     s.disable();
                     return;
                 }
-                var previousQuery = s.value;
                 s.input.val('').trigger('change').focus();
-                s.triggerEvent('clearSearch searchbar:clear', 'onClear', {previousQuery: previousQuery});
+                s.triggerEvent('clearSearch searchbar:clear', 'onClear');
             };
         
             // Search
@@ -2026,7 +1972,6 @@
                 }
                 else $(el).remove();
             },
-            _modalsSelector: '.popup, .modal, .popover, .actions-modal, .picker-modal, .login-screen',
             // Temporary DOM Element
             temporaryDom: document.createElement('div'),
         
@@ -2034,9 +1979,7 @@
             findElement: function (selector, container, view, notCached) {
                 container = $(container);
                 if (notCached) selector = selector + ':not(.cached)';
-                var found = container.find(selector).filter(function (index, el) {
-                    return $(el).parents(app.router._modalsSelector).length === 0;
-                });
+                var found = container.find(selector);
                 if (found.length > 1) {
                     if (typeof view.selector === 'string') {
                         // Search in related view
@@ -2057,8 +2000,8 @@
                 }
             },
         
-            // Set pages classes for animationEnd
-            animatePages: function (leftPage, rightPage, direction) {
+            // Set pages classess for animationEnd
+            animatePages: function (leftPage, rightPage, direction, view) {
                 // Loading new page
                 var removeClasses = 'page-on-center page-on-right page-on-left';
                 if (direction === 'to-left') {
@@ -2088,8 +2031,8 @@
                 });
             },
         
-            // Set navbars classes for animation
-            animateNavbars: function (leftNavbarInner, rightNavbarInner, direction) {
+            // Set navbars classess for animation
+            animateNavbars: function (leftNavbarInner, rightNavbarInner, direction, view) {
                 // Loading new page
                 var removeClasses = 'navbar-on-right navbar-on-center navbar-on-left';
                 if (direction === 'to-left') {
@@ -2186,7 +2129,8 @@
                     t7_rendered_content = options.content, // will be rendered using Template7
                     context = options.context, // Context data for Template7
                     contextName = options.contextName,
-                    template = options.template; // Template 7 compiled template
+                    template = options.template, // Template 7 compiled template
+                    pageName = options.pageName;
         
                 var t7_ctx, t7_template;
                 if (typeof content === 'string') {
@@ -2273,8 +2217,7 @@
         
         
         app.router._load = function (view, options) {
-            // Plugin hook
-            app.pluginHook('routerLoad', view, options);
+            options = options || {};
         
             var url = options.url,
                 content = options.content, //initial content
@@ -2290,6 +2233,8 @@
                 pageElement = options.pageElement;
         
             if (typeof animatePages === 'undefined') animatePages = view.params.animatePages;
+            // Plugin hook
+            app.pluginHook('routerLoad', view, options);
         
             // Render with Template7
             if (app.params.template7Pages && typeof content === 'string' || template) {
@@ -2325,6 +2270,7 @@
                 if (pageElement) newPage = $(pageElement);
                 else newPage = app.router.findElement('.page', app.router.temporaryDom, view);
             }
+        
             // If page not found exit
             if (!newPage || newPage.length === 0 || (pageName && view.activePage && view.activePage.name === pageName)) {
                 view.allowPageChange = true;
@@ -2401,9 +2347,7 @@
                     }
                 }
                 if (dynamicNavbar && newPage.find('.navbar').length > 0) {
-                    app.router._remove(newPage.find('.navbar').filter(function(index, el){
-                        return $(el).parents(app.router._modalsSelector).length === 0;
-                    }));
+                    app.router._remove(newPage.find('.navbar'));
                 }
                 navbar = viewContainer.children('.navbar');
                 if (options.reload) {
@@ -2562,7 +2506,7 @@
                 position: options.reload ? reloadPosition : 'right',
                 navbarInnerContainer: dynamicNavbar ? newNavbarInner && newNavbarInner[0] : undefined,
                 oldNavbarInnerContainer: dynamicNavbar ? oldNavbarInner && oldNavbarInner[0] : undefined,
-                context: t7_rendered.context || options.context,
+                context: t7_rendered.context,
                 query: options.query,
                 fromPage: oldPage && oldPage.length && oldPage[0].f7PageData,
                 reload: options.reload,
@@ -2650,7 +2594,7 @@
                         app.router.animateNavbars(oldNavbarInner, newNavbarInner, 'to-left', view);
                     }, 0);
                 }
-                newPage.animationEnd(function () {
+                newPage.animationEnd(function (e) {
                     afterAnimation();
                 });
             }
@@ -2716,9 +2660,6 @@
         
         app.router._back = function (view, options) {
             options = options || {};
-        
-            app.pluginHook('routerBack', view, options);
-        
             var url = options.url,
                 content = options.content,
                 t7_rendered = {content: options.content}, // will be rendered using Template7
@@ -2737,6 +2678,8 @@
                 oldPage, newPage, oldNavbarInner, newNavbarInner, navbar, navbarInners, dynamicNavbar, manipulateDom = true;
         
             if (typeof animatePages === 'undefined') animatePages = view.params.animatePages;
+        
+            app.pluginHook('routerBack', view, options);
         
             // Render with Template7
             if (app.params.template7Pages && typeof content === 'string' || template) {
@@ -3066,14 +3009,10 @@
                 else if (pageElement && url) {
                     newPage = $(pageElement);
                     if (view.params.dynamicNavbar) {
-                        newNavbarInner = newPage.find('.navbar-inner').filter(function (index, el) {
-                            return $(el).parents(app.router._modalsSelector).length === 0;
-                        });
+                        newNavbarInner = newPage.find('.navbar-inner');
                         if (newNavbarInner.length > 0) {
                             newPage.prepend(newNavbarInner);
-                            app.router._remove(newPage.find('.navbar').filter(function (index, el) {
-                                return $(el).parents(app.router._modalsSelector).length === 0;
-                            }));
+                            app.router._remove(newPage.find('.navbar'));
                         }
                     }
                     setPages();
@@ -3221,6 +3160,7 @@
             if (view.params.domCache) {
                 $(view.container).find('.page.cached').each(function () {
                     var page = $(this);
+                    var index = page.index();
                     var pageUrl = page[0].f7PageData && page[0].f7PageData.url;
                     if (pageUrl && view.history.indexOf(pageUrl) < 0 && view.initialPages.indexOf(this) < 0) {
                         app.pageRemoveCallback(view, page[0], 'right');
@@ -3462,12 +3402,11 @@
             $('.preloader-indicator-overlay, .preloader-indicator-modal').remove();
         };
         // Action Sheet
-        app.actions = function (target, params, animated) {
+        app.actions = function (target, params) {
             var toPopover = false, modal, groupSelector, buttonSelector;
-            if (arguments.length === 1 || arguments.length === 2 && typeof arguments[1] === 'boolean') {
+            if (arguments.length === 1) {
                 // Actions
-                params = arguments[0];
-                animated = arguments[1];
+                params = target;
             }
             else {
                 // Popover
@@ -3478,8 +3417,6 @@
                     if ($(window).width() >= 768) toPopover = true;
                 }
             }
-            if (typeof animated === 'undefined') animated = true;
-        
             params = params || [];
         
             if (params.length > 0 && !$.isArray(params[0])) {
@@ -3509,7 +3446,7 @@
                     app._compiledTemplates.actionsToPopover = t7.compile(actionsToPopoverTemplate);
                 }
                 var popoverHTML = app._compiledTemplates.actionsToPopover(params);
-                modal = $(app.popover(popoverHTML, target, true, animated));
+                modal = $(app.popover(popoverHTML, target, true));
                 groupSelector = '.list-block ul';
                 buttonSelector = '.list-button';
             }
@@ -3560,12 +3497,11 @@
                     }
                 });
             });
-            if (!toPopover) app.openModal(modal, animated);
+            if (!toPopover) app.openModal(modal);
             return modal[0];
         };
-        app.popover = function (modal, target, removeOnClose, animated) {
+        app.popover = function (modal, target, removeOnClose) {
             if (typeof removeOnClose === 'undefined') removeOnClose = true;
-            if (typeof animated === 'undefined') animated = true;
             if (typeof modal === 'string' && modal.indexOf('<') >= 0) {
                 var _modal = document.createElement('div');
                 _modal.innerHTML = modal.trim();
@@ -3756,12 +3692,11 @@
                 $(window).off('resize', sizePopover);
             });
         
-            app.openModal(modal, animated);
+            app.openModal(modal);
             return modal[0];
         };
-        app.popup = function (modal, removeOnClose, animated) {
+        app.popup = function (modal, removeOnClose) {
             if (typeof removeOnClose === 'undefined') removeOnClose = true;
-            if (typeof animated === 'undefined') animated = true;
             if (typeof modal === 'string' && modal.indexOf('<') >= 0) {
                 var _modal = document.createElement('div');
                 _modal.innerHTML = modal.trim();
@@ -3780,12 +3715,11 @@
             }
             modal.show();
         
-            app.openModal(modal, animated);
+            app.openModal(modal);
             return modal[0];
         };
-        app.pickerModal = function (modal, removeOnClose, animated) {
+        app.pickerModal = function (modal, removeOnClose) {
             if (typeof removeOnClose === 'undefined') removeOnClose = true;
-            if (typeof animated === 'undefined') animated = true;
             if (typeof modal === 'string' && modal.indexOf('<') >= 0) {
                 modal = $(modal);
                 if (modal.length > 0) {
@@ -3804,12 +3738,11 @@
                 app.closeModal('.picker-modal.modal-in:not(.modal-out)');
             }
             modal.show();
-            app.openModal(modal, animated);
+            app.openModal(modal);
             return modal[0];
         };
-        app.loginScreen = function (modal, animated) {
+        app.loginScreen = function (modal) {
             if (!modal) modal = '.login-screen';
-            if (typeof animated === 'undefined') animated = true;
             modal = $(modal);
             if (modal.length === 0) return false;
             if ($('.login-screen.modal-in:not(.modal-out)').length > 0 && !modal.hasClass('modal-in')) {
@@ -3817,14 +3750,11 @@
             }
             modal.show();
             
-            app.openModal(modal, animated);
+            app.openModal(modal);
             return modal[0];
         };
-        app.openModal = function (modal, animated) {
-            if (typeof animated === 'undefined') animated = true;
+        app.openModal = function (modal) {
             modal = $(modal);
-            modal[animated ? 'removeClass' : 'addClass']('not-animated');
-        
             var isModal = modal.hasClass('modal');
             var isPopover = modal.hasClass('popover');
             var isPopup = modal.hasClass('popup');
@@ -3846,22 +3776,11 @@
                 });
                 return;
             }
-        
             // do nothing if this modal already shown
             if (true === modal.data('f7-modal-shown')) {
                 return;
             }
             modal.data('f7-modal-shown', true);
-        
-            // Move modal
-            var modalParent = modal.parent();
-            if (app.params.modalsMoveToRoot && !modalParent.is(app.root)) {
-                app.root.append(modal);
-                modal.once(modalType + ':closed', function() {
-                   modalParent.append(modal);
-                });
-            }
-        
             modal.once(modalType + ':close', function() {
                modal.removeData('f7-modal-shown');
             });
@@ -3891,9 +3810,6 @@
                     overlay = $('.picker-modal-overlay');
                 }
             }
-            if (overlay) {
-                overlay[animated ? 'removeClass' : 'addClass']('not-animated');
-            }
         
             //Make sure that styles are applied, trigger relayout;
             var clientLeft = modal[0].clientLeft;
@@ -3919,25 +3835,17 @@
             // Classes for transition in
             if (!isLoginScreen && !isPickerModal) overlay.addClass('modal-overlay-visible');
             if (app.params.material && isPickerModal && overlay) overlay.addClass('modal-overlay-visible');
-            if (animated) {
-                modal.removeClass('modal-out').addClass('modal-in').transitionEnd(function (e) {
-                    if (modal.hasClass('modal-out')) modal.trigger('closed ' + modalType + ':closed');
-                    else modal.trigger('opened ' + modalType + ':opened');
-                });
-            }
-            else {
-                modal.removeClass('modal-out').addClass('modal-in');
-                modal.trigger('opened ' + modalType + ':opened');
-            }
+            modal.removeClass('modal-out').addClass('modal-in').transitionEnd(function (e) {
+                if (modal.hasClass('modal-out')) modal.trigger('closed ' + modalType + ':closed');
+                else modal.trigger('opened ' + modalType + ':opened');
+            });
             return true;
         };
-        app.closeModal = function (modal, animated) {
-            if (typeof animated === 'undefined') animated = true;
+        app.closeModal = function (modal) {
             modal = $(modal || '.modal-in');
             if (typeof modal !== 'undefined' && modal.length === 0) {
                 return;
             }
-            modal[animated ? 'removeClass' : 'addClass']('not-animated');
             var isModal = modal.hasClass('modal');
             var isPopover = modal.hasClass('popover');
             var isPopup = modal.hasClass('popup');
@@ -3974,7 +3882,6 @@
             else if (overlay && overlay.length > 0) {
                 overlay.removeClass('modal-overlay-visible');
             }
-            if (overlay) overlay[animated ? 'removeClass' : 'addClass']('not-animated');
         
             modal.trigger('close ' + modalType + ':close');
         
@@ -3985,36 +3892,18 @@
             }
         
             if (!(isPopover && !app.params.material)) {
-                if (animated) {
-                    modal.removeClass('modal-in').addClass('modal-out').transitionEnd(function (e) {
-                        if (modal.hasClass('modal-out')) modal.trigger('closed ' + modalType + ':closed');
-                        else {
-                            modal.trigger('opened ' + modalType + ':opened');
-                            if (isPopover) return;
-                        }
+                modal.removeClass('modal-in').addClass('modal-out').transitionEnd(function (e) {
+                    if (modal.hasClass('modal-out')) modal.trigger('closed ' + modalType + ':closed');
+                    else {
+                        modal.trigger('opened ' + modalType + ':opened');
+                        if (isPopover) return;
+                    }
         
-                        if (isPickerModal) {
-                            $('body').removeClass('picker-modal-closing');
-                        }
-                        if (isPopup || isLoginScreen || isPickerModal || isPopover) {
-                            modal.removeClass('modal-out').hide();
-                            if (removeOnClose && modal.length > 0) {
-                                modal.remove();
-                            }
-                        }
-                        else if (!keepOnClose) {
-                            modal.remove();
-                        }
-                    });
-                }
-                else {
-                    modal.trigger('closed ' + modalType + ':closed');
-                    modal.removeClass('modal-in modal-out');
                     if (isPickerModal) {
                         $('body').removeClass('picker-modal-closing');
                     }
                     if (isPopup || isLoginScreen || isPickerModal || isPopover) {
-                        modal.hide();
+                        modal.removeClass('modal-out').hide();
                         if (removeOnClose && modal.length > 0) {
                             modal.remove();
                         }
@@ -4022,13 +3911,13 @@
                     else if (!keepOnClose) {
                         modal.remove();
                     }
-                }
+                });
                 if (isModal && app.params.modalStack) {
                     app.modalStackClearQueue();
                 }
             }
             else {
-                modal.removeClass('modal-in modal-out not-animated').trigger('closed ' + modalType + ':closed').hide();
+                modal.removeClass('modal-in modal-out').trigger('closed ' + modalType + ':closed').hide();
                 if (removeOnClose) {
                     modal.remove();
                 }
@@ -4120,19 +4009,16 @@
         ************   Panels   ************
         ======================================================*/
         app.allowPanelOpen = true;
-        app.openPanel = function (panelPosition, animated) {
-            if (typeof animated === 'undefined') animated = true;
+        app.openPanel = function (panelPosition) {
             if (!app.allowPanelOpen) return false;
             var panel = $('.panel-' + panelPosition);
             if (panel.length === 0 || panel.hasClass('active')) return false;
             app.closePanel(); // Close if some panel is opened
             app.allowPanelOpen = false;
             var effect = panel.hasClass('panel-reveal') ? 'reveal' : 'cover';
-            panel[animated ? 'removeClass' : 'addClass']('not-animated');
             panel.css({display: 'block'}).addClass('active');
             panel.trigger('open panel:open');
             if (app.params.material) {
-                $('.panel-overlay')[animated ? 'removeClass' : 'addClass']('not-animated');
                 $('.panel-overlay').show();
             }
             if (panel.find('.' + app.params.viewClass).length > 0) {
@@ -4144,6 +4030,7 @@
         
             // Transition End;
             var transitionEndTarget = effect === 'reveal' ? $('.' + app.params.viewsClass) : panel;
+            var openedTriggered = false;
         
             function panelTransitionEnd() {
                 transitionEndTarget.transitionEnd(function (e) {
@@ -4160,49 +4047,30 @@
                     else panelTransitionEnd();
                 });
             }
-            if (animated) {
-                panelTransitionEnd();    
-            }
-            else {
-                panel.trigger('opened panel:opened');
-                if (app.params.material) $('.panel-overlay').css({display: ''});
-                app.allowPanelOpen = true;
-            }
+            panelTransitionEnd();
         
             $('body').addClass('with-panel-' + panelPosition + '-' + effect);
             return true;
         };
-        app.closePanel = function (animated) {
-            if (typeof animated === 'undefined') animated = true;
+        app.closePanel = function () {
             var activePanel = $('.panel.active');
             if (activePanel.length === 0) return false;
             var effect = activePanel.hasClass('panel-reveal') ? 'reveal' : 'cover';
             var panelPosition = activePanel.hasClass('panel-left') ? 'left' : 'right';
-            activePanel[animated ? 'removeClass' : 'addClass']('not-animated');
             activePanel.removeClass('active');
-            if (app.params.material) {
-                $('.panel-overlay').removeClass('not-animated');
-            }
             var transitionEndTarget = effect === 'reveal' ? $('.' + app.params.viewsClass) : activePanel;
             activePanel.trigger('close panel:close');
             app.allowPanelOpen = false;
-            if (animated) {
-                transitionEndTarget.transitionEnd(function () {
-                    if (activePanel.hasClass('active')) return;
-                    activePanel.css({display: ''});
-                    activePanel.trigger('closed panel:closed');
-                    $('body').removeClass('panel-closing');
-                    app.allowPanelOpen = true;
-                });
-                $('body').addClass('panel-closing').removeClass('with-panel-' + panelPosition + '-' + effect);
-            }
-            else {
+        
+            transitionEndTarget.transitionEnd(function () {
+                if (activePanel.hasClass('active')) return;
                 activePanel.css({display: ''});
                 activePanel.trigger('closed panel:closed');
-                activePanel.removeClass('not-animated');
-                $('body').removeClass('with-panel-' + panelPosition + '-' + effect);
+                $('body').removeClass('panel-closing');
                 app.allowPanelOpen = true;
-            }
+            });
+        
+            $('body').addClass('panel-closing').removeClass('with-panel-' + panelPosition + '-' + effect);
         };
         /*======================================================
         ************   Swipe panels   ************
@@ -4231,8 +4099,6 @@
                 if (!(app.params.swipePanelCloseOpposite || app.params.swipePanelOnlyClose)) {
                     if ($('.panel.active').length > 0 && !panel.hasClass('active')) return;
                 }
-                if (e.target && e.target.nodeName.toLowerCase() === 'input' && e.target.type === 'range') return;
-                if ($(e.target).closest('.tabs-swipeable-wrap').length > 0) return;
                 touchesStart.x = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
                 touchesStart.y = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
                 if (app.params.swipePanelCloseOpposite || app.params.swipePanelOnlyClose) {
@@ -4374,7 +4240,6 @@
                     views.transform('translate3d(' + translate + 'px,0,0)').transition(0);
                     panelOverlay.transform('translate3d(' + translate + 'px,0,0)').transition(0);
         
-                    panel.trigger('panel:swipe', {progress: Math.abs(translate / panelWidth)});
                     app.pluginHook('swipePanelSetTransform', views[0], panel[0], Math.abs(translate / panelWidth));
                 }
                 else {
@@ -4384,7 +4249,6 @@
                         overlayOpacity = Math.abs(translate/panelWidth);
                         panelOverlay.css({opacity: overlayOpacity});
                     }
-                    panel.trigger('panel:swipe', {progress: Math.abs(translate / panelWidth)});
                     app.pluginHook('swipePanelSetTransform', views[0], panel[0], Math.abs(translate / panelWidth));
                 }
             }
@@ -4545,23 +4409,6 @@
                         }
                     }
                 }
-                
-                function onError() {
-                    el.removeClass('lazy').addClass('lazy-loaded');
-                    if (bg) {
-                        el.css('background-image', 'url(' + placeholderSrc + ')');
-                    }
-                    else {
-                        el.attr('src', placeholderSrc);
-                    }
-        
-                    if (app.params.imagesLazyLoadSequential) {
-                        imageIsLoading = false;
-                        if (imagesSequence.length > 0) {
-                            loadImage(imagesSequence.shift());
-                        }
-                    }
-                }
         
                 if (app.params.imagesLazyLoadSequential) {
                     if (imageIsLoading) {
@@ -4575,7 +4422,7 @@
                 
                 var image = new Image();
                 image.onload = onLoad;
-                image.onerror = onError;
+                image.onerror = onLoad;
                 image.src =src;
             }
             function lazyHandler() {
@@ -4644,7 +4491,6 @@
                 pageContainer.trigger('lazy');
             }
         };
-        
 
         /*======================================================
         ************   Material Preloader   ************
@@ -4995,7 +4841,8 @@
                 if (translate < 0) direction = 'to-left';
                 else if (translate > 0) direction = 'to-right';
                 else {
-                    if (!direction) direction = 'to-left';
+                    if (direction) direction = direction;
+                    else direction = 'to-left';
                 }
                 
                 var i, buttonOffset, progress;
@@ -5094,8 +4941,9 @@
                 isTouched = false;
                 isMoved = false;
                 var timeDiff = (new Date()).getTime() - touchStartTime;
-                var action, actionsWidth, actions, buttons, i;
-        
+                var action, actionsWidth, actions, buttons, i, noFold;
+                
+                noFold = direction === 'to-left' ? noFoldRight : noFoldLeft;
                 actions = direction === 'to-left' ? actionsRight : actionsLeft;
                 actionsWidth = direction === 'to-left' ? actionsRightWidth : actionsLeftWidth;
         
@@ -5202,6 +5050,7 @@
             }
             var swipeOutActions = el.find('.swipeout-actions-' + dir);
             if (swipeOutActions.length === 0) return;
+            var noFold = swipeOutActions.hasClass('swipeout-actions-no-fold') || app.params.swipeoutActionsNoFold;
             el.trigger('open swipeout:open').addClass('swipeout-opened').removeClass('transitioning');
             swipeOutActions.addClass('swipeout-actions-opened');
             var buttons = swipeOutActions.children('a');
@@ -5235,6 +5084,7 @@
             if (!el.hasClass('swipeout-opened')) return;
             var dir = el.find('.swipeout-actions-opened').hasClass('swipeout-actions-right') ? 'right' : 'left';
             var swipeOutActions = el.find('.swipeout-actions-opened').removeClass('swipeout-actions-opened');
+            var noFold = swipeOutActions.hasClass('swipeout-actions-no-fold') || app.params.swipeoutActionsNoFold;
             var buttons = swipeOutActions.children('a');
             var swipeOutActionsWidth = swipeOutActions.outerWidth();
             app.allowSwipeout = false;
@@ -5450,16 +5300,8 @@
                 if (select.length === 0) return;
         
                 var valueText = [];
-                var displayAs;
                 for (var i = 0; i < select.length; i++) {
-                    if (select[i].selected) {
-                        displayAs = select[i].dataset ? select[i].dataset.displayAs : $(select[i]).data('display-as');
-                        if (displayAs && typeof displayAs !== 'undefined') {
-        					valueText.push(displayAs);
-        				} else {
-        					valueText.push(select[i].textContent.trim());
-        				}
-        			}
+                    if (select[i].selected) valueText.push(select[i].textContent.trim());
                 }
         
                 var itemAfter = smartSelect.find('.item-after');
@@ -5480,14 +5322,7 @@
                 $select.on('change', function () {
                     var valueText = [];
                     for (var i = 0; i < select.length; i++) {
-                        if (select[i].selected) {
-                            var displayAs = select[i].dataset ? select[i].dataset.displayAs : $(select[i]).data('display-as');
-                        	if (displayAs && typeof displayAs !== 'undefined') {
-        						valueText.push(displayAs);
-        					} else {
-        						valueText.push(select[i].textContent.trim());
-        					}
-        				}
+                        if (select[i].selected) valueText.push(select[i].textContent.trim());
                     }
                     smartSelect.find('.item-after').text(valueText.join(', '));
                 });
@@ -5850,22 +5685,18 @@
                     });
                 }
                 container.on('change', 'input[name="' + inputName + '"]', function () {
-        			var option, text;
                     var input = this;
                     var value = input.value;
                     var optionText = [];
-                    var displayAs;
                     if (input.type === 'checkbox') {
                         var values = [];
                         for (var i = 0; i < select.options.length; i++) {
-                            option = select.options[i];
+                            var option = select.options[i];
                             if (option.value === value) {
                                 option.selected = input.checked;
                             }
                             if (option.selected) {
-                                displayAs = option.dataset ? option.dataset.displayAs : $(option).data('display-as');
-                                text = displayAs && typeof displayAs !== 'undefined' ? displayAs : option.textContent;
-                                optionText.push(text.trim());
+                                optionText.push(option.textContent.trim());
                             }
                         }
                         if (maxLength) {
@@ -5873,10 +5704,7 @@
                         }
                     }
                     else {
-                        option = smartSelect.find('option[value="' + value + '"]')[0];
-                        displayAs = option.dataset ? option.dataset.displayAs : $(option).data('display-as');
-                        text = displayAs && typeof displayAs !== 'undefined' ? displayAs : option.textContent;
-                        optionText = [text];
+                        optionText = [smartSelect.find('option[value="' + value + '"]').text()];
                         select.value = value;
                     }
         
@@ -5978,15 +5806,7 @@
                 height: app.params.material ? 48 : 44,
                 cache: true,
                 dynamicHeightBufferSize: 1,
-                showFilteredItemsOnly: false,
-                template: 
-                    '<li>' +
-                        '<div class="item-content">' +
-                            '<div class="item-inner">' +
-                                '<div class="item-title">{{this}}</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</li>'
+                showFilteredItemsOnly: false
             };
             params = params || {};
             for (var def in defaults) {
@@ -6003,7 +5823,7 @@
             if (vl.params.showFilteredItemsOnly) {
                 vl.filteredItems = [];
             }
-            if (vl.params.template && !vl.params.renderItem) {
+            if (vl.params.template) {
                 if (typeof vl.params.template === 'string') vl.template = t7.compile(vl.params.template);
                 else if (typeof vl.params.template === 'function') vl.template = vl.params.template;
             }
@@ -6162,14 +5982,14 @@
                         item = vl.domCache[index];
                     }
                     else {
-                        if (vl.template && !vl.params.renderItem) {
+                        if (vl.template) {
                             vl.tempDomElement.innerHTML = vl.template(items[i], {index: index}).trim();
                         }
                         else if (vl.params.renderItem) {
                             vl.tempDomElement.innerHTML = vl.params.renderItem(index, items[i]).trim();
                         }
                         else {
-                            vl.tempDomElement.innerHTML = items[i].toString().trim();
+                            vl.tempDomElement.innerHTML = items[i].trim();
                         }
                         item = vl.tempDomElement.childNodes[0];
                         if (vl.params.cache) vl.domCache[index] = item;
@@ -6206,19 +6026,13 @@
                     }
                 }
         
+        
                 // Update list html
                 if (vl.params.onBeforeClear) vl.params.onBeforeClear(vl, vl.fragment);
                 vl.ul[0].innerHTML = '';
         
                 if (vl.params.onItemsBeforeInsert) vl.params.onItemsBeforeInsert(vl, vl.fragment);
-                if (items && items.length === 0) {
-                    vl.reachEnd = true;
-                    if (vl.params.emptyTemplate) vl.ul[0].innerHTML = vl.params.emptyTemplate;
-                }
-                else {
-                    vl.ul[0].appendChild(vl.fragment);
-                }
-                
+                vl.ul[0].appendChild(vl.fragment);
                 if (vl.params.onItemsAfterInsert) vl.params.onItemsAfterInsert(vl, vl.fragment);
         
                 if (typeof forceScrollTop !== 'undefined' && force) {
@@ -6261,9 +6075,7 @@
             vl.attachEvents = function (detach) {
                 var action = detach ? 'off' : 'on';
                 vl.pageContent[action]('scroll', vl.handleScroll);
-                vl.listBlock.parents('.tab').eq(0)[action]('tab:show', vl.handleResize);
-                vl.listBlock.parents('.panel').eq(0)[action]('panel:open', vl.handleResize);
-                vl.listBlock.parents('.popup').eq(0)[action]('popup:open', vl.handleResize);
+                vl.listBlock.parents('.tab').eq(0)[action]('show', vl.handleResize);
                 $(window)[action]('resize', vl.handleResize);
             };
         
@@ -6864,26 +6676,23 @@
             tabbar = $(tabbar);
             activeLink = activeLink || tabbar.find('.tab-link.active');
         
-            if (activeLink && activeLink.length > 0) {
-                var tabLinkWidth, highlightTranslate;
-                if (tabbar.hasClass('tabbar-scrollable')) {
-                    tabLinkWidth = activeLink[0].offsetWidth + 'px';
-                    highlightTranslate = activeLink[0].offsetLeft + 'px';
-                }
-                else {
-                    tabLinkWidth = 1 / tabbar.find('.tab-link').length * 100 + '%';
-                    highlightTranslate = (app.rtl ? - activeLink.index(): activeLink.index()) * 100 + '%';
-                }
-        
-                tabbar.find('.tab-link-highlight')
-                    .css({width: tabLinkWidth})
-                    .transform('translate3d(' + highlightTranslate + ',0,0)');
+            var tabLinkWidth, highlightTranslate;
+            if (tabbar.hasClass('tabbar-scrollable')) {
+                tabLinkWidth = activeLink[0].offsetWidth + 'px';
+                highlightTranslate = (app.rtl ? - activeLink[0].offsetLeft: activeLink[0].offsetLeft) + 'px';
             }
+            else {
+                tabLinkWidth = 1 / tabbar.find('.tab-link').length * 100 + '%';
+                highlightTranslate = (app.rtl ? - activeLink.index(): activeLink.index()) * 100 + '%';
+            }
+        
+            tabbar.find('.tab-link-highlight')
+                .css({width: tabLinkWidth})
+                .transform('translate3d(' + highlightTranslate + ',0,0)');
         };
         app.initPageMaterialTabbar = function (pageContainer) {
             pageContainer = $(pageContainer);
-            var tabbar = pageContainer.find('.tabbar');
-            if (tabbar.length === 0 && pageContainer.hasClass('tabbar')) tabbar = pageContainer;
+            var tabbar = $(pageContainer).find('.tabbar');
         
             function tabbarSetHighlight() {
                 app.materialTabbarSetHighlight(tabbar);
@@ -6900,30 +6709,27 @@
                 });
             }
         };
-        app.initMaterialTabbar = function (tabbar) {
-            return app.initPageMaterialTabbar(tabbar);
-        };
 
         /* ===============================================================================
         ************   Tabs   ************
         =============================================================================== */
-        app.showTab = function (tab, tabLink, animated, force) {
+        app.showTab = function (tab, tabLink, force) {
             var newTab = $(tab);
-            if (arguments.length === 2 && typeof arguments[1] === 'boolean') {
-                tab = arguments[0];
-                animated = arguments[1];
+            if (arguments.length === 2) {
+                if (typeof tabLink === 'boolean') {
+                    force = tabLink;
+                }
             }
-            if (arguments.length === 3 && typeof arguments[1] === 'boolean' && typeof arguments[2] === 'boolean') {
-                tab = arguments[0];
-                animated = arguments[1];
-                force = arguments[2];
-            }
-            if (typeof animated === 'undefined') animated = true;
+			/*
             if (newTab.length === 0) return false;
             if (newTab.hasClass('active')) {
                 if (force) newTab.trigger('show tab:show');
                 return false;
             }
+			
+			
+			alert(););
+			*/
             var tabs = newTab.parent('.tabs');
             if (tabs.length === 0) return false;
         
@@ -6933,7 +6739,6 @@
             // Animated tabs
             var isAnimatedTabs = tabs.parent().hasClass('tabs-animated-wrap');
             if (isAnimatedTabs) {
-                tabs.parent()[animated ? 'removeClass' : 'addClass']('not-animated');
                 var tabTranslate = (app.rtl ? newTab.index() : -newTab.index()) * 100;
                 tabs.transform('translate3d(' + tabTranslate + '%,0,0)');
             }
@@ -6942,7 +6747,7 @@
             var isSwipeableTabs = tabs.parent().hasClass('tabs-swipeable-wrap'), swiper;
             if (isSwipeableTabs) {
                 swiper = tabs.parent()[0].swiper;
-                if (swiper.activeIndex !== newTab.index()) swiper.slideTo(newTab.index(), animated ? undefined : 0, false);
+                if (swiper.activeIndex !== newTab.index()) swiper.slideTo(newTab.index(), undefined, false);
             }
         
             // Remove active class from old tabs
@@ -7708,18 +7513,14 @@
                         else app.openPanel('left');
                     }
                 }
-                
                 // Close Panel
                 if (clicked.hasClass('close-panel')) {
                     app.closePanel();
                 }
         
-                // Panel Overlay
-                if (clicked.hasClass('panel-overlay')) {
-                    $('.panel.active').trigger('panel:overlay-click');
-                    if (app.params.panelsCloseByOutside) app.closePanel();
+                if (clicked.hasClass('panel-overlay') && app.params.panelsCloseByOutside) {
+                    app.closePanel();
                 }
-        
                 // Popover
                 if (clicked.hasClass('open-popover')) {
                     var popover;
@@ -8926,7 +8727,6 @@
                 openIn: 'page',
                 backOnSelect: false,
                 notFoundText: 'Nothing found',
-                requestSourceOnOpen: false,
                 /*
                 pageTitle: undefined,
                 */
@@ -8940,8 +8740,6 @@
                 textProperty: 'text',
         
                 // Dropdown Options
-                highlightMatches: true,
-        
                 /*
                 dropdownPlaceholderText: 'Type anything...',
                 */
@@ -9190,18 +8988,13 @@
                         var itemsHTML = '';
                         var limit = a.params.limit ? Math.min(a.params.limit, items.length) : items.length;
                         a.items = items;
-                        var i, j, regExp;
-                        if (a.params.highlightMatches) {
-                            query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-                            regExp = new RegExp('('+query+')', 'i');
-                        }
-        
+                        var i, j;
+                        var regExp = new RegExp('('+query+')', 'i');
                         for (i = 0; i < limit; i++) {
                             var itemValue = typeof items[i] === 'object' ? items[i][a.params.valueProperty] : items[i];
-                            var itemText = typeof items[i] !== 'object' ? items[i] : items[i][a.params.textProperty];
                             itemsHTML += a.dropdownItemTemplate({
                                 value: itemValue,
-                                text: a.params.highlightMatches ? itemText.replace(regExp, '<b>$1</b>') : itemText
+                                text: (typeof items[i] !== 'object' ? items[i] : items[i][a.params.textProperty]).replace(regExp, '<b>$1</b>')
                             });
                         }
                         if (itemsHTML === '' && query === '' && a.params.dropdownPlaceholderText) {
@@ -9276,52 +9069,6 @@
                     return;
                 }
                 var container = $(page.container);
-        
-                // Source
-                function onSource(query) {
-                    if (!a.params.source) return;
-                    var i, j, k;
-        
-                    a.params.source(a, query, function(items) {
-                        var itemsHTML = '';
-                        var limit = a.params.limit ? Math.min(a.params.limit, items.length) : items.length;
-                        a.items = items;
-                        for (i = 0; i < limit; i++) {
-                            var selected = false;
-                            var itemValue = typeof items[i] === 'object' ? items[i][a.params.valueProperty] : items[i];
-                            for (j = 0; j < a.value.length; j++) {
-                                var aValue = typeof a.value[j] === 'object' ? a.value[j][a.params.valueProperty] : a.value[j];
-                                if (aValue === itemValue || aValue * 1 === itemValue * 1) selected = true;
-                            }
-                            itemsHTML += a.itemTemplate({
-                                value: itemValue,
-                                text: typeof items[i] !== 'object' ? items[i] : items[i][a.params.textProperty],
-                                inputType: a.inputType,
-                                id: a.id,
-                                inputName: a.inputName,
-                                selected: selected,
-                                checkbox: a.inputType === 'checkbox',
-                                material: material
-                            });
-                        }
-                        container.find('.autocomplete-found ul').html(itemsHTML);
-                        if (items.length === 0) {
-                            if (query.length !== 0) {
-                                container.find('.autocomplete-not-found').show();
-                                container.find('.autocomplete-found, .autocomplete-values').hide();
-                            }
-                            else {
-                                container.find('.autocomplete-values').show();
-                                container.find('.autocomplete-found, .autocomplete-not-found').hide();
-                            }
-                        }
-                        else {
-                            container.find('.autocomplete-found').show();
-                            container.find('.autocomplete-not-found, .autocomplete-values').hide();
-                        }
-                    });
-                }
-        
                 // Init Search Bar
                 var searchbar = app.searchbar(container.find('.searchbar'), {
                     customSearch: true,
@@ -9333,7 +9080,48 @@
                             searchbar.overlay.removeClass('searchbar-overlay-active');
                         }
         
-                        onSource(data.query);
+                        var i, j, k;
+        
+                        if (a.params.source) {
+                            a.params.source(a, data.query, function(items) {
+                                var itemsHTML = '';
+                                var limit = a.params.limit ? Math.min(a.params.limit, items.length) : items.length;
+                                a.items = items;
+                                for (i = 0; i < limit; i++) {
+                                    var selected = false;
+                                    var itemValue = typeof items[i] === 'object' ? items[i][a.params.valueProperty] : items[i];
+                                    for (j = 0; j < a.value.length; j++) {
+                                        var aValue = typeof a.value[j] === 'object' ? a.value[j][a.params.valueProperty] : a.value[j];
+                                        if (aValue === itemValue || aValue * 1 === itemValue * 1) selected = true;
+                                    }
+                                    itemsHTML += a.itemTemplate({
+                                        value: itemValue,
+                                        text: typeof items[i] !== 'object' ? items[i] : items[i][a.params.textProperty],
+                                        inputType: a.inputType,
+                                        id: a.id,
+                                        inputName: a.inputName,
+                                        selected: selected,
+                                        checkbox: a.inputType === 'checkbox',
+                                        material: material
+                                    });
+                                }
+                                container.find('.autocomplete-found ul').html(itemsHTML);
+                                if (items.length === 0) {
+                                    if (data.query.length !== 0) {
+                                        container.find('.autocomplete-not-found').show();
+                                        container.find('.autocomplete-found, .autocomplete-values').hide();
+                                    }
+                                    else {
+                                        container.find('.autocomplete-values').show();
+                                        container.find('.autocomplete-found, .autocomplete-not-found').hide();
+                                    }
+                                }
+                                else {
+                                    container.find('.autocomplete-found').show();
+                                    container.find('.autocomplete-not-found, .autocomplete-values').hide();
+                                }
+                            });
+                        }
                     }
                 });
         
@@ -9421,10 +9209,6 @@
                 // Update Values On Page Init
                 updateValues();
         
-                // Source on load
-                if (a.params.requestSourceOnOpen) onSource('');
-        
-                // On Open Callback
                 if (a.params.onOpen) a.params.onOpen(a);
             };
         
@@ -9635,26 +9419,13 @@
             };
             p.updateValue = function (forceValues) {
                 var newValue = forceValues || [];
-                var newDisplayValue = [], i;
-                if (p.cols.length === 0) {
-                    for (i = 0; i < p.params.cols.length; i++) {
-                        if (p.params.cols[i].displayValues !== undefined) {
-                            newDisplayValue.push(p.params.cols[i].displayValues[newValue[i]]);
-                        }
-                        else {
-                            newDisplayValue.push(newValue[i]);
-                        }
+                var newDisplayValue = [];
+                for (var i = 0; i < p.cols.length; i++) {
+                    if (!p.cols[i].divider) {
+                        newValue.push(p.cols[i].value);
+                        newDisplayValue.push(p.cols[i].displayValue);
                     }
                 }
-                else {
-                    for (i = 0; i < p.cols.length; i++) {
-                        if (!p.cols[i].divider) {
-                            newValue.push(p.cols[i].value);
-                            newDisplayValue.push(p.cols[i].displayValue);
-                        }
-                    }
-                }
-                    
                 if (newValue.indexOf(undefined) >= 0) {
                     return;
                 }
@@ -10494,6 +10265,7 @@
                         day = $(e.target);
                     }
                     if (day.length === 0) return;
+                    if (day.hasClass('picker-calendar-day-selected') && !(p.params.multiple || p.params.rangePicker)) return;
                     if (day.hasClass('picker-calendar-day-disabled')) return;
                     if (!p.params.rangePicker) {
                         if (day.hasClass('picker-calendar-day-next')) p.nextMonth();
@@ -10505,9 +10277,7 @@
                     if (p.params.onDayClick) {
                         p.params.onDayClick(p, day[0], dateYear, dateMonth, dateDay);
                     }
-                    if (!day.hasClass('picker-calendar-day-selected') || p.params.multiple || p.params.rangePicker) {
-                        p.addValue(new Date(dateYear, dateMonth, dateDay).getTime());
-                    }
+                    p.addValue(new Date(dateYear, dateMonth, dateDay).getTime());
                     if (p.params.closeOnSelect) {
                         if (p.params.rangePicker && p.value.length === 2 || !p.params.rangePicker) p.close();
                     }
@@ -11444,15 +11214,6 @@
             
             // Init Material Inputs
             if (app.params.material && app.initMaterialWatchInputs) app.initMaterialWatchInputs();
-        
-            // Init Material Tabbar
-            if (app.params.material) {
-                $('.tabbar').each(function (index, el) {
-                    if ($(el).parents('.page').length === 0) {
-                        app.initMaterialTabbar(el);
-                    }
-                });
-            }
             
             // App Init callback
             if (app.params.onAppInit) app.params.onAppInit();
@@ -11536,7 +11297,7 @@
         };
 
         Dom7.prototype = {
-            // Classes and attributes
+            // Classes and attriutes
             addClass: function (className) {
                 if (typeof className === 'undefined') {
                     return this;
@@ -11605,6 +11366,7 @@
                 if (arguments.length === 1 && typeof props === 'string') {
                     // Get prop
                     if (this[0]) return this[0][props];
+                    else return undefined;
                 }
                 else {
                     // Set props
@@ -11624,16 +11386,14 @@
                 }
             },
             data: function (key, value) {
-                var el;
                 if (typeof value === 'undefined') {
-                    el = this[0];
                     // Get value
-                    if (el) {
-                        if (el.dom7ElementDataStorage && (key in el.dom7ElementDataStorage)) {
-                            return el.dom7ElementDataStorage[key];
+                    if (this[0]) {
+                        if (this[0].dom7ElementDataStorage && (key in this[0].dom7ElementDataStorage)) {
+                            return this[0].dom7ElementDataStorage[key];
                         }
                         else {
-                            var dataKey = el.getAttribute('data-' + key);
+                            var dataKey = this[0].getAttribute('data-' + key);    
                             if (dataKey) {
                                 return dataKey;
                             }
@@ -11645,7 +11405,7 @@
                 else {
                     // Set value
                     for (var i = 0; i < this.length; i++) {
-                        el = this[i];
+                        var el = this[i];
                         if (!el.dom7ElementDataStorage) el.dom7ElementDataStorage = {};
                         el.dom7ElementDataStorage[key] = value;
                     }
@@ -11685,6 +11445,7 @@
                     }
                     return dataset;
                 }
+                else return undefined;
             },
             val: function (value) {
                 if (typeof value === 'undefined') {
@@ -11711,7 +11472,7 @@
             transform : function (transform) {
                 for (var i = 0; i < this.length; i++) {
                     var elStyle = this[i].style;
-                    elStyle.webkitTransform = elStyle.transform = transform;
+                    elStyle.webkitTransform = elStyle.MsTransform = elStyle.msTransform = elStyle.MozTransform = elStyle.OTransform = elStyle.transform = transform;
                 }
                 return this;
             },
@@ -11721,7 +11482,7 @@
                 }
                 for (var i = 0; i < this.length; i++) {
                     var elStyle = this[i].style;
-                    elStyle.webkitTransitionDuration = elStyle.transitionDuration = duration;
+                    elStyle.webkitTransitionDuration = elStyle.MsTransitionDuration = elStyle.msTransitionDuration = elStyle.MozTransitionDuration = elStyle.OTransitionDuration = elStyle.transitionDuration = duration;
                 }
                 return this;
             },
@@ -11820,8 +11581,8 @@
                 return this;
             },
             transitionEnd: function (callback) {
-                var events = ['webkitTransitionEnd', 'transitionend'],
-                    i, dom = this;
+                var events = ['webkitTransitionEnd', 'transitionend', 'oTransitionEnd', 'MSTransitionEnd', 'msTransitionEnd'],
+                    i, j, dom = this;
                 function fireCallBack(e) {
                     /*jshint validthis:true */
                     if (e.target !== this) return;
@@ -11838,8 +11599,8 @@
                 return this;
             },
             animationEnd: function (callback) {
-                var events = ['webkitAnimationEnd', 'animationend'],
-                    i, dom = this;
+                var events = ['webkitAnimationEnd', 'OAnimationEnd', 'MSAnimationEnd', 'animationend'],
+                    i, j, dom = this;
                 function fireCallBack(e) {
                     callback(e);
                     for (i = 0; i < events.length; i++) {
@@ -11933,7 +11694,9 @@
                 return this;
             },
             styles: function () {
+                var i, styles;
                 if (this[0]) return window.getComputedStyle(this[0], null);
+                else return undefined;
             },
             css: function (props, value) {
                 var i;
@@ -11960,19 +11723,10 @@
             },
         
             //Dom manipulation
-            // Iterate over the collection passing elements to `callback`
             each: function (callback) {
-                // Don't bother continuing without a callback
-                if (!callback) return this;
-                // Iterate over the current collection
                 for (var i = 0; i < this.length; i++) {
-                    // If the callback returns false
-                    if (callback.call(this[i], i, this[i]) === false) {
-                        // End the loop early
-                        return this;
-                    }
+                    callback.call(this[i], i, this[i]);
                 }
-                // Return `this` to allow chained DOM operations
                 return this;
             },
             filter: function (callback) {
@@ -12009,27 +11763,32 @@
                 }
             },
             is: function (selector) {
-                var compareWith, i, el = this[0];
-                if (!el || typeof selector === 'undefined') return false;
+                if (!this[0] || typeof selector === 'undefined') return false;
+                var compareWith, i;
                 if (typeof selector === 'string') {
+                    var el = this[0];
+                    if (el === document) return selector === document;
+                    if (el === window) return selector === window;
+        
                     if (el.matches) return el.matches(selector);
                     else if (el.webkitMatchesSelector) return el.webkitMatchesSelector(selector);
+                    else if (el.mozMatchesSelector) return el.mozMatchesSelector(selector);
                     else if (el.msMatchesSelector) return el.msMatchesSelector(selector);
                     else {
                         compareWith = $(selector);
                         for (i = 0; i < compareWith.length; i++) {
-                            if (compareWith[i] === el) return true;
+                            if (compareWith[i] === this[0]) return true;
                         }
                         return false;
                     }
                 }
-                else if (selector === document) return el === document;
-                else if (selector === window) return el === window;
+                else if (selector === document) return this[0] === document;
+                else if (selector === window) return this[0] === window;
                 else {
                     if (selector.nodeType || selector instanceof Dom7) {
                         compareWith = selector.nodeType ? [selector] : selector;
                         for (i = 0; i < compareWith.length; i++) {
-                            if (compareWith[i] === el) return true;
+                            if (compareWith[i] === this[0]) return true;
                         }
                         return false;
                     }
@@ -12043,14 +11802,15 @@
                 }
             },
             index: function () {
-                var i, child = this[0];
-                if (child) {
-                    i = 0;
+                if (this[0]) {
+                    var child = this[0];
+                    var i = 0;
                     while ((child = child.previousSibling) !== null) {
                         if (child.nodeType === 1) i++;
                     }
                     return i;
                 }
+                else return undefined;
             },
             eq: function (index) {
                 if (typeof index === 'undefined') return this;
@@ -12066,31 +11826,25 @@
                 }
                 return new Dom7([this[index]]);
             },
-            append: function () {
-                var i, j, k, newChild;
-        
-                for (k = 0; k < arguments.length; k++) {
-                  newChild = arguments[k];
-        
-                  for (i = 0; i < this.length; i++) {
-                      if (typeof newChild === 'string') {
-                          var tempDiv = document.createElement('div');
-                          tempDiv.innerHTML = newChild;
-                          while (tempDiv.firstChild) {
-                              this[i].appendChild(tempDiv.firstChild);
-                          }
-                      }
-                      else if (newChild instanceof Dom7) {
-                          for (j = 0; j < newChild.length; j++) {
-                              this[i].appendChild(newChild[j]);
-                          }
-                      }
-                      else {
-                          this[i].appendChild(newChild);
-                      }
-                  }
+            append: function (newChild) {
+                var i, j;
+                for (i = 0; i < this.length; i++) {
+                    if (typeof newChild === 'string') {
+                        var tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newChild;
+                        while (tempDiv.firstChild) {
+                            this[i].appendChild(tempDiv.firstChild);
+                        }
+                    }
+                    else if (newChild instanceof Dom7) {
+                        for (j = 0; j < newChild.length; j++) {
+                            this[i].appendChild(newChild[j]);
+                        }
+                    }
+                    else {
+                        this[i].appendChild(newChild);
+                    }
                 }
-        
                 return this;
             },
             appendTo: function (parent) {
@@ -12178,13 +11932,12 @@
             },
             prev: function (selector) {
                 if (this.length > 0) {
-                    var el = this[0];
                     if (selector) {
-                        if (el.previousElementSibling && $(el.previousElementSibling).is(selector)) return new Dom7([el.previousElementSibling]);
+                        if (this[0].previousElementSibling && $(this[0].previousElementSibling).is(selector)) return new Dom7([this[0].previousElementSibling]);
                         else return new Dom7([]);
                     }
                     else {
-                        if (el.previousElementSibling) return new Dom7([el.previousElementSibling]);
+                        if (this[0].previousElementSibling) return new Dom7([this[0].previousElementSibling]);
                         else return new Dom7([]);
                     }
                 }
@@ -12436,7 +12189,6 @@
                 script.onerror = function() {
                     clearTimeout(abortTimeout);
                     fireAjaxCallback(undefined, undefined, 'error', null, 'scripterror');
-                    fireAjaxCallback('ajaxComplete ajax:complete', {scripterror: true}, 'complete', null, 'scripterror');
                 };
                 script.src = requestUrl;
         
@@ -12575,7 +12327,6 @@
             xhr.onerror = function (e) {
                 if (xhrTimeout) clearTimeout(xhrTimeout);
                 fireAjaxCallback('ajaxError ajax:error', {xhr: xhr}, 'error', xhr, xhr.status);
-                fireAjaxCallback('ajaxComplete ajax:complete', {xhr: xhr}, 'complete', xhr, xhr.status);
             };
         
             // Ajax start callback
@@ -12621,20 +12372,22 @@
         })();
         
 
-        // DOM Library Utilities
-        $.parseUrlQuery= function (url) {
-            url = url || location.href;
-            var query = {},i, params, param, length;
-            if (typeof url === 'string' && url.length)  {
-                url = url.indexOf('?')>-1 ? url.replace(/\S*\?/,'') : '';
-                params = url.split('&'), length = params.length;
+        // DOM Library Utilites
+        $.parseUrlQuery = function (url) {
+           var url = url || location.href;
+            var query = {}, i, params, param;
         
-                for (i = 0; i < length; i++) {
-                    param = params[i].replace(/#\S+/g,'').split('=');
-                    query[decodeURIComponent(param[0])] = decodeURIComponent(param[1]) || '';
+            if (typeof url === 'string' && url.length)  {
+                url = (url.indexOf('#') > -1) ? url.split('#')[0] : url;
+                if (url.indexOf('?') > -1) url = url.split('?')[1];
+                else return query;
+        
+                params = url.split('&');
+                for (i = 0; i < params.length; i ++) {
+                    param = params[i].split('=');
+                    query[param[0]] = param[1];
                 }
             }
-        
             return query;
         };
         $.isArray = function (arr) {
@@ -12642,34 +12395,20 @@
             else return false;
         };
         $.each = function (obj, callback) {
-            // Check it's iterable
-            // TODO: Should probably raise a value error here
             if (typeof obj !== 'object') return;
-            // Don't bother continuing without a callback
             if (!callback) return;
+            var i, prop;
             if ($.isArray(obj) || obj instanceof Dom7) {
-                var i;
                 // Array
                 for (i = 0; i < obj.length; i++) {
-                    // If callback returns false
-                    if (callback(i, obj[i]) === false) {
-                        // Break out of the loop
-                        return;
-                    }
+                    callback(i, obj[i]);
                 }
             }
             else {
-                var prop;
                 // Object
                 for (prop in obj) {
-                    // Check the propertie belongs to the object
-                    // not it's prototype
                     if (obj.hasOwnProperty(prop)) {
-                        // If the callback returns false
-                        if (callback(prop, obj[prop]) === false) {
-                            // Break out of the loop;
-                            return;
-                        }
+                        callback(prop, obj[prop]);
                     }
                 }
             }
@@ -12770,7 +12509,7 @@
                 transformMatrix = new WebKitCSSMatrix(curTransform === 'none' ? '' : curTransform);
             }
             else {
-                transformMatrix = curStyle.transform || curStyle.getPropertyValue('transform').replace('translate(', 'matrix(1, 0, 0, 1,');
+                transformMatrix = curStyle.MozTransform || curStyle.OTransform || curStyle.MsTransform || curStyle.msTransform  || curStyle.transform || curStyle.getPropertyValue('transform').replace('translate(', 'matrix(1, 0, 0, 1,');
                 matrix = transformMatrix.toString().split(',');
             }
         
@@ -12803,6 +12542,7 @@
         $.requestAnimationFrame = function (callback) {
             if (window.requestAnimationFrame) return window.requestAnimationFrame(callback);
             else if (window.webkitRequestAnimationFrame) return window.webkitRequestAnimationFrame(callback);
+            else if (window.mozRequestAnimationFrame) return window.mozRequestAnimationFrame(callback);
             else {
                 return window.setTimeout(callback, 1000 / 60);
             }
@@ -12810,6 +12550,7 @@
         $.cancelAnimationFrame = function (id) {
             if (window.cancelAnimationFrame) return window.cancelAnimationFrame(id);
             else if (window.webkitCancelAnimationFrame) return window.webkitCancelAnimationFrame(id);
+            else if (window.mozCancelAnimationFrame) return window.mozCancelAnimationFrame(id);
             else {
                 return window.clearTimeout(id);
             }  
@@ -12967,7 +12708,7 @@
                     if (startTime === null) {
                         startTime = time;
                     }
-                    var done;
+                    var doneLeft, doneTop, done;
                     var progress = Math.max(Math.min((time - startTime) / duration, 1), 0);
                     var easeProgress = easing === 'linear' ? progress : (0.5 - Math.cos( progress * Math.PI ) / 2);
                     if (animateTop) scrollTop = currentTop + (easeProgress * (newTop - currentTop));
