@@ -16,11 +16,11 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
-var baseurl='http://127.0.0.1/milliont/';
+//var baseurl='http://127.0.0.1/milliont/';
 //var baseurl='http://192.168.1.107/milliont/';
 //var baseurl='http://192.168.1.8/milliont/';
 
-//var baseurl='https://www.scidoo.com/';
+var baseurl='https://www.scidoo.com/';
 
 var calendarDefault = myApp.calendar({
      input: '#kscal',
@@ -1399,6 +1399,7 @@ function opennosogg(time){
 function opensosp(){
 	var IDsotto=$$('#IDsottocentrogiorno').val();;
 	var time=$$('#timecentrogiorno').val();;
+	//alert('aa');
 	
 	var url=baseurl;
 	var url=url+'mobile/config/sospesi.php';
@@ -2188,7 +2189,6 @@ function controllocarta(){
 
 function prenotaora(IDserv,time,popup){
 	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
-	myApp.closeModal();
 	var url=baseurl;
 	var url=url+'mobile/config/profilo/addserv.php';
 	query={IDserv:IDserv,time:time};			
@@ -2208,7 +2208,6 @@ function prenotaora(IDserv,time,popup){
 						}else{
 							var popupHTML = '<div class="popup" id="contentprenot" style="padding:0px;">'+data+'</div>';
 							myApp.popup(popupHTML);
-
 						}
 			 }
 		 });		
