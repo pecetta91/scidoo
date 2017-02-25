@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 
-<icon src="web_hi_res_512.png" density="ldpi" />
 <widget id="com.scidoo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
 	<name>Scidoo</name>
 	<description>
@@ -8,22 +7,10 @@
 	</description>
 
 	<author email="info@webcoom.com" href="http://www.scidoo.com">
-	   PhoneGap Team
+	   Scidoo Team
 	</author>
 	
-	
-              <icon src="web_hi_res_512.png" density="ldpi" />
-              <icon src="web_hi_res_512.png" density="mdpi" />
-              <icon src="web_hi_res_512.png" density="hdpi" />
-              <icon src="web_hi_res_512.png" density="xhdpi" />
-
-		<!-- you can use any density that exists in the Android project -->
-		<splash src="splashscreen.png" density="land-hdpi"/>
-		<splash src="splashscreen.png" density="land-ldpi"/>
-		<splash src="splashscreen.png" density="land-mdpi"/>
-		<splash src="splashscreen.png" density="land-xhdpi"/>
-	
-	
+	<icon src="web_hi_res_512.png" platform="android" />
 	
 	
 	
