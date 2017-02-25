@@ -11,7 +11,7 @@
 	</author>
 	
 	<icon src="web_hi_res_512.png"  />
-	
+	 <splash src="splashscreen.png" />
 	
 	
 	<platform name="ios" />
