@@ -16,9 +16,9 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
-//var baseurl='http://127.0.0.1/milliont/';
-//var baseurl='http://192.168.1.107/milliont/';
-//var baseurl='http://192.168.1.8/milliont/';
+var baseurl='http://127.0.0.1/milliont/';
+//var baseurl='http://192.168.0.10/milliont/';
+//var baseurl='http://192.168.1.63/milliont/';
 
 var baseurl='https://www.scidoo.com/';
 
@@ -219,24 +219,17 @@ function addprenot(time,app){
 
 myApp.onPageInit('calendario', function (page) {	
 	//var p=0;
-	var ps=0;
-	
-	
-	
+	var ps=0;	
 	var container2 = $$('.page-content');
 	$$(container2).scroll(function() {
 		var offset = $$("#tabappart").offset();
 		var off=parseInt(offset.top)+parseInt(55);
 		if(off<105){
 			if(ps==0){
-				//$$('#navcal').hide();
-				//mainView.hideToolbar();
 				ps=1;
 			}
 		}else{
 			if(ps==1){
-				//mainView.showToolbar();
-				//$$('#navcal').show();
 				ps=0;
 			}
 		}
@@ -283,9 +276,6 @@ myApp.onPageInit('calendario', function (page) {
 });
 
 
-
-
-
 var myCalendar='';
 
 function navigation(id,str,agg){
@@ -327,19 +317,33 @@ function navigation(id,str,agg){
 					//mainView.router.loadContent({content:data,force:true});
 					switch(agg){
 						case 1:
-							var offset = $$(".ogg").offset();
-							var left=(parseInt(offset.left)-parseInt(100));
-							document.getElementById('tabcalmain').scrollLeft=left;
-							
+					
+							if ($$(".ogg").html() != undefined) {
+								var offset = $$(".ogg").offset();
+								var left=(parseInt(offset.left)-parseInt(100));
+								document.getElementById('tabcalmain').scrollLeft=left;
+							}
 							$$('.addpren').on('click', function () {
-							
-							//$$('.addpren').click(function(){
 								var time=$$(this).attr('alt');
 								var app=$$(this).attr('lang');
-								
 								addprenot(time,app);
-								
-							})
+							});
+							$$('.noteesc').on('click', function () {
+								var time=$$(this).attr('alt');
+								openesclu(time);
+							});
+							$$('.nosoggcal').on('click', function () {
+								var time=$$(this).attr('alt');
+								opennosogg(time);
+							});
+							$$('.annullata').on('click', function () {
+								var time=$$(this).attr('alt');
+								openann(time);
+							});
+							$$('.ppren').on('click', function () {
+								var ID=$$(this).attr('alt');
+								navigation(3,ID);
+							});
 						
 						break;
 						case 2:
@@ -556,7 +560,6 @@ function stepnew(step,str){
 
 var okstep1=0;
 
-
 function navigationtxt(id,str,campo,agg){
 	
 	var url=baseurl+"mobile/config/";
@@ -589,27 +592,59 @@ function navigationtxt(id,str,campo,agg){
 					myApp.hideIndicator();
 					$$('#'+campo).html(data);
 					myApp.closeModal('.popover-menu');
-					
-					if(id==1){
-						var offset = $$(".ogg").offset();
-						var left=(parseInt(offset.left)-parseInt(100));
-						document.getElementById('tabcalmain').scrollLeft=left;
+					if(id==3){
+						if ($$(".ogg").html() != undefined) {
+							var offset = $$(".ogg").offset();
+							var left=(parseInt(offset.left)-parseInt(100));
+							document.getElementById('tabcalmain').scrollLeft=left;
+						}
+						
+						$$('.addpren').on('click', function () {
+								var time=$$(this).attr('alt');
+								var app=$$(this).attr('lang');
+								addprenot(time,app);
+							});
+							$$('.noteesc').on('click', function () {
+								var time=$$(this).attr('alt');
+								openesclu(time)
+							});
+							$$('.nosoggcal').on('click', function () {
+								var time=$$(this).attr('alt');
+								opennosogg(time);
+							});
+							$$('.annullata').on('click', function () {
+								var time=$$(this).attr('alt');
+								openann(time);
+							});
+							$$('.ppren').on('click', function () {
+								var ID=$$(this).attr('alt');
+								navigation(3,ID)
+							});
+						
+						
+						
 					}
 					
 					switch(agg){
 						case 1:
 							//$$('.tmenupren').removeClass('active');
 							//$$('#tabm'+query['dato1']).addClass('active');
-							myApp.closeModal('.popover-menu');
+							//myApp.closeModal('.popover-menu');
 							// myApp.materialTabbarSetHighlight('.subnavbar');
-							switch(query['dato1']){
+							/*switch(query['dato1']){
 								case "0":
 								 	myApp.initPageSwiper('#tabmain');
 								break
 								case "1":
 									myApp.initPageSwiper('#tabmain2');
 								break;
-							}
+							}*/
+							
+							
+							
+							$$('.men').removeClass('currentm');
+							$$('#m'+query['dato1']).addClass('currentm');
+							
 							
 						break;
 						case 2:
@@ -677,11 +712,11 @@ function navigationtxt(id,str,campo,agg){
 						     
 						break;
 						case 3:
-							/*var not=$$('#numnotif').val();
-							$$('#numnotifiche').html(not);
 							
-							var not=$$('#numappunt').val();
-							$$('#numappunti').html(not);*/
+							//da specificare
+							
+							
+							
 							
 						break;
 						case 4:
@@ -931,7 +966,7 @@ function modprofilo(id,campo,tipo,val2,agg){
 			cache:false,
 			data: query,
 			success: function (data) {
-				alert(data);
+				//alert(data);
 				clearTimeout();
 				if(agg==3){
 					myApp.addNotification({
@@ -1054,7 +1089,8 @@ function riaggvis(txtsend){
 	switch(mainView.activePage.name){
 		
 		case "detpren":
-		
+			
+			
 			var campo='into1-'+$$('#'+txtsend).val();
 			//alert(campo);
 			var url=baseurl;
@@ -1254,8 +1290,9 @@ function modprenot(id,campo,tipo,val2,agg){
 			break;
 	}
 	
-	var url=baseurl;
+		var url=baseurl;
 		var url=url+'config/gestioneprenot.php';
+		//alert(val);
 		var query = {val:val,tipo:tipo,ID:id,val2:val2};
 		//alert(url);
 		$$.ajax({
@@ -1265,7 +1302,7 @@ function modprenot(id,campo,tipo,val2,agg){
 			cache:false,
 			data: query,
 			success: function (data) {
-				//alert(data);
+//				alert(data);
 				if(agg==2){
 					myApp.addNotification({
 							message: 'Funzione eseguita con successo',
@@ -1600,10 +1637,26 @@ if((serviziriep.length>0)&&(nump==1)){
 							hold:2500,
 							 button: {text: '<i class="material-icons">close</i>'}
 						});
+						
 				switch(agg){
 					case 1:
+						var pagdetpren=$$('#pagdetpren').val();
+						var ricarica=1;		
+						if(pagdetpren==1){
+							if((tipolim11==2)||(tipolim11==1)){
+								ricarica=2;
+							}
+						}
+					
+					
 						var IDpren=$$('#IDprenfunc').val();
-						navigationtxt(2,IDpren+',1','contenutop',1);
+						if(ricarica==1){
+							navigationtxt(2,IDpren+',1','contenutop',1);
+						}else{
+							navigationtxt(2,IDpren+',4','contenutop',1);
+						}
+						
+						
 						//myApp.closePanel('right');
 						$$('.close-popup').trigger('click');
 						
@@ -2074,9 +2127,9 @@ function titolomenu(titolo){
 }
 
 
-function setlocation(lat2,lon2,str,ID){
+function setlocation(lat2,lon2,str){
 	
-	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
+	//myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var lat=parseFloat($$('#latstr').val());
 	var lon=parseFloat($$('#lonstr').val());
 	var nomestr=$$('#nomestr').val();
@@ -2136,9 +2189,14 @@ zoom: 10, mapTypeId: 'roadmap'
 									});
 															  
 								  
-								  
 								}
 							
+	
+}
+
+
+
+function  infopoi(ID){
 	var url=baseurl;
 	var url=url+'mobile/config/detluogo.php';
 	var query = {ID:ID};
@@ -2151,11 +2209,14 @@ zoom: 10, mapTypeId: 'roadmap'
 			success: function (data) {
 				clearTimeout();
 				myApp.hideIndicator();
-				myApp.pickerModal(data);
+				
+				var popupHTML = '<div class="popup" style="padding:0px;">'+data+'</div>';
+				myApp.popup(popupHTML);
+				
+				
 			}
 	});
 }
-
 
 function controllocarta(){
 	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
@@ -2277,8 +2338,73 @@ function modificaorario(ID,tipo,time,popup){
 				}else{
 					var popupHTML = '<div class="popup" id="contentprenot" style="padding:0px;">'+data+'</div>';
 					myApp.popup(popupHTML);
-
 				}		
 			}
 	});
+}
+
+
+function mipiace(ID,tipoobj,agg){
+	
+	//var val=ID+'_'+tipoobj;
+	
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
+	var url=baseurl;
+	var url=url+'config/gestioneprofilo.php';
+	var query = {ID:ID,val:tipoobj,tipo:8,val2:0};
+	$$.ajax({
+			url: url,
+			method: 'POST',
+			dataType: 'text',
+			cache:false,
+			data: query,
+			success: function (data) {
+				//alert(data);
+
+				myApp.hideIndicator();
+				clearTimeout();
+				
+				switch(agg){
+					case 1:
+						var num=parseInt(data);
+						if(num>1){
+							$$('#numl'+ID).html(num);	
+						}else{
+							$$('#numl'+ID).html('');
+						}
+						var classe=$$('#icon'+ID).attr('class');					
+						var num=classe.indexOf("mipiace");  	 //alert(data);
+						if(num==-1){	
+							$$('#icon'+ID).addClass('mipiace');
+						}else{
+							$$('#icon'+ID).removeClass('mipiace');
+						}
+					
+					break;
+					case 2:
+						var num=parseInt(data);
+						if(num>1){
+							$$('#numl'+ID).html(num);	
+						}else{
+							$$('#numl'+ID).html('Mi Piace');
+						}
+						var classe=$$('#numl'+ID).attr('class');					
+						var num=classe.indexOf("mipiace");  	 //alert(data);
+						if(num==-1){	
+							$$('#numl'+ID).addClass('mipiace');
+						}else{
+							$$('#numl'+ID).removeClass('mipiace');
+						}
+					
+					break;
+					
+				}
+				
+						
+			}
+	});
+	
+	
+	
+
 }
