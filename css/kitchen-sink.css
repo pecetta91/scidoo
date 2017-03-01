@@ -598,12 +598,12 @@ box-shadow: 0px 1px 5px 0px rgba(171,171,171,1);border-radius:4px;}
 					 #tabselect .pad0{padding:0px;}
 					 #tabselect b{font-size:13px;}
 					 
-					 .divmainmenu{width:100%; margin:auto; margin-top:0px;z-index:99999; height:20px;  font-size:16px; font-weight:100; color:#3258B9; text-align:center; margin-bottom:0px; }
+					 .divmainmenu{width:100%; margin:auto; margin-top:0px;z-index:99999; height:20px;  font-size:16px; font-weight:400; color:#3258B9; text-align:center; margin-bottom:0px; }
 					 .avanti{width:70px;float:right;margin:2px; height:40px; font-size:11px; line-height:40px; text-align:center;display:inline-block}
 					 .indietro{width:70px; height:40px; margin:2px; float:left; line-height:40px; text-align:center;display:inline-block;font-size:11px;}
 					 
 
-.buttless{padding:5px; width:19px; height:19px; border-radius:4px; font-size:19px; text-align:center; line-height:19px; background:#ccc;}
+.buttless{padding:5px; width:21px; height:21px; border-radius:4px; font-size:21px; text-align:center; line-height:21px; background:#D8D8D8;}
 
 .buttminif{font-size:11px; line-height:20px; font-weight:bold; margin:2px; margin-right:-5px;float:right; border-radius:50%;  color:#fff;width:20px; height:20px;}
 
@@ -612,7 +612,7 @@ box-shadow: 0px 1px 5px 0px rgba(171,171,171,1);border-radius:4px;}
 .bor{width:43%; height:36px; font-size:16px; display:inline-block; line-height:36px; margin:3px;}
 .bor.bor2{width:40%; padding:0px;  display:inline-block; margin:2px;}
 
-.ntavolo{background:#375EB3; width:20px; height:20px; font-size:11px; line-height:20px; padding:3px; border-radius:50%; margin:auto; font-weight:100; color:#fff; text-align:center;}
+.ntavolo{background:#375EB3; width:20px; height:20px; font-size:11px; line-height:20px; padding:3px; border-radius:50%; margin:auto; font-weight:400; color:#fff; text-align:center;}
 
 .ntavolo.tav1{background-color:#AD3234;}
 .ntavolo.tav2{background-color:#9A37A4;}
@@ -624,7 +624,7 @@ box-shadow: 0px 1px 5px 0px rgba(171,171,171,1);border-radius:4px;}
 .button.button12{font-size:12px;padding:1px; margin:2px;}
 .mediaright{margin-left:-10px; margin-right:-20px;}
 
-.titleb{font-size:17px; font-weight:400;}
+.titleb{font-size:13px; font-weight:600; text-transform:uppercase;  color:#455ba2;}
 
 .verticale .timeline-item-date{margin-left:-18px; margin-right:-10px;font-size:15px;  font-weight:bold; color:#276CCD;}
 .verticale .timeline-item-divider{background:#276CCD;}
@@ -687,27 +687,49 @@ border-spacing: 0px;
     color: #666;
   }
   .facebook-card .card-footer {
-    background:#3468AA;
+    background:#f4f4f4;
 	text-align:center;
   }
   .facebook-card .card-footer a {
-    color: #fff;
+    color: #333;font-size: 12px;
 	text-align:center;margin:auto;
-    font-weight: 500;
+    font-weight: 600; width:50%;
+	border-radius:0px; 
   }
   .facebook-card .card-content img {
     display: block;
   }
+  .facebook-card .card-footer a.like{border-right:solid 1px #ccc;}
   .facebook-card .card-content-inner {
     padding: 15px 10px;
   } 
   .center span{font-size:8px;}
   .menusx{ font-size:12px; font-weight:600; text-transform:uppercase; color:#444}
   .menusx2{ font-size:12px; font-weight:400; text-transform:uppercase; color:#444}
-  
-  
-  
+    
   .buttdate{width:70px; height:50px; padding-top:5px;  float:left; display:inline-block; font-size:16px; border-right:solid 1px #f1f1f1; text-align:center; line-height:20px;}
   .datesel{background-color:#2E47B2; color:#fff; border-color:#2E47B2;}
   .buttore{width:60px; float:left; display:inline-block; font-size:16px; border-right:solid 1px #f1f1f1; text-align:center; line-height:55px;}
   .oresel{background-color:#3FA37E; color:#fff; border-color:#3FA37E;}
+  .menualto{margin:0px; height:100%;background:#fff; border-radius:0px;border-right:solid 1px #ccc;}
+  .menualto .material-icons{font-size:22px;color:#888;line-height:40px;}
+  
+  .material-icons.currentm{color:#295ACF;}
+  
+    .material-icons.paymenu.currentm{color:#33B57C;}
+	.material-icons.orarimenu.currentm{color:#D22C2E;}
+	.material-icons.shopmenu.currentm{color:#D023D2;}
+	.material-icons.usermenu.currentm{color:#CAA225;}
+  
+  .tabluoghi {width:100%;}
+  .tabluoghi td{width:33%; text-align:center;}
+  .tabluoghi td i.material-icons{font-size:19px;line-height:25px; width:19px; }
+  
+  .tabluoghi td i.mipiace{color:#CD292C; }
+  a.link.mipiace{color:#CD292C; }
+  
+  b{font-weight:600;}
+  .navbar{height:50px; background:#C6292B; background:#2a92a1; background:#24A5B3  }
+  .navbar .titolonav{text-transform:uppercase; font-size:14px; font-weight:600;}
+  .searchbar{background:#2a92a1; background:#24A5B3 }
+  .buttcc{text-align:left; height:30px;line-height:30px; margin:0px; font-size:12px;}
