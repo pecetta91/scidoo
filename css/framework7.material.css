@@ -1,18 +1,18 @@
 /**
- * Framework7 1.5.2
+ * Framework7 1.5.4
  * Full featured mobile HTML framework for building iOS & Android apps
  * 
  * Google Material Theme
  *
  * http://framework7.io/
  * 
- * Copyright 2016, Vladimir Kharlampidi
+ * Copyright 2017, Vladimir Kharlampidi
  * The iDangero.us
  * http://www.idangero.us/
  * 
  * Licensed under MIT
  * 
- * Released on: December 17, 2016
+ * Released on: March 13, 2017
  */
 html,
 body,
@@ -23,7 +23,7 @@ body,
   overflow-x: hidden;
 }
 body {
-	font-family:Arial;
+  font-family: Roboto, Noto, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
   color: #212121;
@@ -858,7 +858,6 @@ p {
 .views,
 .view {
   position: relative;
-  width: 100%;
   height: 100%;
   z-index: 5000;
 }
@@ -867,6 +866,7 @@ p {
   -webkit-overflow-scrolling: touch;
 }
 .view {
+  width: 100%;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -1060,7 +1060,6 @@ p {
 .toolbar,
 .subnavbar {
   background: #2196f3;
-  background: #394baa;
 }
 .navbar a.link,
 .toolbar a.link,
@@ -1374,6 +1373,9 @@ html:not(.watch-active-state) .tabbar a.tab-link:active,
   overflow: hidden;
   max-width: 100%;
 }
+.tabbar-labels.toolbar-bottom span.tabbar-label {
+  text-transform: none;
+}
 .tabbar-scrollable .toolbar-inner {
   -webkit-box-pack: start;
   -ms-flex-pack: start;
@@ -1477,56 +1479,130 @@ html:not(.watch-active-state) .tabbar a.tab-link:active,
   padding-top: 72px;
 }
 .toolbar-bottom ~ .page-content,
-.messagebar ~ .page-content {
+.messagebar ~ .page-content,
+.toolbar-bottom ~ .pages .page-content,
+.messagebar ~ .pages .page-content,
+.toolbar-bottom ~ .view .page-content,
+.messagebar ~ .view .page-content {
   padding-top: 0;
   padding-bottom: 48px;
 }
-.tabbar-labels.toolbar-bottom ~ .page-content {
+.tabbar-labels.toolbar-bottom ~ .page-content,
+.tabbar-labels.toolbar-bottom ~ .pages .page-content,
+.tabbar-labels.toolbar-bottom ~ .page .page-content,
+.tabbar-labels.toolbar-bottom ~ .view .page-content {
   padding-bottom: 72px;
 }
-.navbar-fixed .page-content {
+.navbar-fixed .page-content,
+.navbar-through .page-content,
+.navbar-fixed.pages .page-content,
+.navbar-through.pages .page-content,
+.navbar-fixed.view .page-content,
+.navbar-through.view .page-content {
   padding-top: 56px;
 }
 .navbar-fixed.toolbar-fixed .page-content,
+.navbar-through.toolbar-fixed .page-content,
 .navbar-fixed.tabbar-fixed .page-content,
+.navbar-through.tabbar-fixed .page-content,
 .navbar-fixed .toolbar-fixed .page-content,
+.navbar-through .toolbar-fixed .page-content,
 .navbar-fixed .tabbar-fixed .page-content,
+.navbar-through .tabbar-fixed .page-content,
 .toolbar-fixed .navbar-fixed .page-content,
-.tabbar-fixed .navbar-fixed .page-content {
+.toolbar-fixed .navbar-through .page-content,
+.tabbar-fixed .navbar-fixed .page-content,
+.tabbar-fixed .navbar-through .page-content {
   padding-top: 104px;
 }
+.navbar-fixed.toolbar-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-through.toolbar-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-fixed.tabbar-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-through.tabbar-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-fixed .toolbar-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-through .toolbar-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-fixed .tabbar-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-through .tabbar-fixed .toolbar-bottom ~ .pages .page-content,
+.toolbar-fixed .navbar-fixed .toolbar-bottom ~ .pages .page-content,
+.toolbar-fixed .navbar-through .toolbar-bottom ~ .pages .page-content,
+.tabbar-fixed .navbar-fixed .toolbar-bottom ~ .pages .page-content,
+.tabbar-fixed .navbar-through .toolbar-bottom ~ .pages .page-content,
+.navbar-fixed.toolbar-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-through.toolbar-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-fixed.tabbar-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-through.tabbar-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-fixed .toolbar-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-through .toolbar-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-fixed .tabbar-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-through .tabbar-fixed .toolbar-bottom ~ .view .page-content,
+.toolbar-fixed .navbar-fixed .toolbar-bottom ~ .view .page-content,
+.toolbar-fixed .navbar-through .toolbar-bottom ~ .view .page-content,
+.tabbar-fixed .navbar-fixed .toolbar-bottom ~ .view .page-content,
+.tabbar-fixed .navbar-through .toolbar-bottom ~ .view .page-content {
+  padding-top: 56px;
+}
 .navbar-fixed.tabbar-labels-fixed .page-content,
+.navbar-through.tabbar-labels-fixed .page-content,
 .navbar-fixed .tabbar-labels-fixed .page-content,
-.tabbar-labels-fixed .navbar-fixed .page-content {
+.navbar-through .tabbar-labels-fixed .page-content,
+.tabbar-labels-fixed .navbar-fixed .page-content,
+.tabbar-labels-fixed .navbar-through .page-content {
   padding-top: 128px;
 }
-.navbar-fixed .toolbar ~ .page-content {
+.navbar-fixed.tabbar-labels-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-through.tabbar-labels-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-fixed .tabbar-labels-fixed .toolbar-bottom ~ .pages .page-content,
+.navbar-through .tabbar-labels-fixed .toolbar-bottom ~ .pages .page-content,
+.tabbar-labels-fixed .navbar-fixed .toolbar-bottom ~ .pages .page-content,
+.tabbar-labels-fixed .navbar-through .toolbar-bottom ~ .pages .page-content,
+.navbar-fixed.tabbar-labels-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-through.tabbar-labels-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-fixed .tabbar-labels-fixed .toolbar-bottom ~ .view .page-content,
+.navbar-through .tabbar-labels-fixed .toolbar-bottom ~ .view .page-content,
+.tabbar-labels-fixed .navbar-fixed .toolbar-bottom ~ .view .page-content,
+.tabbar-labels-fixed .navbar-through .toolbar-bottom ~ .view .page-content {
+  padding-top: 56px;
+}
+.navbar-fixed .toolbar ~ .page-content,
+.navbar-through .toolbar ~ .page-content {
   padding-top: 104px;
 }
 .navbar-fixed .messagebar ~ .page-content,
-.navbar-fixed .toolbar-bottom ~ .page-content {
+.navbar-through .messagebar ~ .page-content,
+.navbar-fixed .toolbar-bottom ~ .page-content,
+.navbar-through .toolbar-bottom ~ .page-content {
   padding-top: 56px;
 }
-.navbar-fixed .tabbar-labels ~ .page-content {
+.navbar-fixed .tabbar-labels ~ .page-content,
+.navbar-through .tabbar-labels ~ .page-content {
   padding-top: 128px;
 }
-.navbar-fixed .tabbar-labels.toolbar-bottom ~ .page-content {
+.navbar-fixed .tabbar-labels.toolbar-bottom ~ .page-content,
+.navbar-through .tabbar-labels.toolbar-bottom ~ .page-content {
   padding-top: 56px;
 }
 .navbar-fixed .with-subnavbar .page-content,
+.navbar-through .with-subnavbar .page-content,
 .navbar-fixed .page-content.with-subnavbar,
-.navbar-fixed .subnavbar ~ .page-content {
+.navbar-through .page-content.with-subnavbar,
+.navbar-fixed .subnavbar ~ .page-content,
+.navbar-through .subnavbar ~ .page-content {
   padding-top: 104px;
 }
 .navbar-fixed .page .subnavbar,
-.navbar-fixed.page .subnavbar {
+.navbar-through .page .subnavbar,
+.navbar-fixed.page .subnavbar,
+.navbar-through.page .subnavbar {
   top: 56px;
 }
-.navbar-fixed .toolbar {
+.navbar-fixed .toolbar,
+.navbar-through .toolbar {
   top: 56px;
 }
 .navbar-fixed .messagebar,
-.navbar-fixed .toolbar-bottom {
+.navbar-through .messagebar,
+.navbar-fixed .toolbar-bottom,
+.navbar-through .toolbar-bottom {
   top: auto;
 }
 .navbar.navbar-hiding {
@@ -1563,7 +1639,7 @@ html:not(.watch-active-state) .tabbar a.tab-link:active,
 .navbar.navbar-hidden ~ .page .list-group-title {
   -webkit-transition-duration: 400ms;
   transition-duration: 400ms;
-  top: -56px;
+  top: 0px;
 }
 .navbar.navbar-hidden ~ .page-content .subnavbar,
 .navbar.navbar-hidden ~ .pages .subnavbar,
@@ -1579,6 +1655,10 @@ html:not(.watch-active-state) .tabbar a.tab-link:active,
   transform: translate3d(0, -56px, 0);
   -webkit-transition-duration: 400ms;
   transition-duration: 400ms;
+}
+.navbar.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
 }
 .page.no-navbar .page-content {
   padding-top: 0;
@@ -1604,6 +1684,11 @@ html:not(.watch-active-state) .tabbar a.tab-link:active,
   -webkit-transition-duration: 400ms;
   transition-duration: 400ms;
 }
+.toolbar.not-animated,
+.tabbar.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
+}
 .toolbar.toolbar-hidden,
 .tabbar.toolbar-hidden,
 .toolbar.tabbar-hidden,
@@ -1611,8 +1696,8 @@ html:not(.watch-active-state) .tabbar a.tab-link:active,
   -webkit-transform: translate3d(0, -100%, 0);
   transform: translate3d(0, -100%, 0);
 }
-.navbar ~ .toolbar.toolbar-hidden,
-.navbar ~ .tabbar.toolbar-hidden,
+.navbar ~ .toolbar.toolbar-hidden:not(.messagebar):not(.toolbar-bottom),
+.navbar ~ .tabbar.toolbar-hidden:not(.messagebar):not(.toolbar-bottom),
 .navbar ~ .toolbar.tabbar-hidden,
 .navbar ~ .tabbar.tabbar-hidden {
   -webkit-transform: translate3d(0, -104px, 0);
@@ -1633,6 +1718,55 @@ html:not(.watch-active-state) .tabbar a.tab-link:active,
 .page.no-toolbar .page-content,
 .page.no-tabbar .page-content {
   padding-bottom: 0;
+}
+.navbar.no-shadow,
+.toolbar.no-shadow {
+  box-shadow: none !important;
+}/*
+.navbar-fixed .subnavbar,
+.navbar-through .subnavbar {
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2), 0px 4px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 1px 0px rgba(0, 0, 0, 0.12);
+}
+.navbar-fixed .navbar,
+.navbar-through .navbar {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+.navbar-fixed .navbar.navbar-hidden,
+.navbar-through .navbar.navbar-hidden {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0), 0px 4px 5px 0px rgba(0, 0, 0, 0), 0px 1px 10px 0px rgba(0, 0, 0, 0) !important;
+}
+.toolbar-fixed .toolbar,
+.tabbar-fixed .toolbar,
+.tabbar-labels-fixed .toolbar {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+.toolbar-fixed .toolbar.toolbar-hidden,
+.tabbar-fixed .toolbar.toolbar-hidden,
+.tabbar-labels-fixed .toolbar.toolbar-hidden {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0), 0px 4px 5px 0px rgba(0, 0, 0, 0), 0px 1px 10px 0px rgba(0, 0, 0, 0) !important;
+}
+.toolbar-fixed .toolbar-bottom,
+.tabbar-fixed .toolbar-bottom,
+.tabbar-labels-fixed .toolbar-bottom,
+.toolbar-bottom {
+  box-shadow: 0px -2px 4px -1px rgba(0, 0, 0, 0.2), 0px -4px 5px 0px rgba(0, 0, 0, 0.14), 0px -1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+.toolbar-bottom.toolbar-hidden {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0), 0px 4px 5px 0px rgba(0, 0, 0, 0), 0px 1px 10px 0px rgba(0, 0, 0, 0) !important;
+}*/
+.navbar-fixed.toolbar-fixed .navbar,
+.navbar-through.toolbar-fixed .navbar,
+.navbar-fixed .toolbar-fixed .navbar,
+.navbar-through .toolbar-fixed .navbar,
+.navbar-fixed.tabbar-fixed .navbar,
+.navbar-through.tabbar-fixed .navbar,
+.navbar-fixed .tabbar-fixed .navbar,
+.navbar-through .tabbar-fixed .navbar,
+.navbar-fixed.tabbar-labels-fixed .navbar,
+.navbar-through.tabbar-labels-fixed .navbar,
+.navbar-fixed .tabbar-labels-fixed .navbar,
+.navbar-through .tabbar-labels-fixed .navbar {
+  box-shadow: none;
 }
 /* === Search Bar === */
 .searchbar {
@@ -1789,6 +1923,7 @@ html:not(.watch-active-state) .searchbar a:active:before,
   left: 0;
   top: 0;
   z-index: 200;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
 .page > .searchbar ~ .page-content {
   padding-top: 48px;
@@ -1887,7 +2022,8 @@ html.pixel-ratio-3 .toolbar.messagebar:before {
 .toolbar.messagebar ~ .page-content {
   padding-bottom: 48px;
 }
-.page.no-toolbar .toolbar.messagebar ~ .page-content {
+.page.no-toolbar .toolbar.messagebar ~ .page-content,
+.page.no-tabbar .toolbar.messagebar ~ .page-content {
   padding-bottom: 48px;
 }
 .hidden-toolbar .toolbar.messagebar {
@@ -2440,24 +2576,24 @@ html.pixel-ratio-3 .list-block .item-inner:after {
   -webkit-flex-shrink: 1;
   -ms-flex: 0 1 auto;
   flex-shrink: 1;
-  white-space: nowrap;
+ 
   position: relative;
   overflow: hidden;
-  text-overflow: ellipsis;
+  /*text-overflow: ellipsis;
+   white-space: nowrap;
+  */
   max-width: 100%;
 }
 .list-block .item-after {
-  white-space: nowrap;
+ /* white-space: nowrap;*/
   color: #757575;
   -webkit-box-flex: 0;
   -webkit-flex-shrink: 0;
   -ms-flex: 0 0 auto;
   flex-shrink: 0;
-  margin-left: 8px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
+  margin-left: auto;
+  padding-left: 8px;
+ 
   max-height: 28px;
   font-size: 14px;
 }
@@ -2465,7 +2601,6 @@ html.pixel-ratio-3 .list-block .item-inner:after {
 .list-block .autocomplete-opener .item-after {
   max-width: 70%;
   overflow: hidden;
-  text-overflow: ellipsis;
   position: relative;
   display: block;
 }
@@ -2537,11 +2672,11 @@ html:not(.watch-active-state) .list-block .item-link:active,
 .list-block .swipeout.transitioning .swipeout-actions-right a,
 .list-block .swipeout.transitioning .swipeout-actions-left a,
 .list-block .swipeout.transitioning .swipeout-overswipe {
-  -webkit-transition: 300ms;
-  transition: 300ms;
+  -webkit-transition: 100ms;
+  transition: 100ms;
 }
 .list-block .swipeout-content {
-  position: relative;
+  position: static;
   z-index: 10;
 }
 .list-block .swipeout-overswipe {
@@ -2567,7 +2702,7 @@ html:not(.watch-active-state) .list-block .item-link:active,
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  -webkit-box-align: center;
+ -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: center;
@@ -3108,8 +3243,7 @@ textarea.resizable {
   padding: 0 10px;
   margin: 0;
   height: 36px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  
   font-size: 14px;
   text-transform: uppercase;
   font-family: inherit;
@@ -3635,8 +3769,8 @@ html:not(.watch-active-state) .speed-dial-buttons a:active,
 /* === Accordion === */
 .list-block .accordion-item-toggle {
   cursor: pointer;
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
+  -webkit-transition-duration: 150ms;
+  transition-duration: 150ms;
 }
 .list-block .accordion-item-toggle .item-inner {
   padding-right: 42px;
@@ -3657,15 +3791,15 @@ html:not(.watch-active-state) .list-block .accordion-item-toggle:active > .item-
 }
 .list-block .accordion-item-toggle .item-inner,
 .list-block .accordion-item > .item-link .item-inner {
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
+  -webkit-transition-duration: 150ms;
+  transition-duration: 150ms;
   -webkit-transition-property: background-color;
   transition-property: background-color;
 }
 .list-block .accordion-item-toggle .item-inner:after,
 .list-block .accordion-item > .item-link .item-inner:after {
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
+  -webkit-transition-duration: 150ms;
+  transition-duration: 150ms;
 }
 .list-block:not(.media-list) .accordion-item-expanded:not(.media-item) .accordion-item-toggle .item-inner,
 .list-block:not(.media-list) .accordion-item-expanded:not(.media-item) > .item-link .item-inner,
@@ -3998,6 +4132,13 @@ html.pixel-ratio-3 .card-footer:before {
   -webkit-transition-duration: 400ms;
   transition-duration: 400ms;
 }
+.modal-overlay.not-animated,
+.preloader-indicator-overlay.not-animated,
+.popup-overlay.not-animated,
+.picker-modal-overlay.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
+}
 .modal-overlay.modal-overlay-visible,
 .preloader-indicator-overlay.modal-overlay-visible,
 .popup-overlay.modal-overlay-visible,
@@ -4220,16 +4361,22 @@ html:not(.watch-active-state) .notifications .modal-buttons .button:not(.button-
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
-.actions-modal.modal-in {
+.actions-modal.modal-in,
+.actions-modal.modal-out {
   -webkit-transition-duration: 300ms;
   transition-duration: 300ms;
+}
+.actions-modal.modal-in.not-animated,
+.actions-modal.modal-out.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
+}
+.actions-modal.modal-in {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 .actions-modal.modal-out {
   z-index: 13499;
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
   -webkit-transform: translate3d(0, 100%, 0);
   transform: translate3d(0, 100%, 0);
 }
@@ -4386,18 +4533,24 @@ input.modal-text-input + input.modal-text-input {
   -webkit-transform-origin: center top;
   transform-origin: center top;
 }
+.popover.modal-in,
+.popover.modal-out {
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms;
+}
+.popover.modal-in.not-animated,
+.popover.modal-out.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
+}
 .popover.modal-in {
   -webkit-transform: scale(1);
   transform: scale(1);
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
   opacity: 1;
 }
 .popover.modal-out {
   -webkit-transform: scale(1);
   transform: scale(1);
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
   opacity: 0;
 }
 .popover .list-block {
@@ -4550,6 +4703,13 @@ html.pixel-ratio-3 .actions-popover-label:after {
   -webkit-transition-duration: 400ms;
   transition-duration: 400ms;
 }
+.popup.modal-in.not-animated,
+.login-screen.modal-in.not-animated,
+.popup.modal-out.not-animated,
+.login-screen.modal-out.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
+}
 .popup.modal-in,
 .login-screen.modal-in {
   -webkit-transform: translate3d(0, 0, 0);
@@ -4588,16 +4748,27 @@ html.pixel-ratio-3 .actions-popover-label:after {
 }
 @media all and (max-width: 629px), (max-height: 629px) {
   html.with-statusbar-overlay .popup {
-    height: -webkit-calc(100% - 20px);
-    height: calc(100% - 20px);
-    top: 20px;
+    height: -webkit-calc(100% - 24px);
+    height: calc(100% - 24px);
+    top: 24px;
   }
   html.with-statusbar-overlay .popup-overlay {
     z-index: 9500;
   }
+  html.with-statusbar-overlay.ios .popup {
+    height: -webkit-calc(100% - 20px);
+    height: calc(100% - 20px);
+    top: 20px;
+  }
 }
 html.with-statusbar-overlay .login-screen,
 html.with-statusbar-overlay .popup.tablet-fullscreen {
+  height: -webkit-calc(100% - 24px);
+  height: calc(100% - 24px);
+  top: 24px;
+}
+html.with-statusbar-overlay.ios .login-screen,
+html.with-statusbar-overlay.ios .popup.tablet-fullscreen {
   height: -webkit-calc(100% - 20px);
   height: calc(100% - 20px);
   top: 20px;
@@ -4646,6 +4817,11 @@ html.with-statusbar-overlay .popup.tablet-fullscreen {
 .picker-modal.modal-out {
   -webkit-transition-duration: 400ms;
   transition-duration: 400ms;
+}
+.picker-modal.modal-in.not-animated,
+.picker-modal.modal-out.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
 }
 .picker-modal.modal-in {
   -webkit-transform: translate3d(0, 0, 0);
@@ -4779,6 +4955,10 @@ html.with-statusbar-overlay .popup.tablet-fullscreen {
   -webkit-transition-duration: 300ms;
   transition-duration: 300ms;
 }
+.panel-overlay.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
+}
 .panel {
   z-index: 1000;
   display: none;
@@ -4795,19 +4975,37 @@ html.with-statusbar-overlay .popup.tablet-fullscreen {
   -webkit-transition-duration: 300ms;
   transition-duration: 300ms;
 }
+.panel.not-animated {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
+}
+.panel.panel-visible {
+  display: block;
+}
+.panel.panel-left {
+  left: 0;
+}
 .panel.panel-left.panel-cover {
   z-index: 6000;
-  left: -260px;
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
 }
-.panel.panel-left.panel-reveal {
-  left: 0;
+.panel.panel-right {
+  right: 0;
 }
 .panel.panel-right.panel-cover {
   z-index: 6000;
-  right: -260px;
+  -webkit-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
 }
-.panel.panel-right.panel-reveal {
-  right: 0;
+.panel.panel-visible-by-breakpoint {
+  display: block;
+  -webkit-transform: translate3d(0, 0, 0) !important;
+  transform: translate3d(0, 0, 0) !important;
+  box-shadow: none !important;
+}
+.panel.panel-visible-by-breakpoint.panel-cover {
+  z-index: 5900;
 }
 body.with-panel-left-cover .panel,
 body.with-panel-right-cover .panel {
@@ -4832,6 +5030,11 @@ body.with-panel-right-reveal .views {
   -moz-transition-property: -moz-transform, box-shadow;
   transition-property: transform, box-shadow;
 }
+body.with-panel-left-reveal .panel.not-animated ~ .views,
+body.with-panel-right-reveal .panel.not-animated ~ .views {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
+}
 body.with-panel-left-reveal .panel-overlay,
 body.with-panel-right-reveal .panel-overlay {
   background: rgba(0, 0, 0, 0);
@@ -4846,9 +5049,9 @@ body.with-panel-left-reveal .panel-overlay {
   -webkit-transform: translate3d(260px, 0, 0);
   transform: translate3d(260px, 0, 0);
 }
-body.with-panel-left-cover .panel-left {
-  -webkit-transform: translate3d(260px, 0, 0);
-  transform: translate3d(260px, 0, 0);
+body.with-panel-left-cover .panel.panel-left {
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 body.with-panel-right-reveal .views {
   -webkit-transform: translate3d(-260px, 0, 0);
@@ -4858,9 +5061,9 @@ body.with-panel-right-reveal .panel-overlay {
   -webkit-transform: translate3d(-260px, 0, 0);
   transform: translate3d(-260px, 0, 0);
 }
-body.with-panel-right-cover .panel-right {
-  -webkit-transform: translate3d(-260px, 0, 0);
-  transform: translate3d(-260px, 0, 0);
+body.with-panel-right-cover .panel.panel-right {
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 body.panel-closing .panel-overlay {
   display: block;
@@ -4871,6 +5074,10 @@ body.panel-closing .views {
   -webkit-transition-property: -webkit-transform, box-shadow;
   -moz-transition-property: -moz-transform, box-shadow;
   transition-property: transform, box-shadow;
+}
+body.panel-closing .panel.not-animated ~ .views {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
 }
 /* === Images Lazy Loading === */
 .lazy-loaded.lazy-fadeIn {
@@ -4912,8 +5119,8 @@ body.panel-closing .views {
   display: -webkit-flex;
   display: flex;
   height: 100%;
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
+  -webkit-transition-duration: 150ms;
+  transition-duration: 150ms;
 }
 .tabs-animated-wrap > .tabs > .tab {
   width: 100%;
@@ -4922,6 +5129,10 @@ body.panel-closing .views {
   -webkit-flex-shrink: 0;
   -ms-flex: 0 0 auto;
   flex-shrink: 0;
+}
+.tabs-animated-wrap.not-animated > .tabs {
+  -webkit-transition-duration: 0ms;
+  transition-duration: 0ms;
 }
 .tabs-swipeable-wrap {
   height: 100%;
@@ -5150,27 +5361,36 @@ body.panel-closing .views {
   }
 }
 /* === Statusbar overlay === */
-html.with-statusbar-overlay body {
-  padding-top: 20px;
+html.with-statusbar-overlay .framework7-root {
+  padding-top: 24px;
   box-sizing: border-box;
 }
-html.with-statusbar-overlay body .statusbar-overlay {
+html.with-statusbar-overlay .framework7-root .statusbar-overlay {
   display: block;
 }
-html.with-statusbar-overlay body .panel {
-  padding-top: 20px;
+html.with-statusbar-overlay .framework7-root .panel {
+  padding-top: 24px;
 }
 .statusbar-overlay {
-  background: #2196f3;
+  background: #0D47A1;
   z-index: 10000;
   position: absolute;
   left: 0;
   top: 0;
-  height: 20px;
+  height: 24px;
   width: 100%;
   display: none;
   -webkit-transition-duration: 300ms;
   transition-duration: 300ms;
+}
+html.with-statusbar-overlay.ios .framework7-root {
+  padding-top: 20px;
+}
+html.with-statusbar-overlay.ios .framework7-root .panel {
+  padding-top: 20px;
+}
+html.ios .statusbar-overlay {
+  height: 20px;
 }
 /* ===
     Preloader
@@ -5553,6 +5773,10 @@ html.with-statusbar-overlay body .panel {
 }
 html.with-statusbar-overlay body > .progressbar-infinite,
 html.with-statusbar-overlay .framework7-root > .progressbar-infinite {
+  top: 24px;
+}
+html.with-statusbar-overlay.ios body > .progressbar-infinite,
+html.with-statusbar-overlay.ios .framework7-root > .progressbar-infinite {
   top: 20px;
 }
 .progressbar-infinite.color-multi {
@@ -5606,6 +5830,10 @@ body > .progressbar-infinite,
 }
 html.with-statusbar-overlay body > .progressbar,
 html.with-statusbar-overlay .framework7-root > .progressbar {
+  top: 24px;
+}
+html.with-statusbar-overlay.ios body > .progressbar,
+html.with-statusbar-overlay.ios .framework7-root > .progressbar {
   top: 20px;
 }
 @-webkit-keyframes progressbar-in {
@@ -5808,7 +6036,6 @@ html.with-statusbar-overlay .framework7-root > .progressbar {
 }
 /* === Pull To Refresh === */
 .pull-to-refresh-layer {
-  position: absolute;
   position: relative;
   margin-top: -48px;
   left: 0;
@@ -7039,6 +7266,12 @@ body > .photo-browser.photo-browser-out,
 }
 html.with-statusbar-overlay body > .photo-browser,
 html.with-statusbar-overlay .framework7-root > .photo-browser {
+  height: -webkit-calc(100% - 24px);
+  height: calc(100% - 24px);
+  top: 24px;
+}
+html.with-statusbar-overlay.ios body > .photo-browser,
+html.with-statusbar-overlay.ios .framework7-root > .photo-browser {
   height: -webkit-calc(100% - 20px);
   height: calc(100% - 20px);
   top: 20px;
@@ -7368,7 +7601,6 @@ body > .photo-browser .toolbar,
 .picker-item {
   height: 36px;
   line-height: 36px;
-  padding: 0 10px;
   white-space: nowrap;
   position: relative;
   overflow: hidden;
@@ -7380,6 +7612,9 @@ body > .photo-browser .toolbar,
   box-sizing: border-box;
   -webkit-transition-duration: 300ms;
   transition-duration: 300ms;
+}
+.picker-item span {
+  padding: 0 10px;
 }
 .picker-items-col-absolute .picker-item {
   position: absolute;
@@ -7729,7 +7964,7 @@ html.pixel-ratio-3 .picker-center-highlight:after {
   left: 0;
   bottom: 0;
   width: 100%;
-  z-index: 10900;
+  z-index: 20000;
   color: #fff;
   font-size: 14px;
   margin: 0;
