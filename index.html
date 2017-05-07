@@ -7,22 +7,18 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="theme-color" content="#394baa">
+    <meta name="theme-color" content="#3089c7">
     <title>Scidoo.com</title>
-    
-    
-    
-    
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_B-LZGrIFQEIfEIzaoxbcRidrermMKeo&callback=initMap" async defer></script>
-    
-    <link rel="stylesheet" href="css/framework7.material.css">
-    <link rel="stylesheet" href="css/framework7.material.colors.min.css">
-     <link rel="stylesheet" href="css/material-icons.css">
-     <link rel="stylesheet" href="css/framework7-icons.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_B-LZGrIFQEIfEIzaoxbcRidrermMKeo&callback=initMap" async defer></script>
+    <link rel="stylesheet" href="css/framework7.ios.css">
+    <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+    <link rel="stylesheet" href="css/material-icons.css">
+    <link rel="stylesheet" href="css/framework7-icons.css">
     <link rel="stylesheet" href="css/kitchen-sink.css">
-    <script type="text/javascript" src="js/framework7.min.js"></script>
+    
+    
+    <script type="text/javascript" src="js/framework7.js"></script>
 
-<!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&libraries=places"></script>-->
    <link rel="icon" href="icon.png">
   </head>
   
@@ -42,11 +38,7 @@
     <div class="statusbar-overlay"></div>
    
   <div class="panel-overlay" ></div>
- 	
-  	
-  
-
-  
+ 	  
     <div class="popover popover-menu" style="z-index:99998; ">
       <div class="popover-inner"  >
         <div class="list-block">
@@ -59,20 +51,18 @@
   
  
   
- 
- 
- 
     <div class="views">
       <div class="view view-main">
         <div class="pages navbar-fixed ">
-          <div data-page="indice" class="page" style="background:#fff; background:url(backhom.jpg) no-repeat center center ; background-size:cover;">
+          <div data-page="indice" class="page" style="background:#fff; background:url(backscidoo.jpg) no-repeat center center ; background-size:cover;">
+           <div style="position:absolute; width:100%; height:100%; background:#333; opacity:0.6;"></div>
            
             <div class="page-content">
               <div class="content-block-title" align="center" style=" margin:0px;   vertical-align:middle; padding:0px; padding-top:60px;padding-bottom:50px; position:relative; margin-top:-100px;" >
               
                <div style="z-index:2; margin-top:15px;"><img src="scidoob.png" width="90%">
                <br>
-               <div style="font-size:17px; width:100%; color:#fff; line-height:20px;">The First App<br>for managing your booking! </div>
+               <div style="font-size:17px; width:100%; color:#fff; line-height:20px;">La prima App<br>per gestire le tue prenotazioni! </div>
                </div>
              
               </div>
@@ -84,16 +74,16 @@
              
              	<div class="content-block" >
     <!-- Buttons row as tabs controller -->
-            <div class="buttons-row tabind" style="margin-top:-45px; ">
+            <div class="buttons-row " id="tabind">
               <!-- Link to 1st tab, active -->
-              <a href="#tab1" class="tab-link active button">Ospite</a>
+              <a href="#tab1" class="tab-link active button"><b>OSPITE</b></a>
               <!-- Link to 2nd tab -->
-              <a href="#tab2" class="tab-link button">Struttura</a>
+              <a href="#tab2" class="tab-link button"><b>STRUTTURA</b></a>
             </div>
           </div>
   <!-- Tabs, tabs wrapper -->
   
-  <div class="tabs-animated-wrap" style="margin-bottom:-150px; padding:0px; margin-top:-45px;">
+  <div class="tabs-animated-wrap" style=" padding:0px; margin-top:-45px;">
   
   <div class="tabs" style="border:none;" >
     <!-- Tab 1, active by default -->
@@ -159,7 +149,7 @@
               </div>
             </div>
           </li>
-          
+         
         </ul>
       </div>
       	<a href="javascript:void(0)" onclick="sendform()" class="button button-big button-fill sendform" style=" width:60%; margin:auto; background:#ff9c00;;">Accedi</a>
@@ -172,12 +162,6 @@
    </div>
   </div>
              
-             <style>
-             .tabind .tab-link{border:solid 2px #fff; color:#fff;}
-			 .tabind .active{background: #fff; color:#333;}
-             
-             </style>
-             
              <!--
                <div class="content-block row" style="padding:4px;">
       <div class="col-100" align="center"><a href="login-screen-embedded.html" class="button button-raised" style="height:70px; background:url(img/family.svg) no-repeat top center; background-size:40px 40px; width:100%;; background-color:#F29A0B; color:#fff;"><br>Un Ospite</a></div>
@@ -185,9 +169,9 @@
     </div>   <br>
     -->
     
-              <div class="content-block" align="center" style="font-size:80%; background:#1d9adb; color:#fff; margin-bottom:-30px;">
+              <div class="content-block" align="center" style="font-size:80%; background:#fff; color:#1d9adb; margin-top:-100px;">
               <br>
-              <img src="scidoob.png" width="50%"><br><br>
+              <img src="scidoohead.png" width="50%"><br><br>
               
               
               Il portale Scidoo.com nasce dall'idea di un giovane titolare di un albergo che, in seguito alle difficoltà riscontrate nel gestire le numerose attività di una struttura, inizia a progettare un software in grado di aiutarlo.<br>Ci troviamo nel 2005 anno in cui l'attività ricettiva inizia a compiere i primi passi.<br>Agli inizi le operazioni  svolte da Scidoo furono quelle di gestire una prenotazione, e di visualizzare graficamente il Tableu di un albergo.<br><br>Oggi Scidoo, è cresciuto e permette anche a te cliente, di gestire la tua prenotazione, iniziando dalla temperatura del tuo alloggio.<br><br>
