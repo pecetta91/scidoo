@@ -1,8 +1,11 @@
 // Init App
 var myApp = new Framework7({
     modalTitle: 'Scidoo.com',
-	 material: true,
-	 animatePages:true
+	 animatePages:true,
+	 cache:true,
+	 fastClicks:true,
+	 uniqueHistory:true,
+	 pushState:true
 });
 //	  swipePanel: 'left'
 
@@ -16,11 +19,61 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 
-var baseurl='http://127.0.0.1/milliont/';
-//var baseurl='http://192.168.0.10/milliont/';
-//var baseurl='http://192.168.1.63/milliont/';
+/*
+$$(window).on('popstate', function(){
+  myApp.closeModal('.popup.modal-in');
+});
+*/
 
+$$(window).on('popstate', function(){
+ 	if ($$('.modal-in').length > 0) { 
+		myApp.closeModal();
+		blockPopstate=true;
+		return false; 
+	}else{ 
+		//controllo che non stiamo sulla pagina profilo
+		switch(mainView.activePage.name){
+			case "profilo":
+				blockPopstate=true;
+				return false; 
+			break;
+			case "profilocli":
+				blockPopstate=true;
+				return false; 
+			break;
+			default:
+				blockPopstate=false;
+				mainView.router.back();
+			break;
+		}
+	} 
+});
+
+
+//var baseurl='http://127.0.0.1/milliont/';
+//var baseurl='http://192.168.1.106/milliont/';
+//var baseurl='http://192.168.1.100/milliont/';
 var baseurl='https://www.scidoo.com/';
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	vars[key] = value;
+	});
+	return vars;
+}
+
+var guest=getUrlVars()["guest"];
+//alert(guest);
+if(typeof guest != 'undefined'){
+	window.localStorage.setItem("IDcode", guest);
+	onloadf(0);
+	//navigation(1,'',7);
+}else{
+	onloadf(0);
+}
+
+
 
 var calendarDefault = myApp.calendar({
      input: '#kscal',
@@ -69,15 +122,14 @@ var IDutente=0;
 					var num=data.indexOf("error");  	 //alert(data);
 					if(num==-1){					
 						window.localStorage.setItem("IDcode", data);
+						//alert(data);
 						IDcode=data;
-							//var query = {IDcode:data};
-							navigation(0,'',0);
-						
+						//var query = {IDcode:data};
+						navigation(0,'',0);
 					}else{
 						myApp.addNotification({
 							message: "I Dati immessi non sono corretti. Prego riprovare!",
-							hold:2000,
-							button: {text: '<i class="material-icons">close</i>'}
+							hold:1200
 						});
 					}
 					 
@@ -126,7 +178,7 @@ var IDutente=0;
 					if(num==-1){
 						window.localStorage.setItem("IDcode", data);
 						IDcode=data;
-						var query = {};
+						//var query = {};
 						navigation(1,'',7);
 
 					}else{
@@ -134,48 +186,47 @@ var IDutente=0;
 						
 						myApp.addNotification({
 							message: "I Dati immessi non sono corretti. Prego riprovare!",
-							hold:2000,
-							button: {text: '<i class="material-icons">close</i>'}
+							hold:1200
 						});
 						
 					}
 				}
             })	
-  
 	
 	}
-
 
 myApp.onPageInit('profilo', function (page) {	
 	myApp.initPageSwiper('#tabmain3');
 });
-
 myApp.onPageInit('indice', function (page) {	
-	onloadf();
+	if(IDcode=='undefined'){
+		onloadf(1);
+	}
 });
 
 var p=0;
 
-
 function scrollrig(){
 		if(p==1){
-			 var offset2=$$('.table-fixed-right').offset();
-			var lef=parseInt(offset2.left)*-1+parseInt(172);
+			// var offset2=;
+			var lef=$$('.table-fixed-right').offset().left*-1+parseInt(172);
 			$$('#tabdate').css('left',lef+'px');
 		}
 	}	
-
+	
+var indipren=0;
 function addprenot(time,app){
 	
-	
-		
-		
-		//IDcode=window.localStorage.getItem("IDcode");
+	indipren=1;
+	//IDcode=window.localStorage.getItem("IDcode");
 		var url=baseurl+"mobile/config/nuovaprenotazione.php";
 		//id=parseInt(id);
 		//var apriurl=new Array('config/profilo.php','config/profilocli.php','config/calendario.inc.php','config/detpren.php');
 		//var url=url+apriurl[id];
 		//alert(IDcode);
+		
+		//var popupHTML = '<div class="popup" style="padding:0px;" id="contprenot"></div>';
+		//myApp.popup(popupHTML);
 		
 		var query={time:time,app:app};			
 		myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
@@ -188,9 +239,14 @@ function addprenot(time,app){
 					success: function (data) {
 						clearTimeout();
 						myApp.hideIndicator();
-						var popupHTML = '<div class="popup" style="padding:0px;">'+data+'</div>';
-						myApp.popup(popupHTML);
+						//$$('#contprenot').html(data);
 						
+						
+						mainView.router.load({
+							content: data,
+						  animatePages: true
+						});
+				
 						navigationtxt(5,0,'step0',0);
 						statostep=0;
 						/*if((time!=0)&&(app!=0)){
@@ -213,17 +269,97 @@ function addprenot(time,app){
 			 }
 		 });	
 	};
-	
+
+$$(document).on('page:back', function (e) {
+   setTimeout(function(){ 
+   
+   		switch(mainView.activePage.name){
+			case 'centrobenesseregiorno':
+				var func=$$('#funccentro').val();
+			 	eval(func);
+			break;
+			case 'centrobenessere':
+				var func=$$('#funccentro2').val();
+			 	eval(func);
+			break;
+			case 'ristorante':
+				var func=$$('#funccentro4').val();
+			 	eval(func);
+			break;
+			case 'ristorantegiorno':
+				var func=$$('#funccentro3').val();
+			 	eval(func);
+			break;
+			case 'dettavolo':
+				var func=$$('#funccentro5').val();
+			 	eval(func);
+			break;
+			
+   		}
+	   
+	   
+  	}, 500);
+
+
+});
 
 
 
 myApp.onPageInit('calendario', function (page) {	
 	//var p=0;
+	
+	if ($$(".ogg").html() != undefined) {
+								var offset = $$(".ogg").offset();
+								var left=(parseInt(offset.left)-parseInt(100));
+								document.getElementById('tabcalmain').scrollLeft=left;
+							}
+							
+							$$('.nosoggcal').on('click', function () {
+								var time=$$(this).attr('alt');
+								if(!isNaN(time)){
+									var time=parseInt($$('#datacal').val())+parseInt(((time-1)*86400));
+									opennosogg(time);
+								}
+							});
+							$$('.ppp').on('click', function () {
+								var ID=$$(this).attr('label');
+								navigation(3,ID);
+								openp=ID;
+							});
+							
+							$$('.new').on('click', function () {
+								if(openp==0){
+									var id=$$(this).attr('id');
+									var arr=id.split('_');
+									var time=parseInt($$('#datacal').val())+parseInt(((arr['0']-1)*86400));
+									var app=arr['1'];
+									addprenot(time,app);
+								}
+							});
+							$$('.noteesc').on('click', function () {
+								var time=$$(this).attr('alt');
+								if(!isNaN(time)){
+									var time=parseInt($$('#datacal').val())+parseInt(((time-1)*86400));
+									openesclu(time);
+								}
+							});
+							
+							$$('.annullata').on('click', function () {
+								var time=$$(this).attr('alt');
+								if(!isNaN(time)){
+									var time=parseInt($$('#datacal').val())+parseInt(((time-1)*86400));
+									openann(time);
+								}
+							});
+							
+	
+	
+	
 	var ps=0;	
 	var container2 = $$('.page-content');
 	$$(container2).scroll(function() {
-		var offset = $$("#tabappart").offset();
-		var off=parseInt(offset.top)+parseInt(55);
+		//var offset = ;
+		var off=parseInt($$("#tabappart").offset().top)+parseInt(55);
 		if(off<105){
 			if(ps==0){
 				ps=1;
@@ -235,8 +371,8 @@ myApp.onPageInit('calendario', function (page) {
 		}
 		
 		if(off<104){
-				 var offset2=$$('.table-fixed-right').offset();
-				var lef=parseInt(offset2.left)*-1+parseInt(172);
+				 //var offset2=;
+				var lef=$$('.table-fixed-right').offset().left*-1+parseInt(172);
 				 var off2=offset.top;
 				 //$('#valore').html(off2);
 				 //document.getElementById('valore').innerHTML=off2;
@@ -244,7 +380,7 @@ myApp.onPageInit('calendario', function (page) {
 					 var off2=(off2*-1);
 					 //off2=parseInt(off2)+parseInt(2);
 				 }else{
-					 off2=0+parseInt(parseInt(2)-off2);
+					 off2=parseInt(2)-off2;
 				}
 				off2=parseInt(off2)+parseInt(50);
 				
@@ -255,13 +391,12 @@ myApp.onPageInit('calendario', function (page) {
 					//$$('#tabdate').css('z-index','99999');
 					$$('#tabdate').css('top','50px');
 					$$('#tabdate').css('left',lef+'px');
-					$$('#tabbody').css('margin-top','38px');
+					$$('#tabbody').css('margin-top','49px');
 					p=1;
 				}
 				
 		}else{
 			if(p==1){
-				
 				$$('#tabdate').css('position','absolute');
 				$$('#tabdate').css('top','auto');
 				$$('#tabdate').css('margin-top','0px');
@@ -278,20 +413,26 @@ myApp.onPageInit('calendario', function (page) {
 
 var myCalendar='';
 
-function navigation(id,str,agg){
-	//alert(id);
+function navigation(id,str,agg,rel){
 	var url=baseurl+"mobile/";
 	id=parseInt(id);
-	var apriurl=new Array('config/profilo.php','config/profilocli.php','config/calendario.inc.php','config/detpren.php','config/centrobenessere.php','config/ristorante.php','config/pulizie.php','config/arrivi.php','config/prenotazioni.php','config/clienti.php','config/domotica.php','config/notifiche.php','config/appunti.php','config/ristorantegiorno.php','config/centrobenesseregiorno.php');
+	var apriurl=new Array('config/profilo.php','config/profilocli.php','config/calendario.inc.php','config/detpren.php','config/centrobenessere.php','config/ristorante.php','config/pulizie.php','config/arrivi.php','config/prenotazioni.php','config/clienti.php','config/domotica.php','config/notifiche.php','config/appunti.php','config/ristorantegiorno.php','config/centrobenesseregiorno.php','config/dettavolo.php');
 	var url=url+apriurl[id];
-	//alert(IDcode);
 	
-	query=new Array();
-	query['IDcode']=IDcode;
+	if(IDcode=='undefined'){
+		onloadf(1);
+	}
+	
+	//alert(url);
+	var query=new Array();
+	//query['IDcode']=IDcode;
 	//alert(IDcode);
+	var str=new String(str);
+	
 	if(str.length>0){
 		var vettore=str.split(',');
 		if(vettore.length>0){
+			
 			for (prop in vettore) {
 				query['dato'+prop]=vettore[prop];
 			}
@@ -309,125 +450,56 @@ function navigation(id,str,agg){
                 success: function (data) {
 					myApp.hideIndicator();
 					//alert(data);
+					
+					
+					
 					clearTimeout();
-					mainView.router.load({
-					  content: data,
-					  force: true
-					});
+					switch(rel){
+						case 1:
+							//alert(data);
+							mainView.router.load({
+							  content: data,
+							  reload:true
+							});
+							//alert('ok');
+						break;
+						case 2:
+							
+							//alert(data);
+							setTimeout(function(){ 
+								mainView.router.load({
+								  content: data,
+								  reload:true
+								});
+							}, 250);
+							
+						break;
+						default:
+							//pageprev=mainView.activePage.name;
+							mainView.router.load({
+							  content: data,
+							   animatePages: true
+							});
+						break;
+					}
+					
+					
 					//mainView.router.loadContent({content:data,force:true});
 					switch(agg){
 						case 1:
-					
-							if ($$(".ogg").html() != undefined) {
-								var offset = $$(".ogg").offset();
-								var left=(parseInt(offset.left)-parseInt(100));
-								document.getElementById('tabcalmain').scrollLeft=left;
-							}
-							$$('.addpren').on('click', function () {
-								var time=$$(this).attr('alt');
-								var app=$$(this).attr('lang');
-								addprenot(time,app);
-							});
-							$$('.noteesc').on('click', function () {
-								var time=$$(this).attr('alt');
-								openesclu(time);
-							});
-							$$('.nosoggcal').on('click', function () {
-								var time=$$(this).attr('alt');
-								opennosogg(time);
-							});
-							$$('.annullata').on('click', function () {
-								var time=$$(this).attr('alt');
-								openann(time);
-							});
-							$$('.ppren').on('click', function () {
-								var ID=$$(this).attr('alt');
-								navigation(3,ID);
-							});
+							//
 						
 						break;
 						case 2:
-	
-							 myCalendar = myApp.calendar({
-								input: '#datacentro',
-								weekHeader: true,
-								dateFormat: 'dd/mm/yyyy',
-								header: false,
-								footer: false,
-								rangePicker: true,
-								onChange:function (p, values, displayValues){
-									//alert(p+'//'+values+'//'+displayValues);
-									var string=new String(values);
-									var vett=string.split(',');
-									var t1=vett['0']/1000;
-									if(string.length>20){
-										var t2=vett['1']/1000;
-										var diff=((t2-t1)/86400);
-										var send=t1+','+diff;
-										navigationtxt(13,send,'centrobenesserediv',5)
-										myCalendar.close()
-									}
-								}
-							});
+
 						
 						break;
 						case 3:
-							 myCalendar = myApp.calendar({
-								input: '#datacentro',
-								weekHeader: true,
-								dateFormat: 'dd/mm/yyyy',
-								header: false,
-								footer: false,
-								rangePicker: true,
-								onChange:function (p, values, displayValues){
-									//alert(p+'//'+values+'//'+displayValues);
-									var string=new String(values);
-									var vett=string.split(',');
-									var t1=vett['0']/1000;
-									if(string.length>20){
-										var t2=vett['1']/1000;
-										var diff=((t2-t1)/86400);
-										var send=t1+','+diff;
-										navigationtxt(14,send,'ristorantediv',6)
-										myCalendar.close()
-									}
-								}
-							});
-						
 						
 							
 						break;
 						case 4:
-						/*
-							 myCalendar = myApp.calendar({
-								input: '#datacentro',
-								weekHeader: true,
-								dateFormat: 'dd/mm/yyyy',
-								header: false,
-								footer: false,
-								rangePicker: true,
-								onChange:function (p, values, displayValues){
-									
-									var string=new String(values);
-									var vett=string.split(',');
-									var t1=vett['0']/1000;
-									if(string.length>20){
-										var t2=vett['1']/1000;
-										var diff=((t2-t1)/86400);
-										var send=t1+','+$$('#IDtipovis').val()+','+diff;
-										navigationtxt(15,send,'puliziediv',7)
-										myCalendar.close()
-									}
-									
-								}
-								
-							});*/
-							
-							
-							
 						
-						
-							
 						break;
 						case 5:
 							 myCalendar = myApp.calendar({
@@ -438,7 +510,6 @@ function navigation(id,str,agg){
 								footer: false,
 								rangePicker: true,
 								onChange:function (p, values, displayValues){
-									
 									var string=new String(values);
 									var vett=string.split(',');
 									var t1=vett['0']/1000;
@@ -449,7 +520,6 @@ function navigation(id,str,agg){
 										navigationtxt(17,send,'arrividiv',8)
 										myCalendar.close()
 									}
-									
 								}
 							});
 						break;
@@ -460,8 +530,8 @@ function navigation(id,str,agg){
 						case 7:
 							menuprofilo();
 						break;
-						
 					}
+					myApp.closeModal();
 					
          }
      });
@@ -475,8 +545,7 @@ function aventistep1(){
 	}else{
 		myApp.addNotification({
 			message: "E' necessario inserire una data. Prego riprovare",
-			hold:2000,
-			button: {text: '<i class="material-icons">close</i>'}
+			hold:1200
 		});
 	}
 }
@@ -487,11 +556,62 @@ function avantistep2(){
 	}else{
 		myApp.addNotification({
 			message: "E' necessario selezionare una soluzione. Prego riprovare",
-			hold:2000,
-			button: {text: '<i class="material-icons">close</i>'}
+			hold:1200
 		});
 	}
 }
+
+
+
+function avanti2(dato0){
+	switch(statostep){
+		case 0:
+			stepnew(1,dato0);
+		break;
+		case 1:
+			aventistep1();
+		break;
+		case 2:
+			if(calcolodispo==0){
+				dispo1();
+			}else{
+				stepnew(1,0);
+			}	
+		break;
+		case 3:
+			//controllo
+			
+			var mioArray=document.getElementsByClassName('tablist selected');
+			var lun=mioArray.length;
+			
+			if(lun>0){
+				stepnew(1,0);
+			}else{
+				//notification
+				
+				myApp.addNotification({
+							message: "Obbligatorio selezionare un'opzione",
+							hold:1200
+						});
+				
+			}
+		break;
+		case 4:
+			stepnew(1,0);
+		break;
+		case 5:
+			stepnew(1,0);
+		break;	
+		case 6:
+			confermapren();
+		break;
+	}
+	
+	
+	
+}
+
+
 
 
 var statostep=0;
@@ -505,6 +625,7 @@ function stepnew(step,str){
 
 	switch(step){
 		case 0:
+			indipren=0;
 			show=0;
 		break;
 		case 1:
@@ -520,54 +641,114 @@ function stepnew(step,str){
 	for(i=0;i<=statostep;i++){
 		$$('#buttstep'+i).removeAttr('disabled');
 	}
+	$$('.avanti').html('Avanti');
+	
+	
+	if(step==2){
+		if(indipren==1){
+			$$('#indietrobutt').css('display','none');
+		}else{
+			$$('#indietrobutt').css('display','block');
+		}
+	}else{
+		$$('.avanti').css('display','block');
+		$$('#indietrobutt').css('display','block');
+	}
+	if(step==0){
+		$$('.avanti').css('display','none');
+		$$('#indietrobutt').css('display','none');
+	}else{
+		$$('.avanti').css('display','block');
+	}
+	
+	
+	if(show!=0){myApp.showTab('#step'+statostep);}
+	
 	switch(step){
 		case 0:
-			if(show!=0){myApp.showTab('#step'+statostep);}
+			indipren=0;
+			
 		break;
 		case 1:
+			indipren=0;
 			if(agg==1){navigationtxt(4,str,'step'+statostep,2);}
-			if(show!=0){myApp.showTab('#step'+statostep);}
+			//if(show!=0){myApp.showTab('#step'+statostep);}
+			$$('#titolodivmain').html('Check In - Check Out');
+			
 		break;
 		case 2:
-			if(agg==1){navigationtxt(4,"0,2",'step'+statostep,0);}
+		
+			
+			
+			
+			if(agg==1){
+				navigationtxt(4,"0,2",'step'+statostep,11);
+			}
+			$$('#titolodivmain').html('Richiesta');
+			
 			if(show!=0){myApp.showTab('#step'+statostep);}
 		break;
 		case 3:
-			if(agg==1){
+			if((agg==1)&&(calcolodispo==0)){
+				//alert(statostep);
 				navigationtxt(6,1,'step'+statostep,0);
-				calcolatot();
+				//calcolatot();
 			}
-			if(show!=0){myApp.showTab('#step'+statostep);}
+			$$('#titolodivmain').html('Trattamento');
+			
+			//if(show!=0){myApp.showTab('#step'+statostep);}
 		break;
 		case 4:
+		
 			$$('#buttonadd').css('visibility','visible');
-			if(agg==1){
+			if((agg==1)&&(calextra==0)){
 				navigationtxt(7,str,'step'+statostep,0);
 				calcolatot();
+			}else{
+				calextra=0;
 			}
-			if(show!=0){myApp.showTab('#step'+statostep);}
+			$$('#titolodivmain').html('Elenco Servizi');
+			//if(show!=0){myApp.showTab('#step'+statostep);}
 		break;
 		case 5:
 			if(agg==1){navigationtxt(8,str,'step'+statostep,0);}
-			if(show!=0){myApp.showTab('#step'+statostep);}
+			//if(show!=0){myApp.showTab('#step'+statostep);}
+			$$('#titolodivmain').html('Dati Cliente');
 		break;
 		case 6:
+			$$('.avanti').html('<i class="f7-icons " style="color:#fff; font-size:30px; margin-top:2px; ">check</i>');
+			$$('#titolodivmain').html('Conferma Prenotazione');
+			$$('.avanti').html('Conferma');
 			if(agg==1){navigationtxt(9,str,'step'+statostep,0);}
-			if(show!=0){myApp.showTab('#step'+statostep);}
+			//if(show!=0){myApp.showTab('#step'+statostep);}
 		break;
 	}
+	
+	if(statostep==0){
+		$$('.divmainmenu').css('visibility','hidden');
+	}else{
+		$$('.divmainmenu').css('visibility','visible');
+		
+	}
+	
 }
 
 var okstep1=0;
+var openp=0;
 
-function navigationtxt(id,str,campo,agg){
+function navigationtxt(id,str,campo,agg,loader){
+	if(IDcode=='undefined'){
+		onloadf(1);
+	}
 	
 	var url=baseurl+"mobile/config/";
-	var apriurl=new Array('profilo/temp.php','calendario.inc.php','detpren2.php','calendario2.inc.php','preventivo/step1.php','preventivo/step0.php','preventivo/step2.php','preventivo/step3.php','preventivo/step4.php','preventivo/step5.php','notifiche.inc.php','promemoria.php','appunti.inc.php','centrobenessere.inc.php','ristorante.inc.php','pulizie.inc.php','domotica.inc.php','arrivi.inc.php','clienti.inc.php','prenotazioni.inc.php','ristorantegiorno.inc.php','centrobenesseregiorno.inc.php','preventivo/step4cerca.php','profilo/servizi.php','profilo/prenotazione.php','profilo/temperatura.php','profilo/menuristorante.php','/profilo/ilconto.php','profilo/elencoservizi.php','profilo/elencoluoghi.php');
+	var apriurl=new Array('profilo/temp.php','calendario.inc.php','detpren2.php','calendario2.inc.php','preventivo/step1.php','preventivo/step0.php','preventivo/step2.php','preventivo/step3.php','preventivo/step4.php','preventivo/step5.php','notifiche.inc.php','promemoria.php','appunti.inc.php','centrobenessere.inc.php','ristorante.inc.php','pulizie.inc.php','domotica.inc.php','arrivi.inc.php','clienti.inc.php','prenotazioni.inc.php','ristorantegiorno.inc.php','centrobenesseregiorno.inc.php','preventivo/step4cerca.php','profilo/servizi.php','profilo/prenotazione.php','profilo/temperatura.php','profilo/menuristorante.php','/profilo/ilconto.php','profilo/elencoservizi.php','profilo/elencoluoghi.php','ricercaclidet.php','ricercaserv.php','centrobenesseregiorno.inc.php');
 	var url=url+apriurl[id];
-	myApp.showIndicator();
-	setTimeout(function(){ hidelo(); }, 5500);	
-
+	
+	if(loader!=0){
+		myApp.showIndicator();
+		setTimeout(function(){ hidelo(); }, 5500);	
+	}
 	query=new Array();
 	query['IDcode']=IDcode;
 	var str=new String(str);
@@ -588,39 +769,61 @@ function navigationtxt(id,str,campo,agg){
 				cache:false,
                 data: query,
                 success: function (data) {
-					clearTimeout();
-					myApp.hideIndicator();
+					//alert(data);
+					if(loader!=0){
+						clearTimeout();
+						myApp.hideIndicator();
+					}
 					$$('#'+campo).html(data);
-					myApp.closeModal('.popover-menu');
+					
 					if(id==3){
 						if ($$(".ogg").html() != undefined) {
-							var offset = $$(".ogg").offset();
-							var left=(parseInt(offset.left)-parseInt(100));
-							document.getElementById('tabcalmain').scrollLeft=left;
-						}
-						
-						$$('.addpren').on('click', function () {
+								var offset = $$(".ogg").offset();
+								var left=(parseInt(offset.left)-parseInt(100));
+								document.getElementById('tabcalmain').scrollLeft=left;
+							}
+							
+							$$('.nosoggcal').on('click', function () {
 								var time=$$(this).attr('alt');
-								var app=$$(this).attr('lang');
-								addprenot(time,app);
+								if(!isNaN(time)){
+									var time=parseInt($$('#datacal').val())+parseInt(((time-1)*86400));
+									opennosogg(time);
+								}
+							});
+							
+							$$('.ppp').on('click', function () {
+								var ID=$$(this).attr('label');
+								navigation(3,ID);
+								openp=ID;
+							});
+						
+							
+							$$('.new').on('click', function () {
+								if(openp==0){
+									var id=$$(this).attr('id');
+									var arr=id.split('_');
+									var time=parseInt($$('#datacal').val())+parseInt(((arr['0']-1)*86400));
+									
+									var app=arr['1'];
+									addprenot(time,app);
+								}
 							});
 							$$('.noteesc').on('click', function () {
 								var time=$$(this).attr('alt');
-								openesclu(time)
+								if(!isNaN(time)){
+									var time=parseInt($$('#datacal').val())+parseInt(((time-1)*86400));
+									openesclu(time);
+								}
 							});
-							$$('.nosoggcal').on('click', function () {
-								var time=$$(this).attr('alt');
-								opennosogg(time);
-							});
+							
 							$$('.annullata').on('click', function () {
 								var time=$$(this).attr('alt');
-								openann(time);
+								if(!isNaN(time)){
+									var time=parseInt($$('#datacal').val())+parseInt(((time-1)*86400));
+									openann(time);
+								}
 							});
-							$$('.ppren').on('click', function () {
-								var ID=$$(this).attr('alt');
-								navigation(3,ID)
-							});
-						
+							
 						
 						
 					}
@@ -642,8 +845,8 @@ function navigationtxt(id,str,campo,agg){
 							
 							
 							
-							$$('.men').removeClass('currentm');
-							$$('#m'+query['dato1']).addClass('currentm');
+							$$('.tab-link').removeClass('active');
+							$$('#m'+query['dato1']).addClass('active');
 							
 							
 						break;
@@ -712,12 +915,10 @@ function navigationtxt(id,str,campo,agg){
 						     
 						break;
 						case 3:
-							
 							//da specificare
+							//alert(data);
 							
-							
-							
-							
+						
 						break;
 						case 4:
 							var offset = $$(".ogg").offset();
@@ -748,6 +949,10 @@ function navigationtxt(id,str,campo,agg){
 							});
 						break;
 						case 6:
+							$$('.datesx').removeClass('selected');
+							$$('#data'+query['dato0']).addClass('selected');
+							
+						/*
 							myCalendar = myApp.calendar({
 								input: '#datacentro',
 								weekHeader: true,
@@ -767,7 +972,7 @@ function navigationtxt(id,str,campo,agg){
 										myCalendar.close()
 									}
 								}
-							});
+							});*/
 						break;
 						case 7:
 						/*
@@ -859,8 +1064,33 @@ zoom: 10,mapTypeId: 'roadmap'
 											
 							//$$('img.lazy').trigger('lazy');
 						break;
+						case 11:
+							
+							
+							
+						break;
+						case 12:
 						
+							myApp.accordionOpen('#IDinfop'+query['dato2'])
+							//$$('#IDinfop'+query['dato2']).trigger('click');;
+						break;
+						case 13:
+							var left=parseInt($$(".tempgiorno.selt").attr('alt'));
+							var left=left*40;
+							//var left=$$(".tempgiorno.selt").offset().left;
+							
+							document.getElementById('tempergiorno').scrollLeft=left;
+							var left=parseInt($$(".tempnotte.selt").attr('alt'));
+				
+							var left=left*40;
+							document.getElementById('tempernotte').scrollLeft=left;
+						
+							
+						break;
 					}
+					
+					document.getElementByClass('.page-content').scrollTop=0;
+					
 					
 					
 					
@@ -870,13 +1100,18 @@ zoom: 10,mapTypeId: 'roadmap'
 
 
 
-onloadf();
 
-function onloadf(){
+
+function onloadf(time){
+	
 	//alert('aa');
+	//alert();
 	IDcode=window.localStorage.getItem("IDcode");
+	var h = window.innerHeight;
+	creasessione(h,86);
+	
 	if(IDcode.length>10){
-		//alert(ID);
+		//alert(IDcode);
 		//var url=baseurl+"mobile/";
 		
 		var url=baseurl+'mobile/config/controlloini.php';
@@ -888,21 +1123,25 @@ function onloadf(){
 				dataType: 'text',
 				cache:false,
                 data: {IDcode:IDcode},
-                success: function (data) {
+                success: function (data){
 					//alert(data);
 					var num=data.indexOf("error");
 					if((num==-1)&&(!isNaN(data))){
 						data=parseInt(data);
 						//var arr=new Array();
-						agg=0;
-						if(data==1)agg=7;
-						navigation(data,'',agg)
+						
+						if(time==0){
+							agg=0;
+							if(data==1)agg=7;
+							navigation(data,'',agg)
+						}
 					}
     				//myApp.hideIndicator();
 					//mainView.router.loadContent(data);
        			}
     	 });
 	}
+	
 	
 }
 
@@ -971,21 +1210,19 @@ function modprofilo(id,campo,tipo,val2,agg){
 				if(agg==3){
 					myApp.addNotification({
 						message: 'Servizio prenotato con successo',
-						hold:2500,
-						 button: {text: '<i class="material-icons">close</i>'}
+						hold:1200
 					});
 				}else{
 					myApp.addNotification({
 					message: 'Modifica effettuata con successo',
-						hold:2500,
-						 button: {text: '<i class="material-icons">close</i>'}
+						hold:1200
 					});
 				}	
 					
 				myApp.hideIndicator();
 				switch(agg) {
 					case 1:
-						navigationtxt(25,0,'contenutodiv',0);
+						navigationtxt(25,0,'contenutodiv',13);
 					break;
 					case 2:
 						navigationtxt(24,0,'contenutodiv',0);
@@ -993,14 +1230,13 @@ function modprofilo(id,campo,tipo,val2,agg){
 						if(tipo==7){
 							myApp.addNotification({
 							message: 'Ha appena ricevuto una copia della mail inviata alla struttura.',
-								hold:2500,
-								 button: {text: '<i class="material-icons">close</i>'}
+								hold:2000
 							});
 						}
 						
 					break;
 					case 3:
-						$$('.close-popup').trigger('click');
+						myApp.closeModal();
 						//var IDsotto=$$('#IDsottotipsel').val();
 						//navigationtxt(24,IDsotto,'contenutodiv',0);
 					break;
@@ -1060,22 +1296,58 @@ function vis2(id,tipo,multi,num){
 	}
 }
 
+
+function modrestr(id,tipo,multi,num,popup){
+	
+
+		var val=$$('#tr'+id).attr('lang');
+		
+		idprec=id;
+		//alert(val);
+		var url=baseurl;
+		var url=url+'mobile/config/modrestr.php';
+		
+		var query = {ID:val,tipo:tipo,multi:multi};
+		//alert(url);
+		$$.ajax({
+				url: url,
+					  method: 'GET',
+					dataType: 'text',
+					cache:false,
+					data: query,
+					success: function (data) {
+						//myApp.hideIndicator();
+						
+						
+						clearTimeout();
+				
+						if(popup==1){
+							$$('#contpopup').html(data);
+						}else{
+							var popupHTML = '<div class="popup" id="contpopup" style="padding:0px;">'+data+'</div>';
+							myApp.popup(popupHTML);
+						}
+				
+						
+						//mainView.router.loadContent(data);
+					}
+			 });
+	
+}
+
 function backcentro(tipo){
-	
-	
-	
 	switch(tipo){
 		case 1:
 			var time=$$('#timecentro').val();
-			var gg=$$('#ggcentro').val();
-			var txt=time+','+gg;
-			navigationtxt(13,txt,'centrobenesserediv',5)
+			//var gg=$$('#ggcentro').val();
+			//var txt=time+','+gg;
+			navigationtxt(13,time,'centrobenesserediv',0)
 		break;
 		case 2:
 			var time=$$('#timeristo').val();
-			var gg=$$('#ggristo').val();
-			var txt=time+','+gg;
-			navigationtxt(14,txt,'ristorantediv',6)
+			//var gg=$$('#ggristo').val();
+			//var txt=time+','+gg;
+			navigationtxt(14,time,'ristorantediv',0)
 		break;
 	}
 }
@@ -1086,11 +1358,17 @@ function riaggvis(txtsend){
 	//controllo dove siamo
 	//
 	
+	/*
+	var time=$$('#timecentrogiorno').val();
+	var sottotip=$$('#IDsottocentrogiorno').val();
+	var txt=time+','+sottotip;
+	
+	
+	navigation(14,txt,6,1);
+	*/
+	
 	switch(mainView.activePage.name){
-		
 		case "detpren":
-			
-			
 			var campo='into1-'+$$('#'+txtsend).val();
 			//alert(campo);
 			var url=baseurl;
@@ -1113,10 +1391,14 @@ function riaggvis(txtsend){
 					 });
 		break;
 		case "centrobenesseregiorno":
+			//alert('aa');
 			var time=$$('#timecentrogiorno').val();
 			var sottotip=$$('#IDsottocentrogiorno').val();
 			var txt=time+','+sottotip;
-			navigationtxt(21,txt,'centrobenesseregiornodiv',9);
+			navigation(14,txt,6,1);
+			
+			//navigationtxt(21,txt,'centrobenesseregiornodiv',9);
+			
 		break;
 		case "ristorantegiorno":
 			var time=$$('#timeristogiorno').val();
@@ -1199,13 +1481,13 @@ function modprenextra(id,campo,tipo,val2,agg){
 					cache:false,
 					data: query,
 					success: function (data) {
+						
+						//alert(data);
 						clearTimeout();
 						myApp.addNotification({
 							message: 'Modifica effettuata con successo',
-							hold:1700,
-							 button: {text: '<i class="material-icons">close</i>'}
+							hold:1700
 						});
-						
 						
 						switch(agg) {
 							case 1:
@@ -1223,12 +1505,21 @@ function modprenextra(id,campo,tipo,val2,agg){
 								var sala=arr['0'];
 								var time=arr['1'];
 								var IDpers=arr['2'];
-								$$('.bor').removeClass('button-fill');
-								$$('#'+time+sala+IDpers).addClass('button-fill');
+								$$('.tablist').removeClass('selected');
+								$$('#'+time+sala+IDpers).addClass('selected');
 								
 								var funz=$$('#funzioneriagg').val();
 								eval(funz);
 								
+							break;
+							case 3:
+								aggintoristo(id,0);
+								
+								
+							break;
+							case 4:
+								var IDpren=$$('#IDprenfunc').val();
+								navigationtxt(2,IDpren+',1','contenutop',1);
 							break;
 							
 						}
@@ -1242,6 +1533,23 @@ function modprenextra(id,campo,tipo,val2,agg){
 }
 
 
+function aggintoristo(IDprenextra,tipo){
+	/*var url=baseurl;
+	var url=url+'mobile/config/ristointo.php';
+	var query = {IDprenextra:IDprenextra,tipo:tipo};
+	$$.get(url,query, function(data){
+		myApp.closeModal();
+		$$('#into'+IDprenextra).html(data);
+		//alert(data);
+	});*/
+	setTimeout(function(){
+		navigation(15,IDprenextra,0,1);
+	 }, 300);	
+	
+	
+	
+}
+
 function modprenot(id,campo,tipo,val2,agg){
 		myApp.showIndicator();setTimeout(function(){ hidelo(); }, 4500);	
 		switch(val2) {
@@ -1253,7 +1561,7 @@ function modprenot(id,campo,tipo,val2,agg){
 				var val=$$('#'+campo).val();
 				val=val.replace(',','.');
 				if(isNaN(val)){
-					alertify.alert("E' necessario inserire un numero. Prego Riprovare");
+					//alertify.alert("E' necessario inserire un numero. Prego Riprovare");
 					return false;
 				}
 				break;
@@ -1302,18 +1610,16 @@ function modprenot(id,campo,tipo,val2,agg){
 			cache:false,
 			data: query,
 			success: function (data) {
-//				alert(data);
+				//alert(data);
 				if(agg==2){
 					myApp.addNotification({
 							message: 'Funzione eseguita con successo',
-							hold:2500,
-							 button: {text: '<i class="material-icons">close</i>'}
+							hold:1200
 						});
 				}else{
 					myApp.addNotification({
 							message: 'Modifica effettuata con successo',
-							hold:2500,
-							 button: {text: '<i class="material-icons">close</i>'}
+							hold:1200
 						});
 				}
 				clearTimeout();
@@ -1322,11 +1628,11 @@ function modprenot(id,campo,tipo,val2,agg){
 					case 1:
 						var vis=$$('#visdom').val();
 						navigationtxt(16,vis,'domoticadiv',0);
-						$$('.close-popup').trigger('click');
+						myApp.closeModal();
 					break;
 					case 2:
 						navigationtxt(12,0,'appuntidiv',0);
-						$$('.close-popup').trigger('click');
+						myApp.closeModal();
 					break;
 					case 3:
 						var send= $$('#timeristo').val()+','+$$('#IDtipovis').val()+','+$$('#ggpulizie').val();
@@ -1335,12 +1641,37 @@ function modprenot(id,campo,tipo,val2,agg){
 					case 4:
 						navigationtxt(22,'','contencli');
 					break;
-					
+					case 5:
+						var txt=$$('#IDprenfunc').val()+',2';
+						navigationtxt(2,txt,'contenutop',1);
+					break;
+					case 6:
+						var txt=$$('#IDprenfunc').val()+',2,'+val;
+						navigationtxt(2,txt,'contenutop',12);
+					break;
+					case 7:
+						var IDpren=$$('#IDprenfunc').val();
+						navigationtxt(2,IDpren+',1','contenutop',1);
+					break;
+					case 8:
+						var tot=$$('#totalevacanza').val();
+						$$('#totaleprev').html(tot+' €');
+					break;
+					case 9:
+						var txt=$$('#IDprenfunc').val()+',0';
+						navigationtxt(2,txt,'contenutop',1);
+					break;
 					
 				}
 			}
 	});
 }
+
+
+function ricercaclidet(nav,val,ID,campo){
+	navigationtxt(30,val+','+ID,campo);
+}
+
 
 function accendidom(ID,acc){
 	var giornic3='';
@@ -1411,7 +1742,10 @@ function openesclu(time){
 			cache:false,
 			data: query,
 			success: function (data) {
-				myApp.pickerModal(data);
+				var popupHTML = '<div class="popup" id="contpopup" style="padding:0px;">'+data+'</div>';
+				myApp.popup(popupHTML);
+				
+				//myApp.pickerModal(data);
 			}
 	});
 }
@@ -1427,7 +1761,9 @@ function opennosogg(time){
 			cache:false,
 			data: query,
 			success: function (data) {
-				myApp.pickerModal(data);
+				var popupHTML = '<div class="popup" id="contpopup" style="padding:0px;">'+data+'</div>';
+				myApp.popup(popupHTML);
+				//myApp.pickerModal(data);
 			}
 	});
 }
@@ -1449,7 +1785,11 @@ function opensosp(){
 			data: query,
 			success: function (data) {
 				//alert(data);
-				myApp.pickerModal(data);
+				mainView.router.load({
+					content: data,
+					  animatePages: true
+				});
+				
 			}
 	});
 }
@@ -1466,14 +1806,25 @@ function openann(time){
 			cache:false,
 			data: query,
 			success: function (data) {
-				myApp.pickerModal(data);
+				
+				
+				
+				var popupHTML = '<div class="popup" id="contpopup" style="padding:0px;">'+data+'</div>';
+				myApp.popup(popupHTML);
+				//myApp.pickerModal(data);
 			}
 	});
+}
+
+function cambiadatamod(ID,tipo,time,riagg){
+	var time=$$('#datamod').val();
+	modificaserv(ID,tipo,time,riagg,1);
 }
 
 function modificaserv(ID,tipo,time,riagg,popup){
 	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
 	var url=baseurl;
+	
 	var url=url+'mobile/config/orarioserv.php';
 	var query = {ID:ID,tipo:tipo,time:time,riagg:riagg};
 	$$.ajax({
@@ -1484,23 +1835,28 @@ function modificaserv(ID,tipo,time,riagg,popup){
 			data: query,
 			success: function (data) {
 				
-				myApp.closeModal('.popover-menu');
+				//myApp.closeModal('.popover-menu');
+				
 				if(popup==1){
-					$$('#contpopup').html(data);
+					mainView.router.load({
+						  content: data,
+						  reload:true
+					});
 				}else{
-					var popupHTML = '<div class="popup" id="contpopup" style="padding:0px;">'+data+'</div>';
-					myApp.popup(popupHTML);
+					//pageprev=mainView.activePage.name;
+					
+					mainView.router.load({
+						content: data,
+						  animatePages: true
+						});
 				}
 				
-				//$$('#pannellodx').html(data);
-				//myApp.openPanel('right');
 				 myApp.hideIndicator();
 				var ID=$$('.tabac').attr('href');	
-				//document.getElementById('pannellodx').scrollTop=0;			
+
 				if(ID.length>0){
 					myApp.showTab(ID);
 				}
-						
 			}
 	});
 }
@@ -1518,6 +1874,7 @@ function aprimod(ID,obj){
 	data=atob(data);
 	$$('#menupop').html(data);
 	myApp.popover($$('.popover-menu'),obj);
+
 }
 
 var durata11='';
@@ -1526,13 +1883,25 @@ var IDtipo11='';
 var serviziriep='';
 var extra11='';
 
+function backselect(){
+	$$('.tabindietro').css('display','none');
+	$$('#buttadddiv').css('display','none');
+}
+
+function backselect2(){
+	$$('.tabindietro').css('display','none');
+	$$('#buttonaddprev').css('display','none');
+}
 function selectservice(ID,tipolim,IDtipo,durata,agg){
+	
 	var url=baseurl;
 	var url=url+'mobile/config/step2add.php';
 	extra11=ID;
 	durata11=durata;
 	tipolim11=tipolim;
 	IDtipo11=IDtipo;
+	$$('.tabindietro').css('display','block');
+	
 	var query = {ID:ID,tipolim:tipolim};
 	$$.ajax({
 			url: url,
@@ -1543,6 +1912,7 @@ function selectservice(ID,tipolim,IDtipo,durata,agg){
 			success: function (data) {
 				$$('#add2').html(data);
 				document.getElementById('pannellodx').scrollTop=0;
+				$$('#buttadddiv').css('display','block');
 				if(isNaN(agg)){
 					myApp.showTab('#add2');
 				}
@@ -1571,10 +1941,7 @@ function creasessione(valore,tipo){
 						 selectservice(extra11,tipolim11,IDtipo11,durata11,1);
 					
 					break;
-				
 				}
-				
-				
 				
 						
 			}
@@ -1617,6 +1984,7 @@ function addservice2(agg,tipoadd){
 			nump=0;
 		}
 	}
+	//alert(serviziriep);
 	
 if((serviziriep.length>0)&&(nump==1)){
 	dataString='arrins='+serviziriep+"&orario=" + orario11  +"&note=" + note+"&IDtipo=" + IDtipo+"&personale=" + personale11 +"&prezzo=" + prezzo +"&durata=" + durata+"&tipolim=" + tipolim+"&tipoadd=" + tipoadd
@@ -1634,10 +2002,9 @@ if((serviziriep.length>0)&&(nump==1)){
 				clearTimeout();
 				myApp.addNotification({
 							message: 'Servizio inserito con successo',
-							hold:2500,
-							 button: {text: '<i class="material-icons">close</i>'}
+							hold:1200
 						});
-						
+						//alert(agg);
 				switch(agg){
 					case 1:
 						var pagdetpren=$$('#pagdetpren').val();
@@ -1648,34 +2015,33 @@ if((serviziriep.length>0)&&(nump==1)){
 							}
 						}
 					
-					
 						var IDpren=$$('#IDprenfunc').val();
 						if(ricarica==1){
 							navigationtxt(2,IDpren+',1','contenutop',1);
 						}else{
 							navigationtxt(2,IDpren+',4','contenutop',1);
 						}
-						
-						
-						//myApp.closePanel('right');
-						$$('.close-popup').trigger('click');
+						mainView.router.back();
 						
 					break;
 					case 2:
 						var IDp=parseInt(data);
-						modificaserv(IDp,1,0,2);
+						modificaserv(IDp,1,0,2,1);
 						setTimeout(function(){ riaggvis(0); }, 1500);					
 					break;
 				}
-				
-				
-				
 				myApp.hideIndicator();
 						
 			}
 	});	
 
 }else{
+	myApp.hideIndicator();
+	myApp.addNotification({
+		message: 'Devi selezionare almeno una persona o aggiungere un oggetto',
+		hold:1200
+	});
+	
 	
 }
 }
@@ -1733,12 +2099,7 @@ function selectbutt(obj){
 	for (var key in arrservice) {
 		 serviziriep =serviziriep +key+'/////';	 
 	}
-	
-	
-	
 }
-
-
 
 
 function cercaservizio(val){
@@ -1775,11 +2136,24 @@ function addservice(IDpren,popup){
 				clearTimeout();
 				
 				if(popup==1){
+					mainView.router.load({
+						  content: data,
+						  reload:true
+					});
+				}else{
+					mainView.router.load({
+						content: data,
+						  animatePages: true
+						});
+				}
+				
+				/*
+				if(popup==1){
 					$$('#contpopup').html(data);
 				}else{
 					var popupHTML = '<div class="popup" id="contpopup" style="padding:0px;">'+data+'</div>';
 					myApp.popup(popupHTML);
-				}
+				}*/
 				
 				 myApp.hideIndicator();
 				
@@ -1818,10 +2192,21 @@ function selprenot(popup){
 				//alert(data);
 				
 				if(popup==1){
-					$$('#contpopup').html(data);
+					
+					mainView.router.load({
+						content: data,
+						  reload: true
+						});
+					
+					
 				}else{
-					var popupHTML = '<div class="popup" id="contpopup" style="padding:0px;">'+data+'</div>';
-					myApp.popup(popupHTML);
+					
+					mainView.router.load({
+						content: data,
+						  animatePages: true
+						});
+					
+					
 				}
 				
 				 myApp.hideIndicator();
@@ -1882,12 +2267,98 @@ function setdom(IDdom,popup){
 
 
 
+function addprodotto(IDpren,popup){
+	
+	myApp.showIndicator();setTimeout(function(){ hidelo(); }, 5500);	
+	var url=baseurl;
+	var url=url+'mobile/config/addprodotto.php';
+	var query = {IDpren:IDpren};
+	$$.ajax({
+			url: url,
+			method: 'GET',
+			dataType: 'text',
+			cache:false,
+			data: query,
+			success: function (data) {
+				//alert(data);
+				clearTimeout();
+				
+				if(popup==1){
+					//$$('#contpopup').html(data);
+					mainView.router.load({
+					 	content: data,
+						reload: true
+					});
+					
+					
+				}else{
+					
+					mainView.router.load({
+					 	content: data,
+						animatePages: true
+					});
+					
+					//var popupHTML = '<div class="popup" id="contpopup" style="padding:0px;">'+data+'</div>';
+					//myApp.popup(popupHTML);
+				}
+				
+				 myApp.hideIndicator();
+				
+						
+			}
+	});
+
+}	
+
+function addprod(ID,add,prezzo){
+	
+	var num=$$('#p'+ID).html();
+	var nprod=$$('#nprod').html();
+	var euro=$$('#euro').html();
+	
+	if(add==0){
+		num=num-1;
+		nprod=nprod-1;
+		euro=euro-prezzo;
+	}else{
+		num=parseInt(num)+parseInt(1);
+		nprod=parseInt(nprod)+parseInt(1);
+		euro=parseInt(euro)+parseInt(prezzo);
+	}
+	$$('#p'+ID).html(num);
+	$$('#nprod').html(nprod);
+	$$('#euro').html(euro);
+	
+	if(num==0){
+		$$('#p'+ID).removeClass('selected');
+	}else{
+		$$('#p'+ID).addClass('selected');
+	}
+}
+
+
+
+
+function addprod2(IDprenextra){
+	
+	servizi='';
+	var mioArray=document.getElementsByClassName('roundb selected');
+	var lun=mioArray.length; //individuo la lunghezza dell’array 
+	for (n=0;n<lun;n++) { //scorro tutti i div del documento
+		var ID=mioArray.item(n).getAttribute('alt');
+		var qta=mioArray.item(n).innerHTML;
+		servizi =servizi +ID+'_'+qta+'/////';		
+	}
+	modprenextra(IDprenextra,servizi,29,9,3);	
+}
+
+
 
 function msgboxelimina(id,tipo,altro,id2,url){
 	var cosa;
 	var agg="";
 	myApp.closeModal('.popover-menu');
-	var arrtipiel=new Array("","la prenotazione","la scheda numero "+id,"il servizio","l'album","la foto","il parametro","l'orario","8","9","la mansione","il soggetto dal personale","il messaggio Newsletter","la fascia oraria","il cliente dalla prenotazione","la nota","la Fattura/Ricevuta","il prodotto dalla Fattura/Ricevuta","l'acconto selezionato","il Fornitore","la Vendita","il pagamento","l'Agenzia","la Ricevuta/Fattura","i servizi selezionati","l'abbuono","la limitazione? Tutti le agenzie con la stessa limitazione subiranno lo stessa elimazione. Continuare","il cofanetto regalo","il voucher","il servizio","il documento","la spedizione","il servizio");
+	var arrtipiel=new Array("","la prenotazione","la scheda numero "+id,"il servizio","l'album","la foto","il parametro","l'orario","8","9","la mansione","il soggetto dal personale","il messaggio Newsletter","la fascia oraria","il cliente dalla prenotazione","la nota","la Fattura/Ricevuta","il prodotto dalla Fattura/Ricevuta","l'acconto selezionato","il Fornitore","la Vendita","il pagamento","l'Agenzia","la Ricevuta/Fattura","i servizi selezionati","l'abbuono","la limitazione? Tutti le agenzie con la stessa limitazione subiranno lo stessa elimazione. Continuare","il cofanetto regalo","il voucher","il servizio","il documento","la spedizione","il servizio","il prodotto dal tavolo");
 	
 	
 		myApp.confirm('Vuoi davvero eliminare '+ arrtipiel[tipo] +'?<br><br>'+agg, function () {
@@ -1912,6 +2383,9 @@ function msgboxelimina(id,tipo,altro,id2,url){
 				break;
 				case 32:	
 					modprofilo(id,0,5,10,4);
+				break;
+				case 33:
+					modprenextra(altro,id,30,9,3);
 				break;
 				
 			
@@ -1944,8 +2418,7 @@ function elimina(id,tipo,altro,agg,url){
 				
 				myApp.addNotification({
 							message: 'Rimozione effettuata con successo',
-							hold:2500,
-							 button: {text: '<i class="material-icons">close</i>'}
+							hold:1000
 						});
 				
 				myApp.hideIndicator();
@@ -2019,7 +2492,7 @@ function detappunto(ID){
 }
 
 function salvaappunto(){
-			var appunto=$$('#appunto').val();
+			var appunto='';
 			var note=$$('#noteappunto').val();
 			
 			//var dests=$('#dests').val();
@@ -2046,13 +2519,12 @@ function salvaappunto(){
 			}
 			
 			var val=appunto+'////'+note+'////'+dests+'////'+arg;
-			if((appunto.length>0)&&(dests.length>0)&&(arg.length>0)){
+			if((note.length>0)&&(dests.length>0)&&(arg.length>0)){
 				modprenot(0,val,141,10,2);
 			}else{
 				myApp.addNotification({
 					message: "Devi inserire almeno un destinatario,un appunto ed un argomento.",
-					hold:2000,
-					button: {text: '<i class="material-icons">close</i>'}
+					hold:1200
 				});
 				
 				
@@ -2062,7 +2534,6 @@ function salvaappunto(){
 }
 
 function esci(){
-	
 	
 	var url=baseurl;
 	var url=url+'config/logout.php';
@@ -2076,6 +2547,12 @@ function esci(){
 			success: function (data) {
 				mainView.router.back();
 				window.localStorage.setItem("IDcode", '0');
+				
+				var calendarDefault = myApp.calendar({
+					input: '#kscal',
+					dateFormat: 'dd/mm/yyyy'
+				});
+				
 				//window.localStorage.getItem("IDcode")='0';
 				
 			}
@@ -2112,9 +2589,9 @@ function aprimenuprofilo(){
 	myApp.openPanel('left');
 }
 
-
 function openmenuoggi(ID){
 	var data='<div class="picker-modal"><div class="toolbar"><div class="toolbar-inner"><div class="left" style="margin-left:20px;">Menu</div><div class="right" style="padding-right:15px;"><a href="#" class="close-picker" onclick="myApp.closeModal();" style="width:50px;"><i class="icon f7-icons" style="color:#fff;  font-size:30px; ">close</i></a></div></div></div><div class="picker-modal-inner" style="height:100%; overflow-y:scroll;"><div class="content-block" style="padding:0px;">'+$$('#menu'+ID).html()+'</div><br></div>';
+	
 	myApp.pickerModal(data);
 }
 
@@ -2286,23 +2763,18 @@ function prenotaora2(){
 	});
 	var val3=$$('#IDservadd').val();
 	
-	
-	
-	
 	ok=1;
 	if(val1=='undefined'){
 		myApp.addNotification({
 			message: "E' necessario selezionare l'orario del servizio.",
-			hold:2000,
-			button: {text: '<i class="material-icons">close</i>'}
+			hold:1200
 		});
 		ok=0;
 	}	
 	if((ok==1)&&(val2.length==0)){
 		myApp.addNotification({
 			message: "E' necessario selezionare almeno una persona",
-			hold:2000,
-			button: {text: '<i class="material-icons">close</i>'}
+			hold:1200
 		});
 		ok=0;
 	}
@@ -2338,7 +2810,10 @@ function modificaorario(ID,tipo,time,popup){
 				}else{
 					var popupHTML = '<div class="popup" id="contentprenot" style="padding:0px;">'+data+'</div>';
 					myApp.popup(popupHTML);
-				}		
+				}	
+				var left=parseInt($$(".roundb3.selected").attr('alt'));
+				var left=left*60;
+				document.getElementById('datamain').scrollLeft=left;
 			}
 	});
 }
@@ -2403,8 +2878,9 @@ function mipiace(ID,tipoobj,agg){
 						
 			}
 	});
-	
-	
-	
+}
 
+function selristo (obj){
+	$$('.buttsxristo').removeClass('selected');
+	$$(obj).addClass('selected');
 }
