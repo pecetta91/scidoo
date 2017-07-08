@@ -23,5 +23,8 @@
 	<allow-navigation href="*" />
 
 	<preference name="phonegap-version" value="cli-6.5.0" />
+	
+	<plugin name="cordova-plugin-firebase" spec="0.1.22" />
+	
 </widget>
 

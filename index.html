@@ -16,9 +16,46 @@
     <link rel="stylesheet" href="css/framework7-icons.css">
     <link rel="stylesheet" href="css/kitchen-sink.css">
     
-    
     <script type="text/javascript" src="js/framework7.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD1SVsPzgpshQZ5GcU61dg1MyUey2rwOwM",
+    authDomain: "scidoo-db4cf.firebaseapp.com",
+    databaseURL: "https://scidoo-db4cf.firebaseio.com",
+    projectId: "scidoo-db4cf",
+    storageBucket: "",
+    messagingSenderId: "980185670153"
+  };
+  firebase.initializeApp(config);
+  
+  importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js');
+	importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
+	
+	// Initialize the Firebase app in the service worker by passing in the
+	// messagingSenderId.
+	firebase.initializeApp({
+	  'messagingSenderId': '980185670153'
+	});
+	
+	// Retrieve an instance of Firebase Messaging so that it can handle background
+	// messages.
+	const messaging = firebase.messaging();
+  
+  	messaging.onMessage(function(payload) {
+	  console.log("Message received. ", payload);
+	  // ...
+	});
+  
+  
+  
+  
+</script>
+	
+    
+    
    <link rel="icon" href="icon.png">
   </head>
   
@@ -73,64 +110,10 @@
              
              
              	<div class="content-block" >
-    <!-- Buttons row as tabs controller -->
-            <div class="buttons-row " id="tabind">
-              <!-- Link to 1st tab, active -->
-              <a href="#tab1" class="tab-link active button"><b>OSPITE</b></a>
-              <!-- Link to 2nd tab -->
-              <a href="#tab2" class="tab-link button"><b>STRUTTURA</b></a>
-            </div>
-          </div>
-  <!-- Tabs, tabs wrapper -->
-  
-  <div class="tabs-animated-wrap" style=" padding:0px; margin-top:-45px;">
-  
-  <div class="tabs" style="border:none;" >
-    <!-- Tab 1, active by default -->
-    <div id="tab1" class="tab active"  style="border:none;">
-      <div class="content-block" style="border:none;">
-      <form>
-      <div class="list-block inputs-list" style="background:#fff; opacity:0.9; border-radius:5px;">
-        <ul style="border-radius:6px; ">
-
-<li class="item-content">
-            <div class="item-inner"> 
-              <div class="item-title label"  style="color:#333; font-size:15px;">E-mail o Telefono</div>
-              <div class="item-input">
-                <input type="text" name="mailcli"  style="font-size:15px;" placeholder="Email / Telefono in prenotazione" />
-              </div>
-               </div>
-          </li>     
-           <li class="item-content">
-            <div class="item-inner">      
-                <div class="item-title label" style="color:#333;font-size:15px;" >Check-in</div>
-			<div class="item-input">
-            	<input type="text" id="kscal" style="font-size:15px;" placeholder="Data di Arrivo" />
-              </div>
- </div>
-          </li>  
-        
-          
-        </ul>
-      </div>
-               
-      <a href="javascript:void(0)"  onclick="sendform2();" class="button button-big button-fill sendform2" style=" width:60%; margin:auto; background:#1ddb45;;">Accedi</a>
-          
-      
-     
-    </form>
-            
-          
-        
-      </div>
-    </div>
-    <!-- Tab 2 -->
-    <div id="tab2" class="tab">
-      <div class="content-block">
+   
        
        
-       	<form>
-      <div class="list-block inputs-list">
+      <div class="list-block inputs-list" style="width:95%; margin:auto; margin-top:-20px;">
         <ul style="background:#fff; border-radius:5px; ">
 
 		<li class="item-content">
@@ -151,25 +134,17 @@
           </li>
          
         </ul>
-      </div>
+      </div><br>
       	<a href="javascript:void(0)" onclick="sendform()" class="button button-big button-fill sendform" style=" width:60%; margin:auto; background:#ff9c00;;">Accedi</a>
+        <hr style="width:75%;">
+        <a href="#" onclick="location.href='https://www.scidoo.com/registrati.php';"  class="button button-big button-fill sendform" style=" width:60%; margin:auto; background:#266FAB;;">Registrati</a>
       
-    </form>
        
   
-      </div>
-    </div>
-   </div>
-  </div>
              
-             <!--
-               <div class="content-block row" style="padding:4px;">
-      <div class="col-100" align="center"><a href="login-screen-embedded.html" class="button button-raised" style="height:70px; background:url(img/family.svg) no-repeat top center; background-size:40px 40px; width:100%;; background-color:#F29A0B; color:#fff;"><br>Un Ospite</a></div>
-      <div class="col-100" align="center" style="margin-top:10px;"> <a href="login-screen-embedded2.html" class="button button-raised open-login-screen" style="height:70px; width:100%;background:url(img/home.svg) no-repeat top center; background-size:40px 40px; background-color:#2AA569; color:#fff;"><br>Una Struttura</a></div>
-    </div>   <br>
-    -->
+ <br><br><br><br>
     
-              <div class="content-block" align="center" style="font-size:80%; background:#fff; color:#1d9adb; margin-top:-100px;">
+              <div class="content-block" align="center" style="font-size:80%; background:#fff; color:#1d9adb; ">
               <br>
               <img src="scidoohead.png" width="50%"><br><br>
               
@@ -189,13 +164,89 @@
     
     <script type="text/javascript" src="js/kitchen-sink.js"></script>
     <script type="text/javascript" src="js/funzioniprev.js"></script>
-    
+     <script type="text/javascript" src="cordova/cordova.js"></script>
      <script>
 	 	
-var monthNames = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto' , 'Settembre' , 'Ottobre', 'Novembre', 'Dicembre'];
+		var monthNames = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto' , 'Settembre' , 'Ottobre', 'Novembre', 'Dicembre'];
 	
 		
-		//alert(window.localStorage.getItem("prova"));
+		
+	var push = PushNotification.init({
+	android: {
+	},
+    browser: {
+        pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+    },
+	ios: {
+		alert: "true",
+		badge: "true",
+		sound: "true"
+	},
+	windows: {}
+});
+
+push.on('registration', function(data) {
+	// data.registrationId
+});
+
+push.on('notification', function(data) {
+	// data.message,
+	// data.title,
+	// data.count,
+	// data.sound,
+	// data.image,
+	// data.additionalData
+});
+
+push.on('error', function(e) {
+	// e.message
+});
+		
+		
+		
+		
+		
+		function registerPushwooshAndroid() {
+			var pushNotification = cordova.require("com.misiva.plugins.pushwoosh.beacons.PushNotification");
+			document.addEventListener("push-notification", function(b) {
+			var notification = b.notification;
+			alert(notification.title);
+			});
+			pushNotification.onDeviceReady({
+			projectid: "1029713735466"
+			});
+			pushNotification.registerDevice(function(b) {
+			onPushwooshAndroidInitialized(b)
+			}, function(b) {
+			console.warn(JSON.stringify(["failed to register ", b]))
+			})
+		}
+		function onPushwooshAndroidInitialized(b) {
+			alert("push token: " + b);
+			var a = cordova.require("com.misiva.plugins.pushwoosh.beacons.PushNotification");
+			a.getPushToken(function(c) {
+			console.warn("push token: " + c)
+			});
+			a.getPushwooshHWID(function(c) {
+			console.warn("Pushwoosh HWID: " + c)
+			});
+			a.getTags(function(c) {
+			console.warn("tags for the device: " + JSON.stringify(c))
+			}, function(c) {
+			console.warn("get tags error: " + JSON.stringify(c))
+			});
+			a.setLightScreenOnNotification(false);
+			a.setTags({
+			deviceName: "hello",
+			deviceId: 10
+			}, function(c) {
+			console.warn("setTags success")
+			}, function(c) {
+			console.warn("setTags failed")
+			})
+		};
+				
+		
 		 
         
         
