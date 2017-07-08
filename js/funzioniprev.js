@@ -57,6 +57,8 @@ var piunotti=0;
 	var calcolodispo=0;
 	
 	function dispo2(){
+		
+		
 		calcolodispo=0;
 		var nottipern=1;
 		if(piunotti==1){		
@@ -487,6 +489,10 @@ function gestioneric(id,campo,tipo,val2,agg){
 						data: query,
 						success: function (data) {
 							//alert(data);
+							
+							
+							
+							
 							myApp.hideIndicator(); 
 							switch(agg) {
 								case 1:
@@ -502,6 +508,12 @@ function gestioneric(id,campo,tipo,val2,agg){
 									
 								break;
 								case 3:
+									myApp.addNotification({
+										message: 'Modifica effettuata con successo',
+										hold:1700
+									});
+						
+								
 									var arr=data.split('_');
 									$$('.roundb6').removeClass('selected');
 									$$('#'+arr['2']).addClass('selected');
@@ -663,8 +675,12 @@ function confermapren(){
 			});
 			myApp.hideIndicator();  
 			//$$('.close-popup').trigger('click');
-			var time=$$('#datacalpren').val();
-			navigationtxt(3,time,'calendariodiv',0);
+			//var time=$$('#datacalpren').val();
+			//alert(time);
+			//navigationtxt(3,time,'calendariodiv',0);
+			
+			reloadcal=1;
+			
 			
 			data=parseInt(data);
 			var IDp=new String(data);
