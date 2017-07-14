@@ -1,41 +1,26 @@
 <?xml version='1.0' encoding='utf-8'?>
-
 <widget id="com.scidoo" version="1.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-	<name>Scidoo</name>
-	<description>
+    <name>Scidoo</name>
+    <description>
 		Scidoo - Manage you Booking
 	</description>
-
-	<author email="info@webcoom.com" href="http://www.scidoo.com">
+    <author email="info@webcoom.com" href="http://www.scidoo.com">
 	   Scidoo Team
 	</author>
-	
-	<icon src="web_hi_res_512.png"  />	
-	
-	
-	<access origin="*" />
-	
-	
-	<platform name="android">
-     	<icon src="res/android/drawable-mdpi/ic_launcher.png" density="mdpi" />
-     	<icon src="res/android/drawable-hdpi/ic_launcher.png" density="hdpi" />
-     	<icon src="res/android/drawable-xhdpi/ic_launcher.png" density="xhdpi" />
-     	<icon src="res/android/drawable-xxhdpi/ic_launcher.png" density="xxhdpi" />
-     	<icon src="res/android/drawable-xxxhdpi/ic_launcher.png" density="xxxhdpi" />
-     </platform>
-	
-	
-	<param name="android-package" value="org.apache.cordova.core.NetworkManager" />
-	<access origin="*" />
-	<plugin name="cordova-plugin-whitelist"  source="npm" version="1.1.0" />
-	<allow-intent href="*" />
-	<allow-navigation href="*" />
-
-	<preference name="phonegap-version" value="cli-6.5.0" />
-	
-	<plugin name="com.onesignal.plugins.onesignal" spec="3.0.0" source="pgb" />
-
-	<plugin name="cordova-plugin-firebase" spec="0.1.22" />
-	
+    <icon src="web_hi_res_512.png" />
+    <access origin="*" />
+    <platform name="android">
+        <icon density="mdpi" src="res/android/drawable-mdpi/ic_launcher.png" />
+        <icon density="hdpi" src="res/android/drawable-hdpi/ic_launcher.png" />
+        <icon density="xhdpi" src="res/android/drawable-xhdpi/ic_launcher.png" />
+        <icon density="xxhdpi" src="res/android/drawable-xxhdpi/ic_launcher.png" />
+        <icon density="xxxhdpi" src="res/android/drawable-xxxhdpi/ic_launcher.png" />
+    </platform>
+    <param name="android-package" value="org.apache.cordova.core.NetworkManager" />
+    <access origin="*" />
+    <plugin name="cordova-plugin-whitelist" source="npm" version="1.1.0" />
+    <allow-intent href="*" />
+    <allow-navigation href="*" />
+    <preference name="phonegap-version" value="cli-6.5.0" />
+    <plugin name="onesignal-cordova-plugin" spec="~2.1.2" />
 </widget>
-
