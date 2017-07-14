@@ -12,9 +12,18 @@
 	
 	<icon src="web_hi_res_512.png"  />	
 	
-	<platform name="ios" />
-	<platform name="android" />
-	<platform name="winphone" />
+	
+	<access origin="*" />
+	
+	
+	<platform name="android">
+     	<icon src="res/android/drawable-mdpi/ic_launcher.png" density="mdpi" />
+     	<icon src="res/android/drawable-hdpi/ic_launcher.png" density="hdpi" />
+     	<icon src="res/android/drawable-xhdpi/ic_launcher.png" density="xhdpi" />
+     	<icon src="res/android/drawable-xxhdpi/ic_launcher.png" density="xxhdpi" />
+     	<icon src="res/android/drawable-xxxhdpi/ic_launcher.png" density="xxxhdpi" />
+     </platform>
+	
 	
 	<param name="android-package" value="org.apache.cordova.core.NetworkManager" />
 	<access origin="*" />
@@ -24,6 +33,8 @@
 
 	<preference name="phonegap-version" value="cli-6.5.0" />
 	
+	<plugin name="com.onesignal.plugins.onesignal" spec="1.5.0" source="pgb" />
+
 	<plugin name="cordova-plugin-firebase" spec="0.1.22" />
 	
 </widget>
