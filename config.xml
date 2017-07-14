@@ -33,7 +33,7 @@
 
 	<preference name="phonegap-version" value="cli-6.5.0" />
 	
-	<plugin name="com.onesignal.plugins.onesignal" spec="1.5.0" source="pgb" />
+	<plugin name="com.onesignal.plugins.onesignal" spec="3.0.0" source="pgb" />
 
 	<plugin name="cordova-plugin-firebase" spec="0.1.22" />
 	
